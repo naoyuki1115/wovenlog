@@ -115,3 +115,5 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 }
+
+const student = 'saka';
