@@ -7,8 +7,8 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  final teacher2 = "toyama";
-  final techaer = "tanaka";
+  final teacher = "saka";
+  final teacher2 = "suzuki";
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
