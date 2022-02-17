@@ -4,12 +4,11 @@ void main() {
   runApp(const MyApp());
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  
-  final teacher = "lewis";
-  final teacher2= "michael";
+
+  final teacher = "saka";
+  final teacher2 = "suzuki";
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
