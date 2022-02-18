@@ -20,6 +20,11 @@ Example commit message:
 - "WV-10-01: add return button"
 - "WV-10-02: add return button"
 
+Branch name:
+- same as story name of Jira
+- example: git push origin WV-10
+- When finished, delete branch on remote repository
+
 Pull request: 
 - select normal merge
 - 1 pull request / 1 story of Jira
