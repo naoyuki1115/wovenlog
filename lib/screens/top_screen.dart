@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wovenlog/dummy_data/category_list.dart';
 import 'package:wovenlog/constants.dart';
+import '../screens/top_edit_screen.dart';
 
 class TopScreen extends StatelessWidget {
   const TopScreen({Key? key}) : super(key: key);
@@ -14,9 +15,14 @@ class TopScreen extends StatelessWidget {
           style: TextStyle(color: kFontColor),
         ),
         backgroundColor: kAppBarColor,
-        leading: const IconButton(
-          icon: Icon(Icons.menu, color: kPrimaryColor),
-          onPressed: null,
+        leading: IconButton(
+          icon: const Icon(Icons.menu, color: kPrimaryColor),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const TopEditScreen()),
+            );
+          },
         ),
       ),
       body: Stack(
@@ -58,9 +64,7 @@ class TopScreen extends StatelessWidget {
 }
 
 class GridViewSection extends StatelessWidget {
-  const GridViewSection({
-    Key? key,
-  }) : super(key: key);
+  const GridViewSection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
