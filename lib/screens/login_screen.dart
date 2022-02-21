@@ -21,106 +21,107 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      //背景色設定
       backgroundColor: kBackgroundColor,
-      // appBar: AppBar(
-      //   title: Text('Login Screen'),
-        
-      // ),
+
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
+          //ロゴ上の余白
           Expanded(child: Container()),//余白
-          SvgPicture.asset('assets/images/woven_planet_logo.svg'),//Wovenロゴ
+          //ロゴ
+          SvgPicture.asset('assets/images/woven_planet_logo.svg'),
+          //ロゴ下の余白
           Expanded(child: Container()),//余白]
+          //認証NGメッセージ表示場所
           Container(
-              // color: kSecondaryColor,
-              // decoration: BoxDecoration(
-              //   //border: Border.all(color: Colors.red),
-              //   borderRadius: BorderRadius.circular(10),
-              // ),
               child: Text(
-                errMsg,
-                style: TextStyle(
-                  color: kPrimaryColor,
-                ),
+                errMsg, //loginボタン押下後に表示内容更新
+                style: TextStyle(color: kPrimaryColor),
               ),
           ),
-          
+
+          //入力フォーム
           Container(
-            //入力フォーム
-            padding: EdgeInsets.only(right: 80.0, left: 80.0),
-            child: Column(children: [
+            child: Row(children: [
+              //左の余白
+              Expanded(flex: 1, child: Container(),),//余白
+              //入力フォーム
+              Expanded(flex:8, 
+                child:Column(children: [
+                  //UserName入力フォーム
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'User Name:',
+                      hintText: 'User Name',
+                      //入力フォーム 背景色
+                      fillColor: Colors.white,
+                      filled: true,
+                      //フォームの丸み
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35),
+                        borderSide: BorderSide.none,//枠線削除
+                      ),
+                      //入力フォーム内のpadding
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 20,
+                      ),
+                    ),
+                    //入力した値を格納
+                    onChanged: (String value) {
+                      setState(() {
+                        userName = value;
+                      });
+                    },
+                  ),
 
-              //UserName入力フォーム
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'User Name:',
-                  //入力フォーム フォントサイズ
-                  hintText: 'User Name',
-                  //hintStyle: const TextStyle(fontSize: 20),
-                  //入力フォーム 背景色
-                  fillColor: Colors.white,
-                  filled: true,
-                  //フォームの丸み
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(35),
-                    borderSide: BorderSide.none,
+                  SizedBox(
+                    height: 20,
                   ),
-                  //padding
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 20,
-                  ),
-                ),
-                //入力した値を格納
-                onChanged: (String value) {
-                  setState(() {
-                    userName = value;
-                  });
-                },
-              ),
 
-              SizedBox(
-                height: 20,
-              ),
-
-              // パスワード入力フォーム
-              TextFormField(
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password:',
-                  //入力フォーム フォントサイズ
-                  hintText: 'Password',
-                  //hintStyle: const TextStyle(fontSize: 20),
-                  //入力フォーム 背景色
-                  fillColor: Colors.white,
-                  filled: true,
-                  //フォームの丸み
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(35),
-                    borderSide: BorderSide.none,
+                  // パスワード入力フォーム
+                  TextFormField(
+                    obscureText: true,//入力内容非表示
+                    decoration: InputDecoration(
+                      labelText: 'Password:',
+                      //入力フォーム フォントサイズ
+                      hintText: 'Password',
+                      //入力フォーム 背景色
+                      fillColor: Colors.white,
+                      filled: true,
+                      //フォームの丸み
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(35),
+                        borderSide: BorderSide.none,//枠線削除
+                      ),
+                      //入力フォーム内のpadding
+                      contentPadding: const EdgeInsets.symmetric(
+                        vertical: 10,
+                        horizontal: 20,
+                      ),
+                    ),
+                    onChanged: (String value) {
+                      setState(() {
+                        password = value;
+                      });
+                    },
                   ),
-                  //padding
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 20,
-                  ),
-                ),
-                onChanged: (String value) {
-                  setState(() {
-                    password = value;
-                  });
-                },
+                ],),
               ),
-            ],)
+              //右の余白
+              Expanded(flex: 1, child: Container()),//余白
+            ]),
           ),
+        
+          //入力フォーム下の余白
           Expanded(child: Container()),//余白
 
           //ログインボタン
           ElevatedButton(
             style: ElevatedButton.styleFrom(
                 primary: kSecondaryColor, //ボタンの背景色
-                shape: const StadiumBorder(),
+                shape: const StadiumBorder(),//ボタンの端を丸める
                 padding: EdgeInsets.symmetric(
                   horizontal: 60,
                   vertical: 20,
