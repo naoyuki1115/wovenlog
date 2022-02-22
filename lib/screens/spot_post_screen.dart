@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:wovenlog/constants.dart';
 import 'package:wovenlog/dummy_data/category_list.dart';
+import 'package:wovenlog/screens/spot_list_screen.dart';
 // import 'package:wovenlog/screens/spot_list_screen.dart';
 
 void main() {
@@ -19,11 +19,20 @@ class SpotPostScreen extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: const Text(
-            'POST',
+            'Post',
             style: TextStyle(
                 fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
           ),
           backgroundColor: kAppBarColor,
+          leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios_new, color: kPrimaryColor),
+              onPressed: () {
+                Navigator.pop(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const SpotListScreen()),
+                );
+              }),
         ),
         body: Center(
           child: Column(
@@ -39,12 +48,12 @@ class SpotPostScreen extends StatelessWidget {
               ),
               const AddProfile(),
               Expanded(
-                flex: 2,
+                flex: 1,
                 child: Container(),
               ),
               const SubmitBottun(),
               Expanded(
-                flex: 2,
+                flex: 3,
                 child: Container(),
               ),
             ],
@@ -79,7 +88,10 @@ class AddImage extends StatelessWidget {
               ),
             ],
           ),
-          child: const Icon(Icons.add),
+          child: IconButton(
+            onPressed: (() {}),
+            icon: Icon(Icons.add),
+          ),
         ),
         const SizedBox(height: 10),
         Text(
@@ -142,7 +154,7 @@ class AddProfile extends StatelessWidget {
               Expanded(
                 child: Container(),
               ),
-              const Categories(),
+              const PullDownButton(),
             ],
           ),
         ),
@@ -205,58 +217,40 @@ class SubmitBottun extends StatelessWidget {
           shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(100))),
         ),
-        onPressed: () {},
+        onPressed: () {
+          // Spot List Screenに遷移
+          Navigator.pop(
+            context,
+            MaterialPageRoute(builder: (context) => const SpotListScreen()),
+          );
+          // 保存処理を実行
+        },
       ),
     );
-
-    //         // 前ページへ遷移
-    //         Navigator.pop(context);
-    //       },
-    //       // 保存処理を実行
-    //     ),
-    //     Expanded(
-    //       flex: 2,
-    //       child: Container(),
-    //     ),
-    //   ],
-    // );
   }
 }
 
-class Categories extends StatefulWidget {
-  const Categories({Key? key}) : super(key: key);
-
+// プルダウンボタン
+class PullDownButton extends StatefulWidget {
+  const PullDownButton({Key? key}) : super(key: key);
   @override
-  State<Categories> createState() => _Categories();
+  _PullDownButtonState createState() => _PullDownButtonState();
 }
 
-// プルダウンボタン
-class _Categories extends State<Categories> {
-  // final List category_list = [];
-  String dropdownValue = 'One';
+class _PullDownButtonState extends State<PullDownButton> {
+  String _selectedValue;
+  List list = categoryList[0].name;
 
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      value: dropdownValue,
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String? newValue) {
+      value: 
+      onChanged: (newvalue) {
         setState(() {
-          dropdownValue = newValue!;
+          _selectedCategory = newvalue!;
         });
+            items: _items,
       },
-      items: <String>['One', 'Two', 'Free', 'Four']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
     );
   }
 }
