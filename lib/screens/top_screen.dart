@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:wovenlog/dummy_data/category_list.dart';
-import 'package:wovenlog/constants.dart';
+import 'package:provider/provider.dart';
+
+import '../dummy_data/category_list.dart';
+import '../dummy_data/selected_category_list.dart';
+import '../constants.dart';
 import '../screens/top_edit_screen.dart';
 
 class TopScreen extends StatelessWidget {
@@ -8,57 +11,64 @@ class TopScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Top",
-          style: TextStyle(color: kFontColor),
-        ),
-        backgroundColor: kAppBarColor,
-        leading: IconButton(
-          icon: const Icon(Icons.menu, color: kPrimaryColor),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const TopEditScreen()),
-            );
-          },
-        ),
-      ),
-      body: Stack(
-        children: [
-          ColorFiltered(
-            colorFilter: ColorFilter.mode(
-              Colors.white.withOpacity(0.12),
-              BlendMode.dstATop,
+    final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
+
+    return Consumer<SelectedCategoryList>(
+      builder: (BuildContext context, SelectedCategoryList value, Widget? child) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              "Top",
+              style: TextStyle(color: kFontColor),
             ),
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  fit: BoxFit.fitHeight,
-                  image: AssetImage(
-                    'assets/images/woven_city_vertical.jpeg',
+            backgroundColor: kAppBarColor,
+            leading: IconButton(
+              icon: const Icon(Icons.menu, color: kPrimaryColor),
+              onPressed: () {
+                _selectedCategoryList.searchSelectedCategory();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const TopEditScreen()),
+                );
+              },
+            ),
+          ),
+          body: Stack(
+            children: [
+              ColorFiltered(
+                colorFilter: ColorFilter.mode(
+                  Colors.white.withOpacity(0.12),
+                  BlendMode.dstATop,
+                ),
+                child: Container(
+                  decoration: const BoxDecoration(
+                    image: DecorationImage(
+                      fit: BoxFit.fitHeight,
+                      image: AssetImage(
+                        'assets/images/woven_city_vertical.jpeg',
+                      ),
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
-          Column(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Container(
-                  color: Colors.transparent,
-                ),
-              ),
-              const Expanded(
-                flex: 10,
-                child: GridViewSection(),
+              Column(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      color: Colors.transparent,
+                    ),
+                  ),
+                  const Expanded(
+                    flex: 10,
+                    child: GridViewSection(),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

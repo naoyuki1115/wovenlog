@@ -53,6 +53,10 @@ class SelectedCategoryList extends ChangeNotifier {
     notifyListeners();
   }
 
+  /*
+  // This method searches, whether the tapped category already exists in
+  // the _selectedCategoryList or not.
+  */
   bool isCategoryAlreadyExist(String inputCategoryId) {
     for (int i = 0; i < _selectedCategoryList.length; i++) {
       if (_selectedCategoryList[i].categoryId == inputCategoryId) {
