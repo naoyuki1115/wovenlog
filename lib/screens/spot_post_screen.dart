@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:wovenlog/constants.dart';
-// import '../dummy_data/category_class.dart';
+import 'package:wovenlog/dummy_data/category_list.dart';
 // import 'package:wovenlog/screens/spot_list_screen.dart';
 
 void main() {
@@ -27,13 +28,21 @@ class SpotPostScreen extends StatelessWidget {
         body: Center(
           child: Column(
             children: [
-              AddImage(),
-              AddProfile(),
+              Expanded(
+                flex: 2,
+                child: Container(),
+              ),
+              const AddImage(),
               Expanded(
                 flex: 1,
                 child: Container(),
               ),
-              SubmitBottun(),
+              const AddProfile(),
+              Expanded(
+                flex: 2,
+                child: Container(),
+              ),
+              const SubmitBottun(),
               Expanded(
                 flex: 2,
                 child: Container(),
@@ -52,19 +61,33 @@ class AddImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
-    // Column(
-    //   children: [
-    //     Expanded(
-    //       child: Container(),
-    //     ),
-    //     const Icon(Icons.add_box_rounded, color: kPrimaryColor, size: 60),
-    //     const Text('Upload image'),
-    //     Expanded(
-    //       child: Container(),
-    //     ),
-    //   ],
-    // );
+    return Column(
+      children: [
+        Container(
+          height: 60,
+          width: 60,
+          padding: const EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: kAppBarColor,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.3),
+                spreadRadius: 1,
+                blurRadius: 3,
+                offset: const Offset(2, 2),
+              ),
+            ],
+          ),
+          child: const Icon(Icons.add),
+        ),
+        const SizedBox(height: 10),
+        Text(
+          "Upload image",
+          style: TextStyle(fontSize: 20, color: kFontColor),
+        ),
+      ],
+    );
   }
 }
 
@@ -80,7 +103,7 @@ class AddProfile extends StatelessWidget {
         // Shop Name
         Container(
           margin: const EdgeInsets.only(top: 10, bottom: 10),
-          padding: const EdgeInsets.all(15.0),
+          alignment: const Alignment(-0.8, 0),
           width: 300,
           height: 60,
           decoration: BoxDecoration(
@@ -109,7 +132,7 @@ class AddProfile extends StatelessWidget {
             children: [
               Container(
                 child: const Text(
-                  "Shop name",
+                  "Category",
                   style: TextStyle(
                       fontSize: 20,
                       color: kFontColor,
@@ -127,7 +150,7 @@ class AddProfile extends StatelessWidget {
         // URL
         Container(
           margin: const EdgeInsets.only(top: 10, bottom: 10),
-          padding: const EdgeInsets.all(15.0),
+          alignment: const Alignment(-0.8, 0),
           width: 300,
           height: 60,
           decoration: BoxDecoration(
@@ -144,7 +167,7 @@ class AddProfile extends StatelessWidget {
         // Description
         Container(
           margin: const EdgeInsets.only(top: 10, bottom: 10),
-          padding: const EdgeInsets.all(15.0),
+          alignment: const Alignment(-0.8, 0),
           width: 300,
           height: 60,
           decoration: BoxDecoration(
@@ -168,21 +191,24 @@ class SubmitBottun extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
-    // Column(
-    //   children: [
-    //     Expanded(
-    //       flex: 1,
-    //       child: Container(),
-    //     ),
-    child:
-    ElevatedButton(
-        child: const Text("Submit"),
-        style: ElevatedButton.styleFrom(
-          primary: const Color(0xffD80C28),
-          onPrimary: const Color(0xffFAE1E5),
+    return SizedBox(
+      width: 300,
+      height: 60,
+      child: TextButton(
+        child: const Text(
+          "Submit",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        onPressed: () {});
+        style: TextButton.styleFrom(
+          primary: Color(0xffD80C28),
+          backgroundColor: kSecondaryColor,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(100))),
+        ),
+        onPressed: () {},
+      ),
+    );
+
     //         // 前ページへ遷移
     //         Navigator.pop(context);
     //       },
