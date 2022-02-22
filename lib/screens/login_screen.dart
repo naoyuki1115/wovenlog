@@ -16,8 +16,25 @@ class _LoginScreenState extends State<LoginScreen> {
   //ログイン情報
   String userName = '';
   String password = '';
-  String errMsg = '';
-  bool loginState = false;
+  String _errMsg = '';
+  bool _loginState = false;
+
+  void authentication(){
+    //ログイン機能の関数
+      //LoginFunction(userName, password);
+      //loginState = false;
+
+      //ログイン承認成功時
+      if(_loginState){
+        _errMsg = 'Authentication successed';
+        //画面遷移
+        //Navigater
+      //ログイン承認失敗時
+      } else {
+        //エラーメッセージ
+        _errMsg = 'Authentication failed';
+      }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +52,10 @@ class _LoginScreenState extends State<LoginScreen> {
           //ロゴ下の余白
           Expanded(child: Container()),//余白]
           //認証NGメッセージ表示場所
-          Container(
+          ConstrainedBox(
+              constraints: BoxConstraints(minHeight: 30.0),
               child: Text(
-                errMsg, //loginボタン押下後に表示内容更新
+                _errMsg, //loginボタン押下後に表示内容更新
                 style: TextStyle(color: kPrimaryColor),
               ),
           ),
@@ -77,9 +95,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                   ),
 
-                  SizedBox(
-                    height: 20,
-                  ),
+                  SizedBox(height: 20,),
 
                   // パスワード入力フォーム
                   TextFormField(
@@ -137,19 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             onPressed: (){
               setState(() {
-                //ログイン機能の関数
-                //LoginFunction(userName, password);
-                loginState = false;
-                //ログイン承認成功時
-                if(loginState){
-                  //画面遷移
-                  errMsg = '認証OK';
-                  //Navigater
-                //ログイン承認失敗時
-                } else {
-                  //エラーメッセージ
-                  errMsg = '認証失敗';
-                }
+                authentication();
               });
             }
           ),
