@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wovenlog/screens/top_screen.dart';
+import 'package:wovenlog/screens/spot_post_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'WovenLog',
-      home: TopScreen(),
+      home: SpotPostScreen(),
     );
   }
 }
