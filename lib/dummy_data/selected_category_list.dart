@@ -13,21 +13,90 @@ class SelectedCategoryList extends ChangeNotifier {
 
   List<SelectedCategory> get selectedCategoryList => _selectedCategoryList;
 
-  void add(SelectedCategory selectedCategory) {
-    _selectedCategoryList.add(selectedCategory);
+  final List<bool> isCheckedList = List<bool>.filled(categoryList.length, false);
+
+  // void add(SelectedCategory selectedCategory) {
+  //   _selectedCategoryList.add(selectedCategory);
+  //   notifyListeners();
+  // }
+
+  /*
+  // This method is used for search selected category and highlight it,
+  // when user tapped edit button on top screen.
+  */
+
+  /*
+  void searchSelectedCategory() {
+    for (int i = 0; i < categoryList.length; i++) {
+      for (int j = 0; j < selectedCategoryList.length; j++) {
+        // print(categoryList[i].id);
+        // print(selectedCategoryList[j].categoryId);
+        print(i);
+        print(j);
+        print("--------------------------");
+        if (categoryList[i].id == selectedCategoryList[j].categoryId) {
+          isCheckedList[i] = true;
+        } else {
+          isCheckedList[i] = false;
+        }
+      }
+    }
+    notifyListeners();
+  }
+  */
+
+  void searchSelectedCategory() {
+    isCheckedList.fillRange(0, categoryList.length, false);
+    for (int i = 0; i < selectedCategoryList.length; i++) {
+      for (int j = 0; j < categoryList.length; j++) {
+        if (selectedCategoryList[i].categoryId == categoryList[j].id) {
+          isCheckedList[j] = true;
+        }
+      }
+    }
+  }
+
+  void addOrRemove(int index) {
+    String _categoryId = categoryList[index].id;
+    SelectedCategory _addCategory = SelectedCategory(
+      userId: "user0001",
+      categoryId: _categoryId,
+    );
+
+    if (!isCategoryAlreadyExist(_categoryId)) {
+      _selectedCategoryList.add(_addCategory);
+    } else {
+      _selectedCategoryList.removeWhere(
+        (element) => element.categoryId == _categoryId,
+      );
+    }
+
+    // if (isCheckedList[index] == false) {
+    //   _selectedCategoryList.add(_addCategory);
+    // } else {
+    //   _selectedCategoryList.removeWhere(
+    //     (element) => element.categoryId == _categoryId,
+    //   );
+    // }
+    searchSelectedCategory();
+    print(_selectedCategoryList.length);
+    print(isCheckedList);
     notifyListeners();
   }
 
-  final List<bool> isCheckedList = List<bool>.filled(categoryList.length, false);
+  bool isCategoryAlreadyExist(String inputCategoryId) {
+    for (int i = 0; i < _selectedCategoryList.length; i++) {
+      if (_selectedCategoryList[i].categoryId == inputCategoryId) {
+        return true;
+      }
+    }
+    return false;
+  }
 
-  // List<bool> detectIsSelected(int index, bool val) {
-  //   if (val) {
-  //     isCheckedList[index] = false;
-  //   } else {
-  //     isCheckedList[index] = true;
+  // void overWriteIsChekedList(){
+  //   for (int i = 0; i < categoryList.length; i++) {
+  //     for (int j = 0; j < _selectedCategoryList.length; j++)
   //   }
-  //   notifyListeners();
-  //   return isCheckedList;
   // }
 
   void detectIsSelected(int index, bool val) {
@@ -39,4 +108,19 @@ class SelectedCategoryList extends ChangeNotifier {
     print(isCheckedList);
     notifyListeners();
   }
+
+  // print(selectedCategoryList[0].categoryId);
+  // print(categoryList[3].id);
 }
+
+
+
+  // List<bool> detectIsSelected(int index, bool val) {
+  //   if (val) {
+  //     isCheckedList[index] = false;
+  //   } else {
+  //     isCheckedList[index] = true;
+  //   }
+  //   notifyListeners();
+  //   return isCheckedList;
+  // }

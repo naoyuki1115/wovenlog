@@ -45,7 +45,7 @@ class CheckBoxListView extends StatelessWidget {
     return Consumer<SelectedCategoryList>(
       builder: (BuildContext context, SelectedCategoryList value, Widget? child) {
         return ListView.builder(
-          itemCount: categoryList.length, // value.selectedCategory.length,
+          itemCount: categoryList.length,
           itemBuilder: (BuildContext context, int index) {
             return Container(
               margin: const EdgeInsets.symmetric(vertical: 3.0),
@@ -60,10 +60,12 @@ class CheckBoxListView extends StatelessWidget {
                   style: const TextStyle(fontSize: 20),
                 ),
                 value: _selectedCategoryList.isCheckedList[index],
-                // _isChecked![index],
                 controlAffinity: ListTileControlAffinity.leading,
                 onChanged: (val) {
-                  _selectedCategoryList.detectIsSelected(index, val!);
+                  _selectedCategoryList.addOrRemove(index);
+                  // print(val);
+                  // _selectedCategoryList.detectIsSelected(index, val!);
+                  // _selectedCategoryList.searchSelectedCategory();
                 },
               ),
             );
