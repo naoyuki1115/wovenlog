@@ -64,7 +64,7 @@ class _CheckBoxListViewState extends State<CheckBoxListView> {
             activeColor: kPrimaryColor,
             title: Text(
               categoryList[index].name,
-              style: const TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 20, color: kFontColor),
             ),
             value: _isChecked![index],
             controlAffinity: ListTileControlAffinity.leading,
