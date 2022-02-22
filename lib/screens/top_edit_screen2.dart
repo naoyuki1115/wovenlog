@@ -63,9 +63,6 @@ class CheckBoxListView extends StatelessWidget {
                 controlAffinity: ListTileControlAffinity.leading,
                 onChanged: (val) {
                   _selectedCategoryList.addOrRemove(index);
-                  // print(val);
-                  // _selectedCategoryList.detectIsSelected(index, val!);
-                  // _selectedCategoryList.searchSelectedCategory();
                 },
               ),
             );
