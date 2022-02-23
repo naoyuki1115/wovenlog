@@ -1,7 +1,7 @@
 class Category {
-  final String? id;
-  final String? name;
-  final String? icon;
+  String? id;
+  String? name;
+  String? icon;
 
   Category({
     this.id,

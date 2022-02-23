@@ -2,19 +2,19 @@ import 'user_class.dart';
 
 List userLists = [
   User(
-    id: "aaaaa11111",
+    id: "user0001",
     name: "Yoshiaki Toyama",
     email: "yoshiaki.toyama@woven-planet.global",
   ),
   User(
-    id: "bbbb2222",
+    id: "user0002",
     name: "Yuki Tanaka",
-    email: "yoshiaki.toyama@woven-planet.global",
+    email: "yuki.tanaka@woven-planet.global",
   ),
   User(
-    id: "bbbb2222",
-    name: "Yuki Tanaka",
-    email: "yoshiaki.toyama@woven-planet.global",
+    id: "user0003",
+    name: "Naoyuki Saka",
+    email: "naoyuki.saka@woven-planet.global",
   ),
 ];
 
