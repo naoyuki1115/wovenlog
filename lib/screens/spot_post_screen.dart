@@ -8,7 +8,7 @@ import 'dart:io';
 // import 'package:wovenlog/screens/spot_list_screen.dart';
 
 void main() {
-  runApp(const SpotPostScreen());
+  runApp(SpotPostScreen());
 }
 
 // メインクラス
@@ -43,12 +43,12 @@ class SpotPostScreen extends StatelessWidget {
                 flex: 1,
                 child: Container(),
               ),
-              const AddImage(),
+              AddImage(),
               Expanded(
                 flex: 1,
                 child: Container(),
               ),
-              const AddProfile(),
+              AddProfile(),
               Expanded(
                 flex: 4,
                 child: Container(),
@@ -61,47 +61,7 @@ class SpotPostScreen extends StatelessWidget {
   }
 }
 
-// // 画像投稿画面
-// class AddImage extends StatelessWidget {
-//   const AddImage({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Column(
-//       children: [
-//         Container(
-//           height: 60,
-//           width: 60,
-//           padding: const EdgeInsets.all(10),
-//           decoration: BoxDecoration(
-//             borderRadius: BorderRadius.circular(10),
-//             color: kAppBarColor,
-//             boxShadow: [
-//               BoxShadow(
-//                 color: Colors.black.withOpacity(0.3),
-//                 spreadRadius: 1,
-//                 blurRadius: 3,
-//                 offset: const Offset(2, 2),
-//               ),
-//             ],
-//           ),
-//           child: IconButton(
-//             onPressed: _getImage,
-//             icon: const Icon(Icons.add),
-//           ),
-//         ),
-//         const SizedBox(height: 10),
-//         const Text(
-//           "Upload image",
-//           style: TextStyle(fontSize: 20, color: kFontColor),
-//         ),
-//       ],
-//     );
-//   }
-// }
-
 //個人情報入力フォーム
-
 class AddProfile extends StatefulWidget {
   const AddProfile({Key? key}) : super(key: key);
 
@@ -229,7 +189,7 @@ class _AddProfileState extends State<AddProfile> {
               style: TextButton.styleFrom(
                 primary: const Color(0xffD80C28),
                 backgroundColor: kSecondaryColor,
-                shape: const RoundedRectangleBorder(
+                shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(100))),
               ),
               onPressed: () {
@@ -237,7 +197,7 @@ class _AddProfileState extends State<AddProfile> {
                   // 画面遷移
                   Navigator.pop(
                     context,
-                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
                   );
                   // 保存処理
                   // 各入力値をListに代入
@@ -263,7 +223,7 @@ class _PullDownButtonState extends State<PullDownButton> {
   // _selectedCategoryはプルダウンから選択されたテキストの受け皿
   String? selectedCategory = null;
   // listにcategoryListを代入
-  List list = categoryList;
+  List? list = categoryList;
 
   @override
   Widget build(BuildContext context) {
@@ -287,7 +247,7 @@ class _PullDownButtonState extends State<PullDownButton> {
         });
       },
 
-      items: list.map((categoryItem) {
+      items: list?.map((categoryItem) {
         return DropdownMenuItem(
           value: categoryItem,
           child: Text(categoryItem.name),
@@ -305,7 +265,7 @@ class AddImage extends StatefulWidget {
 }
 
 class _AddImageState extends State<AddImage> {
-  File? _image = null;
+  File? _image;
   final picker = ImagePicker();
 
   Future _getImage() async {
