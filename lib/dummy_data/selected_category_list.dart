@@ -19,7 +19,7 @@ class SelectedCategoryList extends ChangeNotifier {
   // This method is used for search selected category and highlight it as red,
   // when user tapped edit button on top screen and tapped each checkbox.
   */
-  void searchSelectedCategory() {
+  void updateSelectedCategory() {
     isCheckedList.fillRange(0, categoryList.length, false);
     for (int i = 0; i < selectedCategoryList.length; i++) {
       for (int j = 0; j < categoryList.length; j++) {
@@ -49,7 +49,7 @@ class SelectedCategoryList extends ChangeNotifier {
       );
     }
 
-    searchSelectedCategory();
+    updateSelectedCategory();
     notifyListeners();
   }
 
@@ -64,5 +64,33 @@ class SelectedCategoryList extends ChangeNotifier {
       }
     }
     return false;
+  }
+
+  /*
+  // This method searches name and icon of the selected category
+  // and used for visualize category icon button on the top screen.
+  */
+  String searchSelectedCategoryNameOrIcon(int index, bool isName) {
+    updateSelectedCategory();
+    final List<int> newList = [];
+
+    for (int i = 0; i < isCheckedList.length; i++) {
+      if (isCheckedList[i] == true) {
+        newList.add(i);
+      }
+    }
+
+    if (newList.isNotEmpty) {
+      int _targetIndex = newList[index];
+      String _categoryName = categoryList[_targetIndex].name;
+      String _categoryId = categoryList[_targetIndex].icon;
+      if (isName) {
+        return _categoryName;
+      } else {
+        return _categoryId;
+      }
+    } else {
+      return "Undefined";
+    }
   }
 }
