@@ -1,7 +1,10 @@
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:wovenlog/constants.dart';
 import 'package:wovenlog/dummy_data/category_list.dart';
 import 'package:wovenlog/screens/spot_list_screen.dart';
+import 'dart:io';
 // import 'package:wovenlog/screens/spot_list_screen.dart';
 
 void main() {
@@ -29,8 +32,7 @@ class SpotPostScreen extends StatelessWidget {
               onPressed: () {
                 Navigator.pop(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const SpotListScreen()),
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
                 );
               }),
         ),
@@ -38,7 +40,7 @@ class SpotPostScreen extends StatelessWidget {
           child: Column(
             children: [
               Expanded(
-                flex: 2,
+                flex: 1,
                 child: Container(),
               ),
               const AddImage(),
@@ -48,12 +50,7 @@ class SpotPostScreen extends StatelessWidget {
               ),
               const AddProfile(),
               Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-              const SubmitBottun(),
-              Expanded(
-                flex: 3,
+                flex: 4,
                 child: Container(),
               ),
             ],
@@ -64,9 +61,264 @@ class SpotPostScreen extends StatelessWidget {
   }
 }
 
-// 画像投稿画面
-class AddImage extends StatelessWidget {
+// // 画像投稿画面
+// class AddImage extends StatelessWidget {
+//   const AddImage({Key? key}) : super(key: key);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       children: [
+//         Container(
+//           height: 60,
+//           width: 60,
+//           padding: const EdgeInsets.all(10),
+//           decoration: BoxDecoration(
+//             borderRadius: BorderRadius.circular(10),
+//             color: kAppBarColor,
+//             boxShadow: [
+//               BoxShadow(
+//                 color: Colors.black.withOpacity(0.3),
+//                 spreadRadius: 1,
+//                 blurRadius: 3,
+//                 offset: const Offset(2, 2),
+//               ),
+//             ],
+//           ),
+//           child: IconButton(
+//             onPressed: _getImage,
+//             icon: const Icon(Icons.add),
+//           ),
+//         ),
+//         const SizedBox(height: 10),
+//         const Text(
+//           "Upload image",
+//           style: TextStyle(fontSize: 20, color: kFontColor),
+//         ),
+//       ],
+//     );
+//   }
+// }
+
+//個人情報入力フォーム
+
+class AddProfile extends StatefulWidget {
+  const AddProfile({Key? key}) : super(key: key);
+
+  @override
+  _AddProfileState createState() => _AddProfileState();
+}
+
+class _AddProfileState extends State<AddProfile> {
+  final _formKey = GlobalKey<FormState>();
+  final myController = TextEditingController();
+  late FocusNode myFocusNode;
+  List userInfomations = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    myFocusNode = FocusNode();
+  }
+
+  @override
+  void dispose() {
+    // Clean up the focus node when the Form is disposed.
+    myFocusNode.dispose();
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            width: 300,
+            height: 60,
+            child: TextFormField(
+              autofocus: true,
+              decoration: InputDecoration(
+                hintText: "Shop name",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(23),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter the required infomation';
+                }
+                return null;
+              },
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Padding(
+            // padding: const EdgeInsets.only(left: 30),
+            // alignment: const Alignment(-1, 0),
+            padding: const EdgeInsets.only(left: 5.75, right: 5.75),
+            child: Container(
+                padding: EdgeInsets.only(left: 10),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(23)),
+                child: PullDownButton()),
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          SizedBox(
+            width: 300,
+            height: 60,
+            child: TextFormField(
+              autofocus: true,
+              decoration: InputDecoration(
+                hintText: "URL",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(23),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter the required infomation';
+                }
+                return null;
+              },
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            width: 300,
+            height: 60,
+            child: TextFormField(
+              autofocus: true,
+              decoration: InputDecoration(
+                hintText: "Description",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(23),
+                ),
+              ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter the required infomation';
+                }
+                return null;
+              },
+            ),
+          ),
+          // 空白
+          const SizedBox(
+            height: 70,
+          ),
+          // 登録＆前ページに遷移するボタン
+          SizedBox(
+            width: 300,
+            height: 60,
+            child: TextButton(
+              child: const Text(
+                "Submit",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              style: TextButton.styleFrom(
+                primary: const Color(0xffD80C28),
+                backgroundColor: kSecondaryColor,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(100))),
+              ),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  // 画面遷移
+                  Navigator.pop(
+                    context,
+                    MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  );
+                  // 保存処理
+                  // 各入力値をListに代入
+
+                }
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// プルダウンボタン
+class PullDownButton extends StatefulWidget {
+  const PullDownButton({Key? key}) : super(key: key);
+  @override
+  _PullDownButtonState createState() => _PullDownButtonState();
+}
+
+class _PullDownButtonState extends State<PullDownButton> {
+  // _selectedCategoryはプルダウンから選択されたテキストの受け皿
+  String? selectedCategory = null;
+  // listにcategoryListを代入
+  List list = categoryList;
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButton(
+      hint: const Text(
+        "Category",
+        style: TextStyle(fontSize: 18, color: Colors.grey),
+      ),
+      isExpanded: true,
+      // value：DropdownButtonウェィジェットにて使用する値、_selectedCategoryをそれと定義
+      value: selectedCategory,
+      icon: Icon(Icons.arrow_drop_down),
+      iconSize: 40,
+      style: TextStyle(color: kFontColor, fontSize: 20),
+      underline: Container(),
+      // newValue=onChangedにて使用する引数
+      onChanged: (newvalue) {
+        // _selectedCategoryの値の状態をstatとして持ち、setstateで変更し管理する
+        setState(() {
+          selectedCategory = newvalue as String?;
+        });
+      },
+
+      items: list.map((categoryItem) {
+        return DropdownMenuItem(
+          value: categoryItem,
+          child: Text(categoryItem.name),
+        );
+      }).toList(),
+    );
+  }
+}
+
+class AddImage extends StatefulWidget {
   const AddImage({Key? key}) : super(key: key);
+
+  @override
+  _AddImageState createState() => _AddImageState();
+}
+
+class _AddImageState extends State<AddImage> {
+  File? _image = null;
+  final picker = ImagePicker();
+
+  Future _getImage() async {
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        const Text('No image selected.');
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,168 +341,16 @@ class AddImage extends StatelessWidget {
             ],
           ),
           child: IconButton(
-            onPressed: (() {}),
-            icon: Icon(Icons.add),
+            onPressed: _getImage,
+            icon: const Icon(Icons.add),
           ),
         ),
         const SizedBox(height: 10),
-        Text(
+        const Text(
           "Upload image",
           style: TextStyle(fontSize: 20, color: kFontColor),
         ),
       ],
-    );
-  }
-}
-
-//個人情報入力フォーム
-class AddProfile extends StatelessWidget {
-  const AddProfile({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // Shop Name
-        Container(
-          margin: const EdgeInsets.only(top: 10, bottom: 10),
-          alignment: const Alignment(-0.8, 0),
-          width: 300,
-          height: 60,
-          decoration: BoxDecoration(
-            border: Border.all(color: kFontColor),
-            borderRadius: BorderRadius.circular(23),
-          ),
-          child: const Text(
-            "Shop name",
-            textAlign: TextAlign.left,
-            style: TextStyle(
-                fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
-          ),
-        ),
-
-        // Category
-        Container(
-          margin: const EdgeInsets.only(top: 10, bottom: 10),
-          padding: const EdgeInsets.all(15.0),
-          width: 300,
-          height: 60,
-          decoration: BoxDecoration(
-            border: Border.all(color: kFontColor),
-            borderRadius: BorderRadius.circular(23),
-          ),
-          child: Row(
-            children: [
-              Container(
-                child: const Text(
-                  "Category",
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: kFontColor,
-                      fontWeight: FontWeight.bold),
-                ),
-              ),
-              Expanded(
-                child: Container(),
-              ),
-              const PullDownButton(),
-            ],
-          ),
-        ),
-
-        // URL
-        Container(
-          margin: const EdgeInsets.only(top: 10, bottom: 10),
-          alignment: const Alignment(-0.8, 0),
-          width: 300,
-          height: 60,
-          decoration: BoxDecoration(
-            border: Border.all(color: kFontColor),
-            borderRadius: BorderRadius.circular(23),
-          ),
-          child: const Text(
-            "URL",
-            style: TextStyle(
-                fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
-          ),
-        ),
-
-        // Description
-        Container(
-          margin: const EdgeInsets.only(top: 10, bottom: 10),
-          alignment: const Alignment(-0.8, 0),
-          width: 300,
-          height: 60,
-          decoration: BoxDecoration(
-            border: Border.all(color: kFontColor),
-            borderRadius: BorderRadius.circular(23),
-          ),
-          child: const Text(
-            "Description",
-            style: TextStyle(
-                fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// サブミットボタン
-class SubmitBottun extends StatelessWidget {
-  const SubmitBottun({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 300,
-      height: 60,
-      child: TextButton(
-        child: const Text(
-          "Submit",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-        ),
-        style: TextButton.styleFrom(
-          primary: Color(0xffD80C28),
-          backgroundColor: kSecondaryColor,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(100))),
-        ),
-        onPressed: () {
-          // Spot List Screenに遷移
-          Navigator.pop(
-            context,
-            MaterialPageRoute(builder: (context) => const SpotListScreen()),
-          );
-          // 保存処理を実行
-        },
-      ),
-    );
-  }
-}
-
-// プルダウンボタン
-class PullDownButton extends StatefulWidget {
-  const PullDownButton({Key? key}) : super(key: key);
-  @override
-  _PullDownButtonState createState() => _PullDownButtonState();
-}
-
-class _PullDownButtonState extends State<PullDownButton> {
-  String _selectedValue;
-  List list = categoryList[0].name;
-
-  @override
-  Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: 
-      onChanged: (newvalue) {
-        setState(() {
-          _selectedCategory = newvalue!;
-        });
-            items: _items,
-      },
     );
   }
 }
