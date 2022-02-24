@@ -43,7 +43,10 @@ class SpotListScreen extends StatelessWidget {
           ],
         ),
         body: Column(children: [
-          const SizedBox(height: 10),
+          SizedBox(
+            height: 10,
+            child: Image.asset('assets/spot_images/spot0002.jpg'),
+          ),
           SpotListView(),
           //ShowGmap(),
 
@@ -103,14 +106,13 @@ class SpotListView extends StatelessWidget {
             // return ListTile(
             //   title: Text(spotList[index].name),
             // );
-            
+
             return Card(
               child: Column(children: [
                 ListTile(
+                  leading: Image.asset(spotList[index].image),
                   title: Text(spotList[index].name),
                   subtitle: Text(spotList[index].address),
-                  trailing: Image.asset(spotList[index].image)
-                  
                 )
               ]),
             );
