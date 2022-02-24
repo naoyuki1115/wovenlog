@@ -23,64 +23,40 @@ class SpotListScreen extends StatelessWidget {
             onPressed: () => {Navigator.pop(context)},
           ),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: kAppBarColor,
-          unselectedItemColor: kBackgroundColor,
-          selectedItemColor: kPrimaryColor,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.contacts),
-              label: 'Contacts',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.map),
-              label: 'Map',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.chat),
-              label: 'Chat',
-            ),
-          ],
-        ),
+        
+        bottomNavigationBar: CustomButtomBar(),
+
         body: Column(children: [
-          SizedBox(
-            height: 10,
-            child: Image.asset('assets/spot_images/spot0002.jpg'),
-          ),
+          SizedBox(height: 10,),
           SpotListView(),
-          //ShowGmap(),
-
-          //   //SpotListView()],
-          //   Container(child:
-
-          //     ),
-          //   ),
-
-          //   // タイトル・サブタイトル・画像・アイコン等を含めたアイテムが作れる
-          // ListTile(
-          //   leading: Image.asset('assets/images/woven_city.jpeg'),
-          //   title: Text('ListTile'),
-          //   subtitle: Text('subtitle'),
-          //   trailing: Icon(Icons.more_vert),
-          // ),
-          // // 影のついたカードUIが作れる
-          // Card(
-          //   child: Container(
-          //     height: 60,
-          //     width: double.infinity,
-          //     child: Text('Card'),
-          //   ),
-          // ),
-          // // 組み合わせることもOK
-          // Card(
-          //   child: ListTile(
-          //     leading: Image.network('assets/images/woven_city.jpeg'),
-          //     title: Text('Card and ListTile'),
-          //     subtitle: Text('subtitle'),
-          //     trailing: Icon(Icons.more_vert),
-          //   ),
-          // ),
         ]));
+  }
+}
+
+class CustomButtomBar extends StatelessWidget {
+  const CustomButtomBar({Key? key,}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomNavigationBar(
+      backgroundColor: kAppBarColor,
+      unselectedItemColor: kBackgroundColor,
+      selectedItemColor: kPrimaryColor,
+      items: const <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(Icons.contacts),
+          label: 'Contacts',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.map),
+          label: 'Map',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.chat),
+          label: 'Chat',
+        ),
+      ],
+    );
   }
 }
 
@@ -91,29 +67,26 @@ class SpotListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // int likeNum = 0;
     return Expanded(
       child: ListView.builder(
           itemCount: spotList.length,
           itemBuilder: (context, index) {
-            // return Card(
-            //   child: Container(
-            //     height: 80,
-            //     width: double.infinity,
-            //     child: Text(spotList[index].name),
-            //   ),
-            // );
-
-            // return ListTile(
-            //   title: Text(spotList[index].name),
-            // );
-
             return Card(
               child: Column(children: [
                 ListTile(
-                  leading: Image.asset(spotList[index].image),
-                  title: Text(spotList[index].name),
-                  subtitle: Text(spotList[index].address),
-                )
+                    //tileColor: Colors.blue,
+                    leading: Container(
+                        width: 100,
+                        height: 75,
+                        child: Image.asset(spotList[index].image)),
+                    title: Text(spotList[index].name),
+                    subtitle: Text(spotList[index].address),
+                    trailing: SizedBox(width:90,child: LikeWidget()),//LikeWidget(),//Icon(Icons.more_vert),
+                    enabled: true,
+                    onTap: () {/* react to the tile being tapped */}
+                ),
+                //LikeWidget()
               ]),
             );
           }),
@@ -131,4 +104,60 @@ class ShowGmap extends StatelessWidget {
       child: Image.asset('assets/images/woven_city.jpeg'),
     );
   }
+}
+
+// Like widget作成（Statefull App)
+// make Widget
+class LikeWidget extends StatefulWidget {
+  const LikeWidget({Key? key}) : super(key: key);
+  @override
+  State<LikeWidget> createState() => LikeWidget_State();
+}
+
+// make State
+class LikeWidget_State extends State<LikeWidget> {
+
+  bool _isLiked = false;
+  int likeNum = 0;
+  
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.only(right: 12, left: 12),
+      child:Row(
+        mainAxisAlignment: MainAxisAlignment.end, 
+        children: [
+          _buildLikeButton(),
+          SizedBox(
+            child: Text(likeNum.toString()),
+            width: 20,
+          ),
+        ]
+      )
+    );
+  }
+  
+  void _toggleLike() {
+    setState(() {
+      if(_isLiked){
+        _isLiked = false;
+        likeNum--;
+      } else{
+        _isLiked = true;
+        likeNum++;
+      }
+    });
+  }
+
+  Widget _buildLikeButton(){
+    return IconButton(
+      iconSize: 15,
+      padding: const EdgeInsets.only(right: 8, left: 8),
+      icon: (_isLiked
+          ? const Icon(Icons.favorite)
+          : const Icon(Icons.favorite_border)),
+      color: kPrimaryColor,
+      onPressed: _toggleLike,
+    );
+  }  
 }
