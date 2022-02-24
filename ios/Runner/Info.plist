@@ -2,12 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>Privacy – Microphone Usage Description</key>
-	<string></string>
-	<key>Privacy – Camera Usage Description</key>
-	<string></string>
-	<key>Privacy – Photo Library Usage Description</key>
-	<string></string>
+	<key>NSCameraUsageDescription</key>
+	<string>Access to take a photo by camera</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>Access to pick a photo</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Access to pick a photo</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>CFBundleDevelopmentRegion</key>

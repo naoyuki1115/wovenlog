@@ -5,6 +5,11 @@ import 'package:wovenlog/constants.dart';
 import 'package:wovenlog/dummy_data/category_list.dart';
 import 'package:wovenlog/screens/spot_list_screen.dart';
 import 'dart:io';
+import 'dart:async';
+import 'dart:typed_data';
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 // import 'package:wovenlog/screens/spot_list_screen.dart';
 
 void main() {
@@ -121,8 +126,10 @@ class _AddProfileState extends State<AddProfile> {
           Padding(
             // padding: const EdgeInsets.only(left: 30),
             // alignment: const Alignment(-1, 0),
-            padding: const EdgeInsets.only(left: 5.75, right: 5.75),
+            padding: const EdgeInsets.only(left: 45, right: 45),
             child: Container(
+                height: 60,
+                alignment: Alignment(0, 0),
                 padding: EdgeInsets.only(left: 10),
                 decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey),
@@ -130,7 +137,7 @@ class _AddProfileState extends State<AddProfile> {
                 child: PullDownButton()),
           ),
           const SizedBox(
-            height: 20,
+            height: 10,
           ),
           SizedBox(
             width: 300,
@@ -230,14 +237,14 @@ class _PullDownButtonState extends State<PullDownButton> {
     return DropdownButton(
       hint: const Text(
         "Category",
-        style: TextStyle(fontSize: 18, color: Colors.grey),
+        style: TextStyle(fontSize: 17, color: Color.fromARGB(255, 97, 97, 97)),
       ),
       isExpanded: true,
-      // value：DropdownButtonウェィジェットにて使用する値、_selectedCategoryをそれと定義
+      // vColor.fromARGB(255, 114, 114, 114)る値、_selectedCategoryをそれと定義
       value: selectedCategory,
       icon: Icon(Icons.arrow_drop_down),
       iconSize: 40,
-      style: TextStyle(color: kFontColor, fontSize: 20),
+      style: const TextStyle(color: kFontColor, fontSize: 20),
       underline: Container(),
       // newValue=onChangedにて使用する引数
       onChanged: (newvalue) {
@@ -265,15 +272,15 @@ class AddImage extends StatefulWidget {
 }
 
 class _AddImageState extends State<AddImage> {
-  File? _image;
-  final picker = ImagePicker();
+  XFile? _image;
+  ImagePicker picker = ImagePicker();
 
   Future _getImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
-      if (pickedFile != null) {
-        _image = File(pickedFile.path);
+      if (image != null) {
+        _image = XFile(image.path);
       } else {
         const Text('No image selected.');
       }
