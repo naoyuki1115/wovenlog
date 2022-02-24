@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../screens/top_screen.dart';
-import '../screens/top_edit_screen.dart';
+import 'package:wovenlog/screens/spot_list_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'WovenLog',
-      home: TopEditScreen(),
+      home: SpotListScreen(),
     );
   }
 }
