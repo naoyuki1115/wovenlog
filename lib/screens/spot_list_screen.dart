@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:wovenlog/constants.dart';
 import 'package:wovenlog/dummy_data/spot_list.dart';
+import 'package:wovenlog/dummy_data/category_list.dart';
+import 'package:wovenlog/screens/spot_detail_screen.dart';
 
 class SpotListScreen extends StatelessWidget {
   const SpotListScreen({Key? key}) : super(key: key);
@@ -38,56 +40,68 @@ class CustomButtomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
+    //表示するカテゴリindex番号（サンプル）
+    int _firstCats = 0;
+    int _secondCats = 3;
+    int _thirdCats = 5;
+    
     return BottomNavigationBar(
       backgroundColor: kAppBarColor,
       unselectedItemColor: kBackgroundColor,
       selectedItemColor: kPrimaryColor,
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
-          icon: Icon(Icons.contacts),
-          label: 'Contacts',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.map),
-          label: 'Map',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.chat),
-          label: 'Chat',
-        ),
+      items: [
+        _buildBottomIcon(_firstCats),
+        _buildBottomIcon(_secondCats),
+        _buildBottomIcon(_thirdCats),
       ],
     );
   }
+
+  //ボトムバーに表示するアイコンを定義
+  BottomNavigationBarItem _buildBottomIcon(int _catsIndex){
+    return BottomNavigationBarItem(
+      icon: SizedBox(
+        child: Image.asset(categoryList[_catsIndex].icon),
+        height: 25,
+        width: 25,
+      ),
+      label: categoryList[_catsIndex].name,
+    );
+  }
+
 }
 
+//Spot一覧をカード表示
 class SpotListView extends StatelessWidget {
-  const SpotListView({
-    Key? key,
-  }) : super(key: key);
+  const SpotListView({Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     // int likeNum = 0;
     return Expanded(
       child: ListView.builder(
-          itemCount: spotList.length,
+          itemCount: spotList.length,//リストからSpot数取得
           itemBuilder: (context, index) {
             return Card(
-              child: Column(children: [
-                ListTile(
-                    //tileColor: Colors.blue,
-                    leading: Container(
-                        width: 100,
-                        height: 75,
-                        child: Image.asset(spotList[index].image)),
-                    title: Text(spotList[index].name),
-                    subtitle: Text(spotList[index].address),
-                    trailing: SizedBox(width:90,child: LikeWidget()),//LikeWidget(),//Icon(Icons.more_vert),
-                    enabled: true,
-                    onTap: () {/* react to the tile being tapped */}
+              child: ListTile(
+                  //tileColor: Colors.blue,
+                  leading: Container(
+                      width: 100,
+                      height: 75,
+                      child: Image.asset(spotList[index].image)),
+                  title: Text(spotList[index].name),
+                  subtitle: Text(spotList[index].address),
+                  trailing: SizedBox(width:90,child: LikeWidget()),//LikeWidget(),//Icon(Icons.more_vert),
+                  enabled: true,
+                  onTap: () {
+                    /* react to the tile being tapped */
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SpotDetailScreen(spotIndex:index)),
+                    );
+                  }
                 ),
-                //LikeWidget()
-              ]),
             );
           }),
     );
@@ -137,6 +151,7 @@ class LikeWidget_State extends State<LikeWidget> {
     );
   }
   
+  //Likeボタン押した際に動作
   void _toggleLike() {
     setState(() {
       if(_isLiked){
@@ -149,6 +164,7 @@ class LikeWidget_State extends State<LikeWidget> {
     });
   }
 
+  //Likeボタン作成
   Widget _buildLikeButton(){
     return IconButton(
       iconSize: 15,
