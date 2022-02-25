@@ -75,13 +75,21 @@ class CustomButtomBar extends StatelessWidget {
 //Spot一覧をカード表示
 class SpotListView extends StatelessWidget {
   const SpotListView({Key? key,}) : super(key: key);
-
+  
+  // final catsId;
+  // const SpotListView({Key? key, this.catsId}) : super(key: key);
+  
   @override
   Widget build(BuildContext context) {
     // int likeNum = 0;
+
+    final catsId = "category0001";
+    final spotListOne = spotList.where((spotList) => spotList.category_id == catsId);
+
+
     return Expanded(
       child: ListView.builder(
-          itemCount: spotList.length,//リストからSpot数取得
+          itemCount: spotListOne.length,//リストからSpot数取得
           itemBuilder: (context, index) {
             return Card(
               child: ListTile(
@@ -89,9 +97,9 @@ class SpotListView extends StatelessWidget {
                   leading: Container(
                       width: 100,
                       height: 75,
-                      child: Image.asset(spotList[index].image)),
-                  title: Text(spotList[index].name),
-                  subtitle: Text(spotList[index].address),
+                      child: Image.asset(spotListOne.toList()[index].image.toString())),
+                  title: Text(spotListOne.toList()[index].name.toString()),//spotList[index].name),
+                  subtitle: Text(spotListOne.toList()[index].address.toString()),
                   trailing: SizedBox(width:90,child: LikeWidget()),//LikeWidget(),//Icon(Icons.more_vert),
                   enabled: true,
                   onTap: () {
@@ -108,17 +116,17 @@ class SpotListView extends StatelessWidget {
   }
 }
 
-//Google map 表示
-class ShowGmap extends StatelessWidget {
-  const ShowGmap({Key? key}) : super(key: key);
+// //Google map 表示
+// class ShowGmap extends StatelessWidget {
+//   const ShowGmap({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Image.asset('assets/images/woven_city.jpeg'),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       child: Image.asset('assets/images/woven_city.jpeg'),
+//     );
+//   }
+// }
 
 // Like widget作成（Statefull App)
 // make Widget
