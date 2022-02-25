@@ -94,10 +94,9 @@ class SpotDetailScreen extends StatelessWidget {
                         margin: EdgeInsets.only(left: 20),
                         alignment: Alignment.centerLeft,
                         color: Colors.red,
-                        child: Text(
+                        child: const Text(
                           "・URL",
-                          style:
-                              const TextStyle(fontSize: 20, color: kFontColor),
+                          style: TextStyle(fontSize: 20, color: kFontColor),
                         ),
                       ),
                     ),
@@ -120,19 +119,19 @@ class SpotDetailScreen extends StatelessWidget {
               SizedBox(
                 height: 50,
                 child: Container(
-                    margin: EdgeInsets.only(left: 20, right: 10),
+                    margin: const EdgeInsets.only(left: 20, right: 10),
                     alignment: Alignment.centerLeft,
                     color: Colors.blue,
-                    child: Text(
+                    child: const Text(
                       "・Description",
-                      style: const TextStyle(fontSize: 20, color: kFontColor),
+                      style: TextStyle(fontSize: 20, color: kFontColor),
                     )),
               ),
               // 詳細コメント欄//////////////////
               SizedBox(
                 height: 165,
                 child: Container(
-                    margin: EdgeInsets.only(left: 20, right: 10),
+                    margin: const EdgeInsets.only(left: 20, right: 10),
                     alignment: Alignment.topLeft,
                     color: Colors.grey,
                     child: Text(
