@@ -6,4 +6,13 @@ class SelectedCategory {
     this.userId,
     this.categoryId,
   });
+
+  Map toJson() => {
+        'userId': userId,
+        'categoryId': categoryId,
+      };
+
+  SelectedCategory.fromJson(Map json)
+      : userId = json['userId'],
+        categoryId = json['categoryId'];
 }

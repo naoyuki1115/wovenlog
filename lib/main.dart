@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-// import '../screens/top_screen.dart';
-import '../screens/top_screen_json.dart';
-// import '../screens/top_edit_screen.dart';
-import '../screens/top_edit_screen_json.dart';
-// import '../dummy_data/selected_category_list.dart';
-import '../dummy_data/selected_category_list_json.dart';
+import '../screens/top_screen.dart';
+import '../dummy_data/selected_category_list.dart';
 
 void main() {
   runApp(const MyApp());

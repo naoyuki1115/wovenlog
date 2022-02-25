@@ -42,31 +42,27 @@ class CheckBoxListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
 
-    return Consumer<SelectedCategoryList>(
-      builder: (BuildContext context, SelectedCategoryList value, Widget? child) {
-        return ListView.builder(
-          itemCount: categoryList.length,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              margin: const EdgeInsets.symmetric(vertical: 3.0),
-              decoration: BoxDecoration(
-                color: _selectedCategoryList.isCheckedList[index] ? kSecondaryColor : Colors.transparent,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: CheckboxListTile(
-                activeColor: Colors.red,
-                title: Text(
-                  categoryList[index].name,
-                  style: const TextStyle(fontSize: 20),
-                ),
-                value: _selectedCategoryList.isCheckedList[index],
-                controlAffinity: ListTileControlAffinity.leading,
-                onChanged: (val) {
-                  _selectedCategoryList.addOrRemove(index);
-                },
-              ),
-            );
-          },
+    return ListView.builder(
+      itemCount: categoryList.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Container(
+          margin: const EdgeInsets.symmetric(vertical: 3.0),
+          decoration: BoxDecoration(
+            color: _selectedCategoryList.isCheckedList[index] ? kSecondaryColor : Colors.transparent,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          child: CheckboxListTile(
+            activeColor: Colors.red,
+            title: Text(
+              categoryList[index].name,
+              style: const TextStyle(fontSize: 20),
+            ),
+            value: _selectedCategoryList.isCheckedList[index],
+            controlAffinity: ListTileControlAffinity.leading,
+            onChanged: (val) {
+              _selectedCategoryList.addOrRemove(index);
+            },
+          ),
         );
       },
     );

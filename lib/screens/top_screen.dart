@@ -10,7 +10,8 @@ class TopScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
+    // This provider of _selectedCategoryList is not needed in case of using SharedPreferences.
+    // final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -22,7 +23,8 @@ class TopScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.menu, color: kPrimaryColor),
           onPressed: () {
-            _selectedCategoryList.updateSelectedCategory();
+            // This function below is not needed in case of using SharedPreferences.
+            // _selectedCategoryList.updateIsCheckedList();
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const TopEditScreen()),
