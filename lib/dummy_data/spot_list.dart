@@ -1,3 +1,4 @@
+
 import 'spot_class.dart';
 
 List spotList = [

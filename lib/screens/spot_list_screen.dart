@@ -3,16 +3,21 @@ import 'package:wovenlog/constants.dart';
 import 'package:wovenlog/dummy_data/spot_list.dart';
 import 'package:wovenlog/dummy_data/category_list.dart';
 import 'package:wovenlog/screens/spot_detail_screen.dart';
+import 'package:wovenlog/screens/spot_post_screen.dart';
 
 class SpotListScreen extends StatelessWidget {
   const SpotListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    
+    final catsId = "category0001";
+    String catsName = categoryList.where((_list) => _list.id == catsId).toList()[0].name.toString();  
+
     return Scaffold(
         appBar: AppBar(
-          title: const Text(
-            "[Cats name]",
+          title: Text(
+            catsName,//"[Cats name]",
             style: TextStyle(color: kFontColor),
           ),
           backgroundColor: kAppBarColor,
@@ -24,13 +29,24 @@ class SpotListScreen extends StatelessWidget {
             //一つ前に戻る
             onPressed: () => {Navigator.pop(context)},
           ),
+          actions:[
+            IconButton(
+            icon: const Icon(
+              Icons.add,
+              color: kPrimaryColor,
+            ),
+            onPressed: () => {Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SpotPostScreen()),
+            )}
+          ),]
         ),
         
         bottomNavigationBar: CustomButtomBar(),
 
         body: Column(children: [
           SizedBox(height: 10,),
-          SpotListView(),
+          SpotListView(catsId:catsId),
         ]));
   }
 }
@@ -74,22 +90,20 @@ class CustomButtomBar extends StatelessWidget {
 
 //Spot一覧をカード表示
 class SpotListView extends StatelessWidget {
-  const SpotListView({Key? key,}) : super(key: key);
-  
-  // final catsId;
-  // const SpotListView({Key? key, this.catsId}) : super(key: key);
+  final catsId;
+
+  const SpotListView({Key? key, this.catsId}) : super(key: key);
   
   @override
   Widget build(BuildContext context) {
     // int likeNum = 0;
 
-    final catsId = "category0001";
-    final spotListOne = spotList.where((spotList) => spotList.category_id == catsId);
-
+    //カテゴリIDと一致するものに絞り込み
+    final oneSpotList = spotList.where((_list) => _list.category_id == catsId);
 
     return Expanded(
       child: ListView.builder(
-          itemCount: spotListOne.length,//リストからSpot数取得
+          itemCount: oneSpotList.length,//リストからSpot数取得
           itemBuilder: (context, index) {
             return Card(
               child: ListTile(
@@ -97,16 +111,16 @@ class SpotListView extends StatelessWidget {
                   leading: Container(
                       width: 100,
                       height: 75,
-                      child: Image.asset(spotListOne.toList()[index].image.toString())),
-                  title: Text(spotListOne.toList()[index].name.toString()),//spotList[index].name),
-                  subtitle: Text(spotListOne.toList()[index].address.toString()),
+                      child: Image.asset(oneSpotList.toList()[index].image.toString())),
+                  title: Text(oneSpotList.toList()[index].name.toString()),//spotList[index].name),
+                  subtitle: Text(oneSpotList.toList()[index].address.toString()),
                   trailing: SizedBox(width:90,child: LikeWidget()),//LikeWidget(),//Icon(Icons.more_vert),
                   enabled: true,
                   onTap: () {
-                    /* react to the tile being tapped */
+                    String spotId = oneSpotList.toList()[index].id.toString();
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => SpotDetailScreen(spotIndex:index)),
+                      MaterialPageRoute(builder: (context) => SpotDetailScreen(spotId:spotId)),
                     );
                   }
                 ),
