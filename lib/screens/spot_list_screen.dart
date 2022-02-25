@@ -1,89 +1,73 @@
 import 'package:flutter/material.dart';
+import 'package:wovenlog/screens/spot_detail_screen.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(title: 'Navigation with Arguments', home: HomeScreen(),
-        // 3. 2で作成したWidgetをルートテーブルに設定
-        routes: {
-          ExtractArgumentsScreen.routeName: (_) => ExtractArgumentsScreen(),
-        });
+    return MaterialApp(
+      debugShowCheckedModeBanner: true,
+      title: 'Navigator App',
+      home: SpotListScreen(),
+    );
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class SpotListScreen extends StatefulWidget {
+  @override
+  _SpotListScreen createState() => _SpotListScreen();
+}
+
+class _SpotListScreen extends State<SpotListScreen> {
+  final _controller = TextEditingController();
+  String? _inputString;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home Screen'),
+        title: Text("First Screen"),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // A button that navigates to a named route.
-            // The named route extracts the arguments
-            // by itself.
-            ElevatedButton(
+      body: Column(
+        children: <Widget>[
+          Text('入力フォーム'),
+          Padding(
+            padding: EdgeInsets.all(10.0),
+          ),
+          TextField(
+            controller: _controller,
+            onChanged: changeTextField,
+          ),
+          Container(
+            alignment: Alignment.centerLeft,
+            child: ElevatedButton(
+              child: Text('送信'),
               onPressed: () {
-                // When the user taps the button,
-                // navigate to a named route and
-                // provide the arguments as an optional
-                // parameter.
-                Navigator.pushNamed(
-                  context,
-                  ExtractArgumentsScreen.routeName,
-                  arguments: ScreenArguments(
-                    'Extract Arguments Screen',
-                    'This message is extracted in the build method.',
-                  ),
-                );
+                if (_inputString!.isEmpty) {
+                  return;
+                } else {
+                  /// 3. Navigator.push で遷移する際に渡す値を指定する
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          SpotDetailScreen(_inputString!),
+                      fullscreenDialog: true,
+                    ),
+                  );
+                }
               },
-              child: const Text('Navigate to screen that extracts arguments'),
             ),
-            // A button that navigates to a named route.
-            // For this route, extract the arguments in
-            // the onGenerateRoute function and pass them
-            // to the screen.
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
-}
 
-// 2. 引数を抽出し、引数を処理するWidgetを作成
-class ExtractArgumentsScreen extends StatelessWidget {
-  const ExtractArgumentsScreen({Key? key}) : super(key: key);
-
-  static const routeName = '/extractArguments';
-
-  @override
-  Widget build(BuildContext context) {
-    // Extract the arguments from the current ModalRoute
-    // settings and cast them as ScreenArguments.
-    final args = ModalRoute.of(context)!.settings.arguments as ScreenArguments;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(args.title),
-      ),
-      body: Center(
-        child: Text(args.message),
-      ),
-    );
+  void changeTextField(String value) {
+    _inputString = value;
   }
-}
-
-// 1. 引数を定義したクラス
-class ScreenArguments {
-  final String title;
-  final String message;
-
-  ScreenArguments(this.title, this.message);
 }

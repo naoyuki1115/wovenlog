@@ -33,13 +33,14 @@ class SpotPostScreen extends StatelessWidget {
           ),
           backgroundColor: kAppBarColor,
           leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new, color: kPrimaryColor),
-              onPressed: () {
-                Navigator.pop(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()),
-                );
-              }),
+            icon: const Icon(Icons.arrow_back_ios_new, color: kPrimaryColor),
+            onPressed: () {
+              Navigator.pop(
+                context,
+                MaterialPageRoute(builder: (context) => SpotListScreen()),
+              );
+            },
+          ),
         ),
         body: Center(
           child: Column(
@@ -202,10 +203,10 @@ class _AddProfileState extends State<AddProfile> {
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
                   // 画面遷移
-                  Navigator.pop(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                  );
+                  // Navigator.pop(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => HomeScreen()),
+                  // );
                   // 保存処理
                   // 各入力値をListに代入
 
@@ -256,7 +257,7 @@ class _PullDownButtonState extends State<PullDownButton> {
 
       items: list?.map((categoryItem) {
         return DropdownMenuItem(
-          value: categoryItem,
+          value: categoryItem.name,
           child: Text(categoryItem.name),
         );
       }).toList(),
