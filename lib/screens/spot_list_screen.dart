@@ -23,7 +23,7 @@ class SpotListScreen extends StatefulWidget {
 
 class _SpotListScreen extends State<SpotListScreen> {
   final _controller = TextEditingController();
-  String? _inputString;
+  String? _inputSpotId;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +46,7 @@ class _SpotListScreen extends State<SpotListScreen> {
             child: ElevatedButton(
               child: Text('送信'),
               onPressed: () {
-                if (_inputString!.isEmpty) {
+                if (_inputSpotId!.isEmpty) {
                   return;
                 } else {
                   /// 3. Navigator.push で遷移する際に渡す値を指定する
@@ -54,8 +54,7 @@ class _SpotListScreen extends State<SpotListScreen> {
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) =>
-                          SpotDetailScreen(_inputString!),
-                      fullscreenDialog: true,
+                          SpotDetailScreen(_inputSpotId!),
                     ),
                   );
                 }
@@ -68,6 +67,6 @@ class _SpotListScreen extends State<SpotListScreen> {
   }
 
   void changeTextField(String value) {
-    _inputString = value;
+    _inputSpotId = value;
   }
 }

@@ -1,16 +1,11 @@
-// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:wovenlog/constants.dart';
-import 'package:wovenlog/dummy_data/category_list.dart';
 import 'package:wovenlog/screens/spot_list_screen.dart';
-import 'dart:io';
 import 'dart:async';
-import 'dart:typed_data';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
-// import 'package:wovenlog/screens/spot_list_screen.dart';
+
+import '../constants.dart';
+import '../dummy_data/category_list.dart';
+import '../generated_plugin_registrant.dart';
 
 void main() {
   runApp(SpotPostScreen());
@@ -55,10 +50,10 @@ class SpotPostScreen extends StatelessWidget {
                 child: Container(),
               ),
               AddProfile(),
-              Expanded(
-                flex: 4,
-                child: Container(),
-              ),
+              // Expanded(
+              //   flex: 4,
+              //   child: Container(),
+              // ),
             ],
           ),
         ),
@@ -98,123 +93,125 @@ class _AddProfileState extends State<AddProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Column(
-        children: <Widget>[
-          SizedBox(
-            width: 300,
-            height: 60,
-            child: TextFormField(
-              autofocus: true,
-              decoration: InputDecoration(
-                hintText: "Shop name",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(23),
+    return SingleChildScrollView(
+      child: Form(
+        key: _formKey,
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              width: 300,
+              height: 60,
+              child: TextFormField(
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: "Shop name",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(23),
+                  ),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the required infomation';
+                  }
+                  return null;
+                },
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter the required infomation';
-                }
-                return null;
-              },
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          Padding(
-            // padding: const EdgeInsets.only(left: 30),
-            // alignment: const Alignment(-1, 0),
-            padding: const EdgeInsets.only(left: 45, right: 45),
-            child: Container(
-                height: 60,
-                alignment: Alignment(0, 0),
-                padding: EdgeInsets.only(left: 10),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(23)),
-                child: PullDownButton()),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            width: 300,
-            height: 60,
-            child: TextFormField(
-              autofocus: true,
-              decoration: InputDecoration(
-                hintText: "URL",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(23),
+            const SizedBox(
+              height: 10,
+            ),
+            Padding(
+              // padding: const EdgeInsets.only(left: 30),
+              // alignment: const Alignment(-1, 0),
+              padding: const EdgeInsets.only(left: 45, right: 45),
+              child: Container(
+                  height: 60,
+                  alignment: const Alignment(0, 0),
+                  padding: const EdgeInsets.only(left: 10),
+                  decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(23)),
+                  child: PullDownButton()),
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              width: 300,
+              height: 60,
+              child: TextFormField(
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: "URL",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(23),
+                  ),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the required infomation';
+                  }
+                  return null;
+                },
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter the required infomation';
-                }
-                return null;
-              },
             ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            width: 300,
-            height: 60,
-            child: TextFormField(
-              autofocus: true,
-              decoration: InputDecoration(
-                hintText: "Description",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(23),
+            const SizedBox(
+              height: 10,
+            ),
+            SizedBox(
+              width: 300,
+              height: 60,
+              child: TextFormField(
+                autofocus: true,
+                decoration: InputDecoration(
+                  hintText: "Description",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(23),
+                  ),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter the required infomation';
+                  }
+                  return null;
+                },
               ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter the required infomation';
-                }
-                return null;
-              },
             ),
-          ),
-          // 空白
-          const SizedBox(
-            height: 70,
-          ),
-          // 登録＆前ページに遷移するボタン
-          SizedBox(
-            width: 300,
-            height: 60,
-            child: TextButton(
-              child: const Text(
-                "Submit",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              style: TextButton.styleFrom(
-                primary: const Color(0xffD80C28),
-                backgroundColor: kSecondaryColor,
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(100))),
-              ),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  // 画面遷移
-                  // Navigator.pop(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => HomeScreen()),
-                  // );
-                  // 保存処理
-                  // 各入力値をListに代入
+            // 空白
+            const SizedBox(
+              height: 70,
+            ),
+            // 登録＆前ページに遷移するボタン
+            SizedBox(
+              width: 300,
+              height: 60,
+              child: TextButton(
+                child: const Text(
+                  "Submit",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                style: TextButton.styleFrom(
+                  primary: const Color(0xffD80C28),
+                  backgroundColor: kSecondaryColor,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(100))),
+                ),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    // 画面遷移
+                    // Navigator.pop(
+                    //   context,
+                    //   MaterialPageRoute(builder: (context) => HomeScreen()),
+                    // );
+                    // 保存処理
+                    // 各入力値をListに代入
 
-                }
-              },
+                  }
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -229,7 +226,7 @@ class PullDownButton extends StatefulWidget {
 
 class _PullDownButtonState extends State<PullDownButton> {
   // _selectedCategoryはプルダウンから選択されたテキストの受け皿
-  String? selectedCategory = null;
+  String? selectedCategory;
   // listにcategoryListを代入
   List? list = categoryList;
 
@@ -243,9 +240,9 @@ class _PullDownButtonState extends State<PullDownButton> {
       isExpanded: true,
       // vColor.fromARGB(255, 114, 114, 114)る値、_selectedCategoryをそれと定義
       value: selectedCategory,
-      icon: Icon(Icons.arrow_drop_down),
+      icon: const Icon(Icons.arrow_drop_down),
       iconSize: 40,
-      style: const TextStyle(color: kFontColor, fontSize: 20),
+      style: const TextStyle(color: kFontColor, fontSize: 17),
       underline: Container(),
       // newValue=onChangedにて使用する引数
       onChanged: (newvalue) {
