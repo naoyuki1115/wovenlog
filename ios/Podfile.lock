@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 PODS:
   - BSGridCollectionViewLayout (1.2.5)
   - BSImagePicker (2.10.3):
@@ -53,3 +54,28 @@ SPEC CHECKSUMS:
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 
 COCOAPODS: 1.11.2
+||||||| 47d6dd2
+=======
+PODS:
+  - Flutter (1.0.0)
+  - shared_preferences_ios (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  shared_preferences_ios:
+    :path: ".symlinks/plugins/shared_preferences_ios/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
+
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+
+COCOAPODS: 1.11.2
+>>>>>>> 0db89c7516b8d7e996c23218cd6b5e4479b87d61

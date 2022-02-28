@@ -39,6 +39,7 @@ dependencies:
   image_gallery_saver: ^1.7.1
   path_provider: ^2.0.7
   multi_image_picker: any
+  provider: ^6.0.2
 
 dev_dependencies:
   flutter_test:
@@ -66,7 +67,7 @@ flutter:
   assets:
     - assets/icons/
     - assets/images/
-    - assets/images/spot_images/
+    - assets/spot_images/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
