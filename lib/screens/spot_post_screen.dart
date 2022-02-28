@@ -5,7 +5,6 @@ import 'dart:async';
 
 import '../constants.dart';
 import '../dummy_data/category_list.dart';
-import '../generated_plugin_registrant.dart';
 
 void main() {
   runApp(SpotPostScreen());
