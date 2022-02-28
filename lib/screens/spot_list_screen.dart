@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:wovenlog/constants.dart';
 import 'package:wovenlog/dummy_data/spot_list.dart';
 import 'package:wovenlog/dummy_data/category_list.dart';
+import '../dummy_data/selected_category_list.dart';
 import 'package:wovenlog/screens/spot_detail_screen.dart';
 import 'package:wovenlog/screens/spot_post_screen.dart';
 
@@ -59,10 +60,12 @@ class CustomButtomBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
-    //表示するカテゴリindex番号（サンプル）
-    int _firstCats = 0;
-    int _secondCats = 3;
-    int _thirdCats = 5;
+    final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
+    
+    //表示するカテゴリID（上位3つ）
+    String? _firstCatsId = _selectedCategoryList.selectedCategoryList[0].categoryId;
+    String? _secondCatsId = _selectedCategoryList.selectedCategoryList[1].categoryId;
+    String? _thirdCatsId = _selectedCategoryList.selectedCategoryList[2].categoryId;
 
     // void _switchCats(){
     // }
@@ -72,16 +75,17 @@ class CustomButtomBar extends StatelessWidget {
       unselectedItemColor: kBackgroundColor,
       selectedItemColor: kPrimaryColor,
       items: [
-        _buildBottomIcon(_firstCats),
-        _buildBottomIcon(_secondCats),
-        _buildBottomIcon(_thirdCats),
+        _buildBottomIcon(_firstCatsId),
+        _buildBottomIcon(_secondCatsId),
+        _buildBottomIcon(_thirdCatsId),
       ],
       //onTap: _switchCats(),
     );
   }
 
   //ボトムバーに表示するアイコンを定義
-  BottomNavigationBarItem _buildBottomIcon(int _catsIndex){
+  BottomNavigationBarItem _buildBottomIcon(_catsId){
+    int _catsIndex = categoryList.indexWhere((element) => element.id == _catsId);
     return BottomNavigationBarItem(
       icon: SizedBox(
         child: Image.asset(categoryList[_catsIndex].icon),
@@ -91,6 +95,7 @@ class CustomButtomBar extends StatelessWidget {
       label: categoryList[_catsIndex].name,
     );
   }
+
 }
 
 //Spot一覧をカード表示
@@ -103,7 +108,6 @@ class SpotListView extends StatelessWidget {
     final _spotListInstance = Provider.of<SpotList>(context); 
 
     //カテゴリIDと一致するSpotに絞り込み
-    //final oneCatsSpotList = _spotList.narrowDownSpotListByCatsId(catsId);
     _spotListInstance.narrowDownSpotListByCatsId(catsId);
     List oneCatsSpotList = _spotListInstance.getCatsSpotList();
 
