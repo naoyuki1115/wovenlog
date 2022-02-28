@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
 import '../dummy_data/category_list.dart';
+import '../dummy_data/selected_category_list.dart';
 import '../screens/top_screen.dart';
 
 class TopEditScreen extends StatelessWidget {
@@ -33,45 +35,32 @@ class TopEditScreen extends StatelessWidget {
   }
 }
 
-class CheckBoxListView extends StatefulWidget {
+class CheckBoxListView extends StatelessWidget {
   const CheckBoxListView({Key? key}) : super(key: key);
 
   @override
-  _CheckBoxListViewState createState() => _CheckBoxListViewState();
-}
-
-class _CheckBoxListViewState extends State<CheckBoxListView> {
-  List<bool>? _isChecked;
-
-  @override
-  void initState() {
-    super.initState();
-    _isChecked = List<bool>.filled(categoryList.length, false);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
+
     return ListView.builder(
       itemCount: categoryList.length,
       itemBuilder: (BuildContext context, int index) {
         return Container(
           margin: const EdgeInsets.symmetric(vertical: 3.0),
           decoration: BoxDecoration(
-            color: _isChecked![index] ? kSecondaryColor : Colors.transparent,
+            color: _selectedCategoryList.isCheckedList[index] ? kSecondaryColor : Colors.transparent,
             borderRadius: BorderRadius.circular(10),
           ),
           child: CheckboxListTile(
-            activeColor: kPrimaryColor,
+            activeColor: Colors.red,
             title: Text(
               categoryList[index].name,
-              style: const TextStyle(fontSize: 20, color: kFontColor),
+              style: const TextStyle(fontSize: 20),
             ),
-            value: _isChecked![index],
+            value: _selectedCategoryList.isCheckedList[index],
             controlAffinity: ListTileControlAffinity.leading,
             onChanged: (val) {
-              setState(() {
-                _isChecked![index] = val!;
-              });
+              _selectedCategoryList.addOrRemove(index);
             },
           ),
         );
