@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:wovenlog/screens/spot_list_screen.dart';
-import 'dart:async';
 
 import '../constants.dart';
 import '../dummy_data/category_list.dart';
