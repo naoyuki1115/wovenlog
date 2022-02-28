@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wovenlog/dummy_data/spot_list.dart';
 
 import '../screens/login_screen.dart';
 import '../screens/top_screen.dart';
@@ -23,7 +24,10 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => SelectedCategoryList(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SpotList(),
+        ),
       ],
     );
   }

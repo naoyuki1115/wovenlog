@@ -4,17 +4,33 @@ import 'spot_class.dart';
 
 class SpotList extends ChangeNotifier {
 
-  //指定のカテゴリIDと一致するSpotリストを取得
-  List narrowDownSpotListByCatsId(catsId){
-    return spotList.where((_list) => _list.category_id == catsId).toList();
+  //指定のカテゴリIDでSpotリストを絞り込み（Providerへ通知）
+  void narrowDownSpotListByCatsId(_catsId){
+    _catsSpotList = spotList.where((_list) => _list.category_id == _catsId).toList();
+    notifyListeners();
+  }
+
+  //カテゴリで絞り込み後のSpotリスト取得
+  List getCatsSpotList(){
+    return _catsSpotList;
   }
 
   //指定のSpotIDと一致するSpot情報を取得
-  Spot getSpotInfo(spotId){
-    return spotList.singleWhere((_list) => _list.spot_id == spotId);
+  Spot getSpotInfo(_spotId){
+    return spotList.singleWhere((_list) => _list.id == _spotId);
   }
 
-  List spotList = [
+  //Spot追加（Providerへ通知）
+  void addSpot(Spot _addedSpot){
+    spotList.add(_addedSpot);
+    notifyListeners();
+  }
+
+  //カテゴリで絞り込み後リスト（Providerで監視）
+  List<Spot> _catsSpotList = <Spot>[];
+
+  //Spotリスト（Providerで監視）
+  List<Spot> spotList = [
     Spot(
       id: "spot0001",
       name: "McDonald's",

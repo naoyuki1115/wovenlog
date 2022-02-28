@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:wovenlog/constants.dart';
 import 'package:wovenlog/dummy_data/spot_list.dart';
 import 'package:wovenlog/dummy_data/category_list.dart';
@@ -99,10 +100,12 @@ class SpotListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _spotList = SpotList();
+    final _spotListInstance = Provider.of<SpotList>(context); 
 
     //カテゴリIDと一致するSpotに絞り込み
-    final oneCatsSpotList = _spotList.narrowDownSpotListByCatsId(catsId);
+    //final oneCatsSpotList = _spotList.narrowDownSpotListByCatsId(catsId);
+    _spotListInstance.narrowDownSpotListByCatsId(catsId);
+    List oneCatsSpotList = _spotListInstance.getCatsSpotList();
 
     return Expanded(
       child: ListView.builder(
