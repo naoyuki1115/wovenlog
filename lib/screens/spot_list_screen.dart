@@ -11,8 +11,9 @@ class SpotListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     
+    //カテゴリIDからカテゴリ名を取得
     final catsId = "category0001";
-    String catsName = categoryList.where((_list) => _list.id == catsId).toList()[0].name.toString();  
+    String catsName = categoryList.singleWhere((_list) => _list.id == catsId).name.toString();  
 
     return Scaffold(
         appBar: AppBar(
@@ -61,6 +62,9 @@ class CustomButtomBar extends StatelessWidget {
     int _firstCats = 0;
     int _secondCats = 3;
     int _thirdCats = 5;
+
+    // void _switchCats(){
+    // }
     
     return BottomNavigationBar(
       backgroundColor: kAppBarColor,
@@ -71,6 +75,7 @@ class CustomButtomBar extends StatelessWidget {
         _buildBottomIcon(_secondCats),
         _buildBottomIcon(_thirdCats),
       ],
+      //onTap: _switchCats(),
     );
   }
 
@@ -85,25 +90,23 @@ class CustomButtomBar extends StatelessWidget {
       label: categoryList[_catsIndex].name,
     );
   }
-
 }
 
 //Spot一覧をカード表示
 class SpotListView extends StatelessWidget {
   final catsId;
-
   const SpotListView({Key? key, this.catsId}) : super(key: key);
-  
+
   @override
   Widget build(BuildContext context) {
-    // int likeNum = 0;
+    final _spotList = SpotList();
 
-    //カテゴリIDと一致するものに絞り込み
-    final oneSpotList = spotList.where((_list) => _list.category_id == catsId);
+    //カテゴリIDと一致するSpotに絞り込み
+    final oneCatsSpotList = _spotList.narrowDownSpotListByCatsId(catsId);
 
     return Expanded(
       child: ListView.builder(
-          itemCount: oneSpotList.length,//リストからSpot数取得
+          itemCount: oneCatsSpotList.length,//リストからSpot数取得
           itemBuilder: (context, index) {
             return Card(
               child: ListTile(
@@ -111,13 +114,13 @@ class SpotListView extends StatelessWidget {
                   leading: Container(
                       width: 100,
                       height: 75,
-                      child: Image.asset(oneSpotList.toList()[index].image.toString())),
-                  title: Text(oneSpotList.toList()[index].name.toString()),//spotList[index].name),
-                  subtitle: Text(oneSpotList.toList()[index].address.toString()),
+                      child: Image.asset(oneCatsSpotList[index].image.toString())),
+                  title: Text(oneCatsSpotList[index].name.toString()),//spotList[index].name),
+                  subtitle: Text(oneCatsSpotList[index].address.toString()),
                   trailing: SizedBox(width:90,child: LikeWidget()),//LikeWidget(),//Icon(Icons.more_vert),
                   enabled: true,
                   onTap: () {
-                    String spotId = oneSpotList.toList()[index].id.toString();
+                    String spotId = oneCatsSpotList[index].id.toString();
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => SpotDetailScreen(spotId:spotId)),
@@ -130,17 +133,6 @@ class SpotListView extends StatelessWidget {
   }
 }
 
-// //Google map 表示
-// class ShowGmap extends StatelessWidget {
-//   const ShowGmap({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       child: Image.asset('assets/images/woven_city.jpeg'),
-//     );
-//   }
-// }
 
 // Like widget作成（Statefull App)
 // make Widget
