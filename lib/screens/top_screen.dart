@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:wovenlog/dummy_data/category_list.dart';
-import 'package:wovenlog/constants.dart';
+import 'package:provider/provider.dart';
+
+import '../dummy_data/selected_category_list.dart';
+import '../constants.dart';
 import '../screens/top_edit_screen.dart';
 
 class TopScreen extends StatelessWidget {
@@ -8,6 +10,9 @@ class TopScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // This provider of _selectedCategoryList is not needed in case of using SharedPreferences.
+    // final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -18,6 +23,8 @@ class TopScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.menu, color: kPrimaryColor),
           onPressed: () {
+            // This function below is not needed in case of using SharedPreferences.
+            // _selectedCategoryList.updateIsCheckedList();
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const TopEditScreen()),
@@ -68,11 +75,13 @@ class GridViewSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
+
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 3,
       ),
-      itemCount: 10,
+      itemCount: _selectedCategoryList.selectedCategoryList.length,
       itemBuilder: (BuildContext context, int index) {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -97,13 +106,16 @@ class GridViewSection extends StatelessWidget {
                   ],
                 ),
                 child: Image.asset(
-                  categoryList[index].icon,
+                  _selectedCategoryList.searchSelectedCategoryNameOrIcon(
+                      index, false),
+                  // categoryList[index].icon,
                 ),
               ),
             ),
             const SizedBox(height: 10),
             Text(
-              categoryList[index].name,
+              _selectedCategoryList.searchSelectedCategoryNameOrIcon(
+                  index, true),
               style: const TextStyle(color: kFontColor),
             ),
           ],
