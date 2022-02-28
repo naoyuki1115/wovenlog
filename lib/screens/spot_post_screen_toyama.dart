@@ -7,14 +7,10 @@ import 'package:wovenlog/screens/spot_list_screen.dart';
 import 'dart:io';
 import 'dart:async';
 import 'dart:typed_data';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+// import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
+// import 'package:path_provider/path_provider.dart';
 // import 'package:wovenlog/screens/spot_list_screen.dart';
-
-void main() {
-  runApp(SpotPostScreen());
-}
 
 // メインクラス
 class SpotPostScreen extends StatelessWidget {
