@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import './screens/spot_post_screen_toyama.dart';
-import '../dummy_data/selected_category_list.dart';
+import './dummy_data/spot_list_provider.dart';
+import './dummy_data/selected_category_list.dart';
 
 void main() {
   runApp(const MyApp());
@@ -21,7 +22,10 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => SelectedCategoryList(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SpotListNotifier(),
+        ),
       ],
     );
   }

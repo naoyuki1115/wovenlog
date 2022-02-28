@@ -1,60 +1,56 @@
-// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:wovenlog/constants.dart';
-import 'package:wovenlog/dummy_data/category_list.dart';
-import 'package:wovenlog/screens/spot_list_screen.dart';
-import 'dart:io';
-import 'dart:async';
-import 'dart:typed_data';
+
+import '../constants.dart';
+import '../dummy_data/category_list.dart';
+import '../dummy_data/spot_class.dart';
+import '../dummy_data/spot_list_provider.dart';
+import '../screens/top_screen.dart';
+
 // import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:image_picker/image_picker.dart';
 // import 'package:path_provider/path_provider.dart';
 // import 'package:wovenlog/screens/spot_list_screen.dart';
 
-// メインクラス
 class SpotPostScreen extends StatelessWidget {
   const SpotPostScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'spot_post_screen',
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text(
-            'Post',
-            style: TextStyle(fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
-          ),
-          backgroundColor: kAppBarColor,
-          leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios_new, color: kPrimaryColor),
-              onPressed: () {
-                Navigator.pop(
-                  context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()),
-                );
-              }),
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Post',
+          style: TextStyle(fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
         ),
-        body: Center(
-          child: Column(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-              AddImage(),
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-              AddProfile(),
-              Expanded(
-                flex: 4,
-                child: Container(),
-              ),
-            ],
-          ),
+        backgroundColor: kAppBarColor,
+        leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new, color: kPrimaryColor),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const TopScreen()),
+              );
+            }),
+      ),
+      body: Center(
+        child: Column(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Container(),
+            ),
+            const AddImage(),
+            Expanded(
+              flex: 1,
+              child: Container(),
+            ),
+            const AddProfile(),
+            Expanded(
+              flex: 4,
+              child: Container(),
+            ),
+          ],
         ),
       ),
     );
@@ -71,12 +67,30 @@ class AddProfile extends StatefulWidget {
 
 class _AddProfileState extends State<AddProfile> {
   final _formKey = GlobalKey<FormState>();
-  final myController = TextEditingController();
+
+  // final _spotNameController = TextEditingController();
+  String _spotName = '';
+  String _spotURL = '';
+  String _spotDescription = '';
+
+  // final _spotURLController = TextEditingController();
+  // final _spotDescriptionController = TextEditingController();
+
   late FocusNode myFocusNode;
-  List userInfomations = [];
 
   @override
   void initState() {
+    // _newSpot.id = '';
+    // _newSpot.name = '';
+    // _newSpot.address = '';
+    // _newSpot.latitude = 0.0;
+    // _newSpot.longitude = 0.0;
+    // _newSpot.url = '';
+    // _newSpot.image = '';
+    // _newSpot.createdDate = DateTime(2022, 1, 1);
+    // _newSpot.categoryId = '';
+    // _newSpot.description = '';
+
     super.initState();
 
     myFocusNode = FocusNode();
@@ -90,8 +104,16 @@ class _AddProfileState extends State<AddProfile> {
     super.dispose();
   }
 
+  void _saveForm() {
+    if (_formKey.currentState!.validate()) {
+      _formKey.currentState!.save();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    final _spotListNotifier = Provider.of<SpotListNotifier>(context);
+
     return Form(
       key: _formKey,
       child: Column(
@@ -100,6 +122,7 @@ class _AddProfileState extends State<AddProfile> {
             width: 300,
             height: 60,
             child: TextFormField(
+              // controller: _spotNameController,
               autofocus: true,
               decoration: InputDecoration(
                 hintText: "Shop name",
@@ -113,6 +136,11 @@ class _AddProfileState extends State<AddProfile> {
                 }
                 return null;
               },
+              onSaved: (newValue) {
+                setState(() {
+                  _spotName = newValue!;
+                });
+              },
             ),
           ),
           const SizedBox(
@@ -124,11 +152,13 @@ class _AddProfileState extends State<AddProfile> {
             padding: const EdgeInsets.only(left: 45, right: 45),
             child: Container(
                 height: 60,
-                alignment: Alignment(0, 0),
-                padding: EdgeInsets.only(left: 10),
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(23)),
-                child: PullDownButton()),
+                alignment: Alignment.center,
+                padding: const EdgeInsets.only(left: 10),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(23),
+                ),
+                child: const PullDownButton()),
           ),
           const SizedBox(
             height: 10,
@@ -149,6 +179,11 @@ class _AddProfileState extends State<AddProfile> {
                   return 'Please enter the required infomation';
                 }
                 return null;
+              },
+              onSaved: (newValue) {
+                setState(() {
+                  _spotURL = newValue!;
+                });
               },
             ),
           ),
@@ -172,6 +207,11 @@ class _AddProfileState extends State<AddProfile> {
                 }
                 return null;
               },
+              onSaved: (newValue) {
+                setState(() {
+                  _spotDescription = newValue!;
+                });
+              },
             ),
           ),
           // 空白
@@ -190,18 +230,14 @@ class _AddProfileState extends State<AddProfile> {
               style: TextButton.styleFrom(
                 primary: const Color(0xffD80C28),
                 backgroundColor: kSecondaryColor,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100))),
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(100)),
+                ),
               ),
               onPressed: () {
                 if (_formKey.currentState!.validate()) {
-                  // 画面遷移
-                  Navigator.pop(
-                    context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()),
-                  );
-                  // 保存処理
-                  // 各入力値をListに代入
-
+                  _formKey.currentState!.save();
+                  _spotListNotifier.addNewSpot(_spotName, _spotURL, _spotDescription);
                 }
               },
             ),
@@ -249,7 +285,7 @@ class _PullDownButtonState extends State<PullDownButton> {
 
       items: list?.map((categoryItem) {
         return DropdownMenuItem(
-          value: categoryItem,
+          value: categoryItem.name,
           child: Text(categoryItem.name),
         );
       }).toList(),

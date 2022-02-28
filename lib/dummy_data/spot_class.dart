@@ -6,10 +6,9 @@ class Spot {
   final double? longitude;
   final String? url;
   final String? image;
-  final DateTime? created_date;
-  final String? category_id;
+  final DateTime? createdDate;
+  final String? categoryId;
   final String? description;
-
 
   Spot({
     this.id,
@@ -19,8 +18,8 @@ class Spot {
     this.longitude,
     this.url,
     this.image,
-    this.created_date,
-    this.category_id,
+    this.createdDate,
+    this.categoryId,
     this.description,
   });
 }
