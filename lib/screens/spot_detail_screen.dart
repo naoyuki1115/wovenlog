@@ -14,23 +14,25 @@ class SpotDetailScreen extends StatelessWidget {
 
   //const SpotDetailScreen({this.spotIndex,});
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-      title: Text(
-        spotId, //spotList[spotIndex].name,
-        style: TextStyle(color: kFontColor),
-      ),
-      leading: IconButton(
-        icon: const Icon(
-          Icons.arrow_back,
-          color: kPrimaryColor,
-        ),
-        //一つ前に戻る
-        onPressed: () => {Navigator.pop(context)},
-      ),
-    ));
+      appBar: AppBar(
+          title: Text(
+            spotId,//spotList[spotIndex].name,
+            style: TextStyle(color: kFontColor),
+          ),
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: kPrimaryColor,
+            ),
+            //一つ前に戻る
+            onPressed: () => {Navigator.pop(context)},
+          ),
+      )
+    );
   }
 }
 ///

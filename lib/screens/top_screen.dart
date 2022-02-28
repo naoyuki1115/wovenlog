@@ -106,14 +106,16 @@ class GridViewSection extends StatelessWidget {
                   ],
                 ),
                 child: Image.asset(
-                  _selectedCategoryList.searchSelectedCategoryNameOrIcon(index, false),
+                  _selectedCategoryList.searchSelectedCategoryNameOrIcon(
+                      index, false),
                   // categoryList[index].icon,
                 ),
               ),
             ),
             const SizedBox(height: 10),
             Text(
-              _selectedCategoryList.searchSelectedCategoryNameOrIcon(index, true),
+              _selectedCategoryList.searchSelectedCategoryNameOrIcon(
+                  index, true),
               style: const TextStyle(color: kFontColor),
             ),
           ],
