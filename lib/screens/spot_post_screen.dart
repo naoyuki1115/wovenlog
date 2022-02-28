@@ -20,6 +20,7 @@ class SpotPostScreen extends StatelessWidget {
     return MaterialApp(
       title: 'spot_post_screen',
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           title: const Text(
             'Post',
@@ -50,10 +51,13 @@ class SpotPostScreen extends StatelessWidget {
                 child: Container(),
               ),
               AddProfile(),
-              // Expanded(
-              //   flex: 4,
-              //   child: Container(),
-              // ),
+              Expanded(
+                flex: 4,
+                child: Container(),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).viewInsets.bottom,
+              ),
             ],
           ),
         ),
@@ -93,125 +97,125 @@ class _AddProfileState extends State<AddProfile> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            SizedBox(
-              width: 300,
-              height: 60,
-              child: TextFormField(
-                autofocus: true,
-                decoration: InputDecoration(
-                  hintText: "Shop name",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(23),
-                  ),
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: <Widget>[
+          SizedBox(
+            width: 300,
+            height: 60,
+            child: TextFormField(
+              autofocus: true,
+              decoration: InputDecoration(
+                hintText: "Shop name",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(23),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the required infomation';
-                  }
-                  return null;
-                },
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter the required infomation';
+                }
+                return null;
+              },
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              // padding: const EdgeInsets.only(left: 30),
-              // alignment: const Alignment(-1, 0),
-              padding: const EdgeInsets.only(left: 45, right: 45),
-              child: Container(
-                  height: 60,
-                  alignment: const Alignment(0, 0),
-                  padding: const EdgeInsets.only(left: 10),
-                  decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(23)),
-                  child: PullDownButton()),
-            ),
-            const SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              width: 300,
-              height: 60,
-              child: TextFormField(
-                autofocus: true,
-                decoration: InputDecoration(
-                  hintText: "URL",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(23),
-                  ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            width: 300,
+            // Padding(
+            //   // padding: const EdgeInsets.only(left: 30),
+            //   // alignment: const Alignment(-1, 0),
+            //   padding: const EdgeInsets.only(left: 45, right: 45),
+            child: Container(
+                height: 60,
+                alignment: const Alignment(0, 0),
+                padding: const EdgeInsets.only(left: 10),
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(23)),
+                child: PullDownButton()),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            width: 300,
+            height: 60,
+            child: TextFormField(
+              autofocus: true,
+              decoration: InputDecoration(
+                hintText: "URL",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(23),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the required infomation';
-                  }
-                  return null;
-                },
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter the required infomation';
+                }
+                return null;
+              },
             ),
-            const SizedBox(
-              height: 10,
-            ),
-            SizedBox(
-              width: 300,
-              height: 60,
-              child: TextFormField(
-                autofocus: true,
-                decoration: InputDecoration(
-                  hintText: "Description",
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(23),
-                  ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          SizedBox(
+            width: 300,
+            height: 60,
+            child: TextFormField(
+              autofocus: true,
+              decoration: InputDecoration(
+                hintText: "Description",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(23),
                 ),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter the required infomation';
-                  }
-                  return null;
-                },
               ),
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter the required infomation';
+                }
+                return null;
+              },
             ),
-            // 空白
-            const SizedBox(
-              height: 70,
-            ),
-            // 登録＆前ページに遷移するボタン
-            SizedBox(
-              width: 300,
-              height: 60,
-              child: TextButton(
-                child: const Text(
-                  "Submit",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                style: TextButton.styleFrom(
-                  primary: const Color(0xffD80C28),
-                  backgroundColor: kSecondaryColor,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(100))),
-                ),
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // 画面遷移
-                    // Navigator.pop(
-                    //   context,
-                    //   MaterialPageRoute(builder: (context) => HomeScreen()),
-                    // );
-                    // 保存処理
-                    // 各入力値をListに代入
+          ),
+          // 空白
+          const SizedBox(
+            height: 70,
+          ),
+          // 登録＆前ページに遷移するボタン
+          SizedBox(
+            width: 300,
+            height: 60,
+            child: TextButton(
+              child: const Text(
+                "Submit",
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              style: TextButton.styleFrom(
+                primary: const Color(0xffD80C28),
+                backgroundColor: kSecondaryColor,
+                shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(100))),
+              ),
+              onPressed: () {
+                if (_formKey.currentState!.validate()) {
+                  // 画面遷移
+                  // Navigator.pop(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => HomeScreen()),
+                  // );
+                  // 保存処理
+                  // 各入力値をListに代入
 
-                  }
-                },
-              ),
+                }
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

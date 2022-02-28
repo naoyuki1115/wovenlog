@@ -4,26 +4,29 @@ import 'package:wovenlog/screens/spot_list_screen.dart';
 import '../constants.dart';
 import '../dummy_data/category_list.dart';
 import '../dummy_data/spot_list.dart';
-import '../generated_plugin_registrant.dart';
+// import '../generated_plugin_registrant.dart';
 
 class SpotDetailScreen extends StatelessWidget {
   //前ページから受け取ったSPOTのID
-  final String _inputSpotId;
-  SpotDetailScreen(this._inputSpotId);
+  // final String _inputSpotId;
+  // SpotDetailScreen(this._inputSpotId);
 
   // List _selectedSpotList =
   //     spotList.where((_shop) => _shop.id == _inputSpotId).toList();
+
   // String _spotName = _selectedSpotList[0].name;
   // String _spotImage = _selectedSpotList[0].image;
+
   // String _selectedCategory_id = _selectedSpotList[0].category_id;
   // List _spotCategory = categoryList
   //     .where((_category) => _category.id == _selectedCategory_id)
   //     .toList()[0]
   //     .name;
+
   // String _spotUrl = _selectedSpotList[0].url;
   // String _spotDescription = _selectedSpotList[0].description;
 
-  /// 2. 引数受け取り用にinputStringの引数を指定したコンストラクタを書く
+  // / 2. 引数受け取り用にinputStringの引数を指定したコンストラクタを書く
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +67,7 @@ class SpotDetailScreen extends StatelessWidget {
                 margin: const EdgeInsets.only(top: 10),
                 alignment: Alignment.center,
                 child: Text(
-                  _inputSpotId,
+                  "sss",
                   style: const TextStyle(fontSize: 20, color: kFontColor),
                 ),
               ),
