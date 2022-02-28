@@ -33,10 +33,10 @@ class MyApp extends StatelessWidget {
         builder: (context, state) => const TopEditScreen(),
       ),
       GoRoute(
-        path: '/spot_list_screen',
-        builder: (context, state) => const SpotListScreen(),
-        // path: '/spot_list_screen/:categoryId',
-        // builder: (context, state) => SpotListScreen(categoryId: state.params['categoryId']!),
+        // path: '/spot_list_screen',
+        // builder: (context, state) => const SpotListScreen(),
+        path: '/spot_list_screen/:categoryId',
+        builder: (context, state) => SpotListScreen(categoryId: state.params['categoryId']!),
       ),
       GoRoute(
         path: '/spot_detail_screen/:spotId',
@@ -64,19 +64,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
-  // @override
-  // Widget build(BuildContext context) {
-  //   return MultiProvider(
-  //     child: const MaterialApp(
-  //       title: 'WovenLog',
-  //       home: TopScreen(),
-  //     ),
-  //     providers: [
-  //       ChangeNotifierProvider(
-  //         create: (context) => SelectedCategoryList(),
-  //       )
-  //     ],
-  //   );
-  // }

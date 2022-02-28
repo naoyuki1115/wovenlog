@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 import '../constants.dart';
 import '../dummy_data/category_list.dart';
 import '../dummy_data/selected_category_list.dart';
-import '../screens/top_screen.dart';
 
 class TopEditScreen extends StatelessWidget {
   const TopEditScreen({Key? key}) : super(key: key);
@@ -18,14 +18,7 @@ class TopEditScreen extends StatelessWidget {
           style: TextStyle(color: kFontColor),
         ),
         backgroundColor: kAppBarColor,
-        leading: IconButton(
-            icon: const Icon(Icons.menu, color: kPrimaryColor),
-            onPressed: () {
-              Navigator.pop(
-                context,
-                MaterialPageRoute(builder: (context) => const TopScreen()),
-              );
-            }),
+        leading: IconButton(icon: const Icon(Icons.menu, color: kPrimaryColor), onPressed: () => context.pop()),
       ),
       body: const Padding(
         padding: EdgeInsets.symmetric(vertical: 30.0, horizontal: 20.0),
