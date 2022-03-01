@@ -31,7 +31,7 @@ class Spot {
         'longitude': longitude,
         'url': url,
         'image': image,
-        'createdDate': createdDate,
+        'createdDate': createdDate.toString(),
         'categoryId': categoryId,
         'description': description,
       };
@@ -44,7 +44,7 @@ class Spot {
         longitude = json['longitude'],
         url = json['url'],
         image = json['image'],
-        createdDate = json['createdDate'],
+        createdDate = DateTime.parse(json['createdDate']),
         categoryId = json['categoryId'],
         description = json['description'];
 }

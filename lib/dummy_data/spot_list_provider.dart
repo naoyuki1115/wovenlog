@@ -1,10 +1,6 @@
-import 'dart:io';
-import 'dart:typed_data';
-import 'package:flutter/services.dart';
-import 'package:path/path.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'spot_class.dart';
@@ -16,51 +12,45 @@ class SpotListNotifier extends ChangeNotifier {
   String message = "";
   // ImagePicker? picker;
 
-  List<Spot> get selectedCategoryList => _spotList;
+  List<Spot> get spotList => _spotList;
 
-  // SpotListNotifier() {
-  //   picker = ImagePicker();
-  // }
+  SpotListNotifier() {
+    loadDataViaSharedPreferences();
+    // picker = ImagePicker();
+  }
 
   Future getImage() async {
     ImagePicker picker = ImagePicker();
     imageFile = await picker.pickImage(source: ImageSource.gallery);
-
-    // if (imageFile != null) {
-    //   var imagePath = XFile(imageFile!.path);
-    //   print(imagePath);
-
-    //   print("image picked");
-    // } else {
-    //   message = "No image selected";
-    // }
   }
 
-  // Future saveToSharedPreferences(XFile image) async {
-  //   final path = await localPath;
-  //   final String fileName = basename(image.path);
-  //   final imagePath = '$path/$fileName';
-  // }
+  Future saveToSharedPreferences() async {
+    List<String> savedSpotList = _spotList
+        .map(
+          (e) => json.encode(e.toJson()),
+        )
+        .toList();
 
-  // Future get localPath async {
-  //   Directory appDocDir = await getApplicationDocumentsDirectory();
-  //   String path = appDocDir.path;
-  //   return path;
-  // }
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  // Future sharedPreferencesWrite(imagePath) async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setString('sample_image_key_220301', imagePath);
-  // }
+    await prefs.setStringList('savedSpotList_2203011556', savedSpotList);
+  }
 
-  // Future<Uint8List> sharedPreferencesRead() async {
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   String imagePath = prefs.getString('sample_image_key_220301').toString();
+  Future loadDataViaSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  //   ByteData byte = await rootBundle.load(imagePath);
-  //   final Uint8List list = byte.buffer.asUint8List();
-  //   return list;
-  // }
+    var result = prefs.getStringList('savedSpotList_2203011556');
+
+    if (result != null) {
+      _spotList = result
+          .map(
+            (e) => Spot.fromJson(json.decode(e)),
+          )
+          .toList();
+    }
+
+    notifyListeners();
+  }
 
   void addNewSpot(String name, String url, String description, String? categoryName) {
     String categoryLength = _spotList.length.toString();
@@ -83,20 +73,14 @@ class SpotListNotifier extends ChangeNotifier {
       _spotList.add(_newSpot);
       print(_newSpot.image);
       print(_spotList.length);
+      saveToSharedPreferences();
     } else {
       message = "No image selected";
       print(message);
     }
   }
 
-  Future<void> saveImagePath() async {
-    if (imageFile != null) {
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      String path = imageFile!.path;
-    }
-  }
-
-  final List<Spot> _spotList = <Spot>[
+  List<Spot> _spotList = <Spot>[
     Spot(
       id: "spot0001",
       name: "McDonald's",
