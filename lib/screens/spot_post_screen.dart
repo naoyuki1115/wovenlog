@@ -43,8 +43,8 @@ class SpotPostScreen extends StatelessWidget {
                   url:
                       "https://www.google.com/maps/place/McDonald's./@35.6796886,139.7678116,15z/data=!4m9!1m2!2m1!1sMcDonald's!3m5!1s0x60188bfeba8313b7:0xf0ef793b5d8bc354!8m2!3d35.679713!4d139.7677172!15sCgpNY0RvbmFsZCdzIgOIAQFaDCIKbWNkb25hbGQnc5IBFGZhc3RfZm9vZF9yZXN0YXVyYW50",
                   image: "assets/images/spot_images/spot0001.jpg",
-                  created_date: DateTime(2022, 1, 1),
-                  category_id: 'category0001',
+                  createdDate: DateTime(2022, 1, 1),
+                  categoryId: 'category0001',
                   description: '東京駅マック',
                 );
 
