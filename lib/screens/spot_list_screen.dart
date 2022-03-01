@@ -53,8 +53,8 @@ class _SpotListScreen extends State<SpotListScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (BuildContext context) => SpotDetailScreen(),
-                    ),
+                        builder: (BuildContext context) =>
+                            SpotDetailScreen(spotId: _inputSpotId)),
                   );
                 }
               },

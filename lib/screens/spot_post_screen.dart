@@ -1,18 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:wovenlog/screens/spot_list_screen.dart';
 
 import '../constants.dart';
 import '../dummy_data/category_list.dart';
+import 'spot_list_screen.dart';
 
 void main() {
   runApp(SpotPostScreen());
 }
 
-// メインクラス
-class SpotPostScreen extends StatelessWidget {
+class SpotPostScreen extends StatefulWidget {
   const SpotPostScreen({Key? key}) : super(key: key);
 
+  @override
+  State<SpotPostScreen> createState() => _SpotPostScreenState();
+}
+
+String _errMsg = '';
+bool _postState = false;
+
+void submit() {
+  if (_postState) {
+    //画面遷移
+    // 登録処理
+  } else {
+    _errMsg = 'Please fill some required info';
+  }
+}
+
+class _SpotPostScreenState extends State<SpotPostScreen> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,6 +42,7 @@ class SpotPostScreen extends StatelessWidget {
                 fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
           ),
           backgroundColor: kAppBarColor,
+          // 戻るボタン
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new, color: kPrimaryColor),
             onPressed: () {
@@ -36,25 +53,62 @@ class SpotPostScreen extends StatelessWidget {
             },
           ),
         ),
-        body: Center(
+        body: Container(
+          height: 750,
+          alignment: Alignment.center,
           child: Column(
             children: [
               Expanded(
                 flex: 1,
                 child: Container(),
               ),
+              // Submitエラー表示
+              ConstrainedBox(
+                constraints: BoxConstraints(minHeight: 30.0),
+                child: Text(
+                  _errMsg, //loginボタン押下後に表示内容更新
+                  style: TextStyle(color: kPrimaryColor),
+                ),
+              ),
+              // 入力フォーム
+              AddProfile(),
+              // 空白
+              Expanded(
+                flex: 1,
+                child: Container(),
+              ),
+              // 画像投稿フォーム
               AddImage(),
               Expanded(
                 flex: 1,
                 child: Container(),
               ),
-              AddProfile(),
+              // Submitボタン
+              SizedBox(
+                width: 300,
+                height: 60,
+                child: TextButton(
+                  child: const Text(
+                    "Submit",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  style: TextButton.styleFrom(
+                    primary: const Color(0xffD80C28),
+                    backgroundColor: kSecondaryColor,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(100))),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      // Submit成功可否の表示＆Listへの登録
+                      submit();
+                    });
+                  },
+                ),
+              ),
               Expanded(
                 flex: 4,
                 child: Container(),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).viewInsets.bottom,
               ),
             ],
           ),
@@ -76,20 +130,18 @@ class _AddProfileState extends State<AddProfile> {
   final _formKey = GlobalKey<FormState>();
   final myController = TextEditingController();
   late FocusNode myFocusNode;
-  List userInfomations = [];
 
   @override
+  // オートフォーカス用にstateを初期化
   void initState() {
     super.initState();
-
     myFocusNode = FocusNode();
   }
 
+  //フォーカス終了
   @override
   void dispose() {
-    // Clean up the focus node when the Form is disposed.
     myFocusNode.dispose();
-
     super.dispose();
   }
 
@@ -97,121 +149,70 @@ class _AddProfileState extends State<AddProfile> {
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      child: Column(
-        children: <Widget>[
-          SizedBox(
-            width: 300,
-            height: 60,
-            child: TextFormField(
-              autofocus: true,
-              decoration: InputDecoration(
-                hintText: "Shop name",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(23),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 1,
+            child: Container(),
+          ),
+          Expanded(
+            flex: 8,
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    labelText: "Spot name",
+                    hintText: "Spot name",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(23),
+                    ),
+                  ),
                 ),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter the required infomation';
-                }
-                return null;
-              },
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            width: 300,
-            // Padding(
-            //   // padding: const EdgeInsets.only(left: 30),
-            //   // alignment: const Alignment(-1, 0),
-            //   padding: const EdgeInsets.only(left: 45, right: 45),
-            child: Container(
-                height: 60,
-                alignment: const Alignment(0, 0),
-                padding: const EdgeInsets.only(left: 10),
-                decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(23)),
-                child: PullDownButton()),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            width: 300,
-            height: 60,
-            child: TextFormField(
-              autofocus: true,
-              decoration: InputDecoration(
-                hintText: "URL",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(23),
+                const SizedBox(
+                  height: 10,
                 ),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter the required infomation';
-                }
-                return null;
-              },
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            width: 300,
-            height: 60,
-            child: TextFormField(
-              autofocus: true,
-              decoration: InputDecoration(
-                hintText: "Description",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(23),
+                // プルダウンボタン表示
+                Container(
+                    height: 60,
+                    alignment: const Alignment(0, 0),
+                    padding: const EdgeInsets.only(left: 10),
+                    decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(23)),
+                    child: PullDownButton()),
+                const SizedBox(
+                  height: 10,
                 ),
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter the required infomation';
-                }
-                return null;
-              },
+                TextFormField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    labelText: "URL",
+                    hintText: "URL",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(23),
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextFormField(
+                  autofocus: true,
+                  decoration: InputDecoration(
+                    labelText: "Decription",
+                    hintText: "Description",
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(23),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-          // 空白
-          const SizedBox(
-            height: 70,
-          ),
-          // 登録＆前ページに遷移するボタン
-          SizedBox(
-            width: 300,
-            height: 60,
-            child: TextButton(
-              child: const Text(
-                "Submit",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              style: TextButton.styleFrom(
-                primary: const Color(0xffD80C28),
-                backgroundColor: kSecondaryColor,
-                shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(100))),
-              ),
-              onPressed: () {
-                if (_formKey.currentState!.validate()) {
-                  // 画面遷移
-                  // Navigator.pop(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => HomeScreen()),
-                  // );
-                  // 保存処理
-                  // 各入力値をListに代入
-
-                }
-              },
-            ),
+          Expanded(
+            flex: 1,
+            child: Container(),
           ),
         ],
       ),
@@ -264,6 +265,7 @@ class _PullDownButtonState extends State<PullDownButton> {
   }
 }
 
+// 画像投稿機能
 class AddImage extends StatefulWidget {
   const AddImage({Key? key}) : super(key: key);
 
