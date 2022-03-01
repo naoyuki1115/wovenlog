@@ -175,14 +175,14 @@ class LikeWidget_State extends State<LikeWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(right: 12, left: 12),
-      child:Row(
+      //padding: EdgeInsets.only(right: 12, left: 12),
+      child:Column(
         mainAxisAlignment: MainAxisAlignment.end, 
         children: [
-          _buildLikeButton(),
-          SizedBox(
+          Expanded(child: _buildLikeButton()),
+          Expanded(
             child: Text(likeNum.toString()),
-            width: 20,
+            //width: 20,
           ),
         ]
       )
