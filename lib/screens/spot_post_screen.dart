@@ -30,7 +30,8 @@ class SpotPostScreen extends StatelessWidget {
       ),
 
       //ProviderのtestとしてSpot追加
-      body: ElevatedButton(
+      body: Column(children: [
+        ElevatedButton(
               child: Text('SPOT追加'),
               onPressed: (){
                 Spot test = Spot(
@@ -49,8 +50,16 @@ class SpotPostScreen extends StatelessWidget {
 
                 //追加処理
                 _spotListInstance.addSpot(test);
-              }
+              },
       ),
+              ElevatedButton(
+              child: Text('category変更'),
+              onPressed: (){
+                //category変更処理
+                _spotListInstance.narrowDownSpotListByCatsId('category0002');
+              },
+      ),
+      ]),
     );
   }
 }

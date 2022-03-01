@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'spot_class.dart';
+import 'package:wovenlog/dummy_data/category_list.dart';
 
 class SpotList extends ChangeNotifier {
 
@@ -13,6 +14,27 @@ class SpotList extends ChangeNotifier {
   //カテゴリで絞り込み後のSpotリスト取得
   List getCatsSpotList(){
     return _catsSpotList;
+  }
+
+  //カテゴリで絞り込み後のSpotリストをアップデート
+  void upadateCatsSpotList(){
+    if(_catsSpotList.isNotEmpty){
+      String _catsId = _catsSpotList.first.category_id.toString();
+      narrowDownSpotListByCatsId(_catsId);//Provider通知済み
+    }
+  }
+
+  //現在絞り込んでいるカテゴリ名を取得
+  String getCatsName(){
+    String _catsId;
+    String _catsName;
+    if(_catsSpotList.isNotEmpty){
+      _catsId = _catsSpotList.first.category_id.toString();
+      _catsName = categoryList.singleWhere((_list) => _list.id == _catsId).name.toString();
+    }else{
+      _catsName='error';
+    }
+    return _catsName;
   }
 
   //指定のSpotIDと一致するSpot情報を取得

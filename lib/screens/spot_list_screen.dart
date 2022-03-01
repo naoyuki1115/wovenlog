@@ -8,14 +8,19 @@ import 'package:wovenlog/screens/spot_detail_screen.dart';
 import 'package:wovenlog/screens/spot_post_screen.dart';
 
 class SpotListScreen extends StatelessWidget {
-  const SpotListScreen({Key? key}) : super(key: key);
+  final catsId = "category0001";
+
+  const SpotListScreen({Key? key, /*this.catsId*/}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _spotListInstance = Provider.of<SpotList>(context);
+
+    //カテゴリIDで絞り込み
+    //_spotListInstance.narrowDownSpotListByCatsId(catsId);
     
     //カテゴリIDからカテゴリ名を取得
-    final catsId = "category0001";
-    String catsName = categoryList.singleWhere((_list) => _list.id == catsId).name.toString();  
+    String catsName = _spotListInstance.getCatsName();
 
     return Scaffold(
         appBar: AppBar(
@@ -49,7 +54,10 @@ class SpotListScreen extends StatelessWidget {
 
         body: Column(children: [
           SizedBox(height: 10,),
-          SpotListView(catsId:catsId),
+          SpotListView(),
+          // Consumer(builder:(BuildContext context, value, child){
+          //   return SpotListView();
+          // }),
         ]));
   }
 }
@@ -59,13 +67,20 @@ class CustomButtomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
+    final _spotListInstance = Provider.of<SpotList>(context);
     final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
     
     //表示するカテゴリID（上位3つ）
     String? _firstCatsId = _selectedCategoryList.selectedCategoryList[0].categoryId;
     String? _secondCatsId = _selectedCategoryList.selectedCategoryList[1].categoryId;
     String? _thirdCatsId = _selectedCategoryList.selectedCategoryList[2].categoryId;
+
+    //表示するカテゴリID（上位3つ）
+    List favoriteCats = [
+      _firstCatsId,
+      _secondCatsId,
+      _thirdCatsId,
+    ];
 
     // void _switchCats(){
     // }
@@ -75,11 +90,14 @@ class CustomButtomBar extends StatelessWidget {
       unselectedItemColor: kBackgroundColor,
       selectedItemColor: kPrimaryColor,
       items: [
-        _buildBottomIcon(_firstCatsId),
-        _buildBottomIcon(_secondCatsId),
-        _buildBottomIcon(_thirdCatsId),
+        _buildBottomIcon(favoriteCats[0]),//(_firstCatsId),
+        _buildBottomIcon(favoriteCats[1]),
+        _buildBottomIcon(favoriteCats[2]),
       ],
-      //onTap: _switchCats(),
+      onTap: (index){
+        _spotListInstance.narrowDownSpotListByCatsId(favoriteCats[index]);
+        //_spotListInstance.getCatsSpotList();
+      },
     );
   }
 
@@ -95,20 +113,19 @@ class CustomButtomBar extends StatelessWidget {
       label: categoryList[_catsIndex].name,
     );
   }
-
 }
+
 
 //Spot一覧をカード表示
 class SpotListView extends StatelessWidget {
-  final catsId;
-  const SpotListView({Key? key, this.catsId}) : super(key: key);
+  const SpotListView({Key? key,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final _spotListInstance = Provider.of<SpotList>(context); 
 
     //カテゴリIDと一致するSpotに絞り込み
-    _spotListInstance.narrowDownSpotListByCatsId(catsId);
+    _spotListInstance.upadateCatsSpotList();
     List oneCatsSpotList = _spotListInstance.getCatsSpotList();
 
     return Expanded(
@@ -139,6 +156,7 @@ class SpotListView extends StatelessWidget {
     );
   }
 }
+
 
 
 // Like widget作成（Statefull App)
