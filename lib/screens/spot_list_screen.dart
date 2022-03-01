@@ -15,10 +15,12 @@ class SpotListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _spotListInstance = Provider.of<SpotList>(context);
-
-    //カテゴリIDで絞り込み
-    //_spotListInstance.narrowDownSpotListByCatsId(catsId);
     
+    //カテゴリIDで絞り込み
+    if(_spotListInstance.isFirst){
+      _spotListInstance.narrowDownSpotListByCatsId(catsId);
+      _spotListInstance.switchIsFirst();
+    }
     //カテゴリIDからカテゴリ名を取得
     String catsName = _spotListInstance.getCatsName();
 
@@ -75,15 +77,12 @@ class CustomButtomBar extends StatelessWidget {
     String? _secondCatsId = _selectedCategoryList.selectedCategoryList[1].categoryId;
     String? _thirdCatsId = _selectedCategoryList.selectedCategoryList[2].categoryId;
 
-    //表示するカテゴリID（上位3つ）
+    //表示するカテゴリIDリスト化（上位3つ）
     List favoriteCats = [
       _firstCatsId,
       _secondCatsId,
       _thirdCatsId,
     ];
-
-    // void _switchCats(){
-    // }
     
     return BottomNavigationBar(
       backgroundColor: kAppBarColor,

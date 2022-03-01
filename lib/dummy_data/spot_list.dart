@@ -5,6 +5,14 @@ import 'package:wovenlog/dummy_data/category_list.dart';
 
 class SpotList extends ChangeNotifier {
 
+  //最初の読み込みかどうかStateを保持
+  bool isFirst = true;
+
+  void switchIsFirst(){
+    isFirst = !isFirst;
+    notifyListeners();
+  }
+
   //指定のカテゴリIDでSpotリストを絞り込み（Providerへ通知）
   void narrowDownSpotListByCatsId(_catsId){
     _catsSpotList = spotList.where((_list) => _list.category_id == _catsId).toList();
