@@ -5,6 +5,7 @@ import 'package:wovenlog/dummy_data/spot_list.dart';
 import 'package:wovenlog/dummy_data/category_list.dart';
 import '../dummy_data/selected_category_list.dart';
 import 'package:wovenlog/screens/spot_detail_screen.dart';
+import 'package:wovenlog/screens/spot_post_screen.dart';
 
 class SpotListScreen extends StatelessWidget {
   final catsId = "category0001";
@@ -17,24 +18,12 @@ class SpotListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _spotListInstance = Provider.of<SpotList>(context);
-<<<<<<< HEAD
 
     //カテゴリIDで絞り込み
-    //_spotListInstance.narrowDownSpotListByCatsId(catsId);
-
-||||||| b67521c
-
-    //カテゴリIDで絞り込み
-    //_spotListInstance.narrowDownSpotListByCatsId(catsId);
-    
-=======
-    
-    //カテゴリIDで絞り込み
-    if(_spotListInstance.isFirst){
+    if (_spotListInstance.isFirst) {
       _spotListInstance.narrowDownSpotListByCatsId(catsId);
       _spotListInstance.switchIsFirst();
     }
->>>>>>> 8f298507abb6381fa46c6bbfd52d6f50e6a3d2b5
     //カテゴリIDからカテゴリ名を取得
     String catsName = _spotListInstance.getCatsName();
 
@@ -104,19 +93,7 @@ class CustomButtomBar extends StatelessWidget {
       _secondCatsId,
       _thirdCatsId,
     ];
-<<<<<<< HEAD
 
-    // void _switchCats(){
-    // }
-
-||||||| b67521c
-
-    // void _switchCats(){
-    // }
-    
-=======
-    
->>>>>>> 8f298507abb6381fa46c6bbfd52d6f50e6a3d2b5
     return BottomNavigationBar(
       backgroundColor: kAppBarColor,
       unselectedItemColor: kBackgroundColor,
@@ -206,73 +183,47 @@ class LikeWidget extends StatefulWidget {
   State<LikeWidget> createState() => LikeWidget_State();
 }
 
-class _SpotListScreen extends State<SpotListScreen> {
-  final _controller = TextEditingController();
-  String? _inputSpotId;
+// make State
+class LikeWidget_State extends State<LikeWidget> {
+  bool _isLiked = false;
+  int likeNum = 0;
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("First Screen"),
-      ),
-      body: Column(
-        children: <Widget>[
-          Text('入力フォーム'),
-          Padding(
-            padding: EdgeInsets.all(10.0),
-          ),
-          TextField(
-            controller: _controller,
-            onChanged: changeTextField,
-||||||| b67521c
     return Container(
-      padding: EdgeInsets.only(right: 12, left: 12),
-      child:Row(
-        mainAxisAlignment: MainAxisAlignment.end, 
-        children: [
-          _buildLikeButton(),
-          SizedBox(
-            child: Text(likeNum.toString()),
-            width: 20,
-=======
-    return Container(
-      //padding: EdgeInsets.only(right: 12, left: 12),
-      child:Column(
-        mainAxisAlignment: MainAxisAlignment.end, 
-        children: [
-          Expanded(child: _buildLikeButton()),
-          Expanded(
-            child: Text(likeNum.toString()),
-            //width: 20,
->>>>>>> 8f298507abb6381fa46c6bbfd52d6f50e6a3d2b5
-          ),
-          Container(
-            alignment: Alignment.centerLeft,
-            child: ElevatedButton(
-              child: Text('送信'),
-              onPressed: () {
-                if (_inputSpotId!.isEmpty) {
-                  return;
-                } else {
-                  /// 3. Navigator.push で遷移する際に渡す値を指定する
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            SpotDetailScreen(spotId: _inputSpotId)),
-                  );
-                }
-              },
-            ),
-          ),
-        ],
+        //padding: EdgeInsets.only(right: 12, left: 12),
+        child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
+      Expanded(child: _buildLikeButton()),
+      Expanded(
+        child: Text(likeNum.toString()),
+        //width: 20,
       ),
-    );
+    ]));
   }
 
-  void changeTextField(String value) {
-    _inputSpotId = value;
+  //Likeボタン押した際に動作
+  void _toggleLike() {
+    setState(() {
+      if (_isLiked) {
+        _isLiked = false;
+        likeNum--;
+      } else {
+        _isLiked = true;
+        likeNum++;
+      }
+    });
+  }
+
+  //Likeボタン作成
+  Widget _buildLikeButton() {
+    return IconButton(
+      iconSize: 15,
+      padding: const EdgeInsets.only(right: 8, left: 8),
+      icon: (_isLiked
+          ? const Icon(Icons.favorite)
+          : const Icon(Icons.favorite_border)),
+      color: kPrimaryColor,
+      onPressed: _toggleLike,
+    );
   }
 }
