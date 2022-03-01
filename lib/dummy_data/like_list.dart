@@ -10,43 +10,41 @@ import 'package:wovenlog/dummy_data/spot_list.dart';
 
 class LikeList extends ChangeNotifier{
 
-  //UserリストからユーザID一覧を取得
-  // List? getUserIdList(){
-  //   List userIdList = [];
-  //   for (User item in userLists) {
-  //     userIdList.add(item.id);
-  //   return userIdList;
-  // }
-
-  //SpotリストからSpotID一覧を取得
-
-
-
-  //Like追加
-  void addOrRemoveLike(String? _userId, String? _spotId, DateTime _createdDate){
-    
-    Like _spot = Like(
-      userId: _userId,
-      spotId: _spotId,
-      createdDate: _createdDate,
-    );
-
-    //Likeリスト上を有無確認
-    bool isExisted = likeList.contains(_spot); 
-
-    //Add or Remove判定
-    isExisted 
-      ? likeList.remove(_spot)
-      : likeList.add(_spot);
-
-    notifyListeners();
-  }
-
   //SpotごとのLike数を取得
   int getLikeNums(_spotId){
     return likeList.where((element) => element.spotId == _spotId).length;
   }
 
+  //UserID x SpotIDのLikeリスト上の有無確認
+  bool getIsLikeExisted(_userId, _spotId){
+    List<Like> narrowDownList = likeList.where((element) => element.userId == _userId).where((element) => element.spotId == _spotId).toList();
+    return narrowDownList.isNotEmpty;
+  }
+
+  //UserID x SpotIDごとのLikeを取得
+  Like getLikePerUserIdAndSpotId(_userId, _spotId){
+    return likeList.where((element) => element.userId == _userId).singleWhere((element) => element.spotId == _spotId);
+  }
+
+  //Like追加/削除
+  void addOrRemoveLike(String? _userId, String? _spotId, DateTime _createdDate){
+    
+    Like _like = Like(
+      userId: _userId,
+      spotId: _spotId,
+      createdDate: _createdDate,
+    );
+
+    //Likeリスト上を有無確認し、Add or Remove
+    if(getIsLikeExisted(_userId, _spotId)){
+      //取り除くLikeを取得
+      Like _removedLike =  getLikePerUserIdAndSpotId(_userId, _spotId);
+      likeList.remove(_removedLike);
+    } else {
+      likeList.add(_like);
+    }
+    notifyListeners();
+  }
 
   List<Like> likeList = [
     Like(userId: "user0001", spotId: "spot0001", createdDate: DateTime(2022, 1, 1),),

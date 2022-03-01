@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wovenlog/constants.dart';
+import 'package:wovenlog/dummy_data/like_list.dart';
 import 'package:wovenlog/dummy_data/spot_list.dart';
 import 'package:wovenlog/dummy_data/category_list.dart';
 import '../dummy_data/selected_category_list.dart';
@@ -131,6 +132,7 @@ class SpotListView extends StatelessWidget {
       child: ListView.builder(
           itemCount: oneCatsSpotList.length,//リストからSpot数取得
           itemBuilder: (context, index) {
+            String spotId = oneCatsSpotList[index].id.toString();
             return Card(
               child: ListTile(
                   //tileColor: Colors.blue,
@@ -140,10 +142,13 @@ class SpotListView extends StatelessWidget {
                       child: Image.asset(oneCatsSpotList[index].image.toString())),
                   title: Text(oneCatsSpotList[index].name.toString()),//spotList[index].name),
                   subtitle: Text(oneCatsSpotList[index].address.toString()),
-                  trailing: SizedBox(width:90,child: LikeWidget()),//LikeWidget(),//Icon(Icons.more_vert),
+                  trailing: SizedBox(
+                    width:90, 
+                    child: LikeWidget(userId: 'user0001', spotId: spotId,),
+                  ),//LikeWidget(),//Icon(Icons.more_vert),
                   enabled: true,
                   onTap: () {
-                    String spotId = oneCatsSpotList[index].id.toString();
+                    // String spotId = oneCatsSpotList[index].id.toString();
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (context) => SpotDetailScreen(spotId:spotId)),
@@ -156,62 +161,101 @@ class SpotListView extends StatelessWidget {
   }
 }
 
+class LikeWidget extends StatelessWidget {
+  final userId;
+  final spotId;
+  const LikeWidget({ Key? key, this.userId, this.spotId}) : super(key: key);
 
-
-// Like widget作成（Statefull App)
-// make Widget
-class LikeWidget extends StatefulWidget {
-  const LikeWidget({Key? key}) : super(key: key);
-  @override
-  State<LikeWidget> createState() => LikeWidget_State();
-}
-
-// make State
-class LikeWidget_State extends State<LikeWidget> {
-
-  bool _isLiked = false;
-  int likeNum = 0;
-  
   @override
   Widget build(BuildContext context) {
+    final _likeListInstance = Provider.of<LikeList>(context);
+    int _likeNums = _likeListInstance.getLikeNums(spotId);
+    
+
     return Container(
       //padding: EdgeInsets.only(right: 12, left: 12),
       child:Column(
         mainAxisAlignment: MainAxisAlignment.end, 
         children: [
-          Expanded(child: _buildLikeButton()),
-          Expanded(
-            child: Text(likeNum.toString()),
-            //width: 20,
-          ),
+          Expanded(child: _buildLikeButton(_likeListInstance)),
+          Expanded(child: Text(_likeNums.toString()),),
         ]
       )
     );
   }
-  
-  //Likeボタン押した際に動作
-  void _toggleLike() {
-    setState(() {
-      if(_isLiked){
-        _isLiked = false;
-        likeNum--;
-      } else{
-        _isLiked = true;
-        likeNum++;
-      }
-    });
-  }
+
 
   //Likeボタン作成
-  Widget _buildLikeButton(){
+  Widget _buildLikeButton(LikeList _likeListInstance){
+    bool _isLikeExsited = _likeListInstance.getIsLikeExisted(userId,spotId);
+
     return IconButton(
       iconSize: 15,
       padding: const EdgeInsets.only(right: 8, left: 8),
-      icon: (_isLiked
+      icon: (_isLikeExsited
           ? const Icon(Icons.favorite)
           : const Icon(Icons.favorite_border)),
       color: kPrimaryColor,
-      onPressed: _toggleLike,
+      onPressed: (){
+          DateTime _createdDate = DateTime.now();
+          _likeListInstance.addOrRemoveLike(userId, spotId, _createdDate);
+      }
     );
   }  
+
 }
+
+// // Like widget作成（Statefull App)
+// // make Widget
+// class LikeWidget extends StatefulWidget {
+//   const LikeWidget({Key? key}) : super(key: key);
+//   @override
+//   State<LikeWidget> createState() => LikeWidget_State();
+// }
+
+// // make State
+// class LikeWidget_State extends State<LikeWidget> {
+
+//   bool _isLiked = false;
+//   int likeNum = 0;
+  
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       //padding: EdgeInsets.only(right: 12, left: 12),
+//       child:Column(
+//         mainAxisAlignment: MainAxisAlignment.end, 
+//         children: [
+//           Expanded(child: _buildLikeButton()),
+//           Expanded(child: Text(likeNum.toString()),),
+//         ]
+//       ),
+//     );
+//   }
+  
+//   //Likeボタン押した際に動作
+//   void _toggleLike() {
+//     setState(() {
+//       if(_isLiked){
+//         _isLiked = false;
+//         likeNum--;
+//       } else{
+//         _isLiked = true;
+//         likeNum++;
+//       }
+//     });
+//   }
+
+//   //Likeボタン作成
+//   Widget _buildLikeButton(){
+//     return IconButton(
+//       iconSize: 15,
+//       padding: const EdgeInsets.only(right: 8, left: 8),
+//       icon: (_isLiked
+//           ? const Icon(Icons.favorite)
+//           : const Icon(Icons.favorite_border)),
+//       color: kPrimaryColor,
+//       onPressed: _toggleLike,
+//     );
+//   }  
+// }
