@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
 import '../dummy_data/category_list.dart';
@@ -16,9 +17,10 @@ class SpotDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final _spotListInstance = Provider.of<SpotList>(context);
     // 前画面から渡されたSpotIdと一致するSpotを抽出
-    final _selectedSpot =
-        spotList.singleWhere((element) => element.id == spotId);
+    final _selectedSpot = _spotListInstance
+        .getSpotInfo("spot0002"); //前画面からspotIdに値を渡す動作確認済み、現状値をベタ描き
     //抽出したSpotのCategoruIdと一致するカテゴリー名をcategoryListから抽出
     final _selectedCats = categoryList
         .singleWhere((element) => element.id == _selectedSpot.categoryId);
@@ -29,7 +31,7 @@ class SpotDetailScreen extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           title: Text(
-            _selectedSpot.name,
+            _selectedSpot.name.toString(),
             style: const TextStyle(
                 fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
           ),
@@ -53,7 +55,7 @@ class SpotDetailScreen extends StatelessWidget {
               decoration: BoxDecoration(
                   image: DecorationImage(
                 fit: BoxFit.fill,
-                image: AssetImage(_selectedSpot.image),
+                image: AssetImage(_selectedSpot.image.toString()),
                 // fit: BoxFit.cover,
               )),
             ),
@@ -62,7 +64,8 @@ class SpotDetailScreen extends StatelessWidget {
               height: 45,
               alignment: Alignment.center,
               margin: const EdgeInsets.only(right: 5, left: 5),
-              child: Text(_selectedSpot.name, style: TextStyle(fontSize: 20)),
+              child: Text(_selectedSpot.name.toString(),
+                  style: TextStyle(fontSize: 20)),
             ),
             Container(
               // カテゴリー表示
@@ -95,7 +98,7 @@ class SpotDetailScreen extends StatelessWidget {
                   ),
                   Expanded(
                     child: Container(
-                        child: Text(_selectedSpot.url,
+                        child: Text(_selectedSpot.url.toString(),
                             style: TextStyle(fontSize: 20))),
                   ),
                 ],
@@ -112,7 +115,7 @@ class SpotDetailScreen extends StatelessWidget {
                 height: 150,
                 width: double.infinity,
                 margin: const EdgeInsets.only(right: 25, left: 25),
-                child: Text(_selectedSpot.description,
+                child: Text(_selectedSpot.description.toString(),
                     style: TextStyle(fontSize: 14))),
             Expanded(
               flex: 1,
