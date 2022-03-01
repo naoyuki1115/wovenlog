@@ -21,7 +21,7 @@ class SpotDetailScreen extends StatelessWidget {
         spotList.singleWhere((element) => element.id == spotId);
     //抽出したSpotのCategoruIdと一致するカテゴリー名をcategoryListから抽出
     final _selectedCats = categoryList
-        .singleWhere((element) => element.id == _selectedSpot.category_id);
+        .singleWhere((element) => element.id == _selectedSpot.categoryId);
 
     // var _getSpotId = getSpotId(spotId);
     return MaterialApp(
@@ -30,7 +30,7 @@ class SpotDetailScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             _selectedSpot.name,
-            style: TextStyle(
+            style: const TextStyle(
                 fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
           ),
           backgroundColor: kAppBarColor,
@@ -61,7 +61,7 @@ class SpotDetailScreen extends StatelessWidget {
               // Spot名表示
               height: 45,
               alignment: Alignment.center,
-              margin: EdgeInsets.only(right: 5, left: 5),
+              margin: const EdgeInsets.only(right: 5, left: 5),
               child: Text(_selectedSpot.name, style: TextStyle(fontSize: 20)),
             ),
             Container(
@@ -73,14 +73,11 @@ class SpotDetailScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: Container(
-                        child:
-                            Text("・Category", style: TextStyle(fontSize: 20))),
+                    child: Text("・Category", style: TextStyle(fontSize: 20)),
                   ),
                   Expanded(
-                    child: Container(
-                        child: Text(_selectedCats.name,
-                            style: TextStyle(fontSize: 20))),
+                    child: Text(_selectedCats.name,
+                        style: TextStyle(fontSize: 20)),
                   ),
                 ],
               ),
@@ -94,8 +91,7 @@ class SpotDetailScreen extends StatelessWidget {
               child: Row(
                 children: [
                   Expanded(
-                    child: Container(
-                        child: Text("・URL", style: TextStyle(fontSize: 20))),
+                    child: const Text("・URL", style: TextStyle(fontSize: 20)),
                   ),
                   Expanded(
                     child: Container(
@@ -109,13 +105,13 @@ class SpotDetailScreen extends StatelessWidget {
                 height: 45,
                 width: double.infinity,
                 alignment: Alignment.centerLeft,
-                margin: EdgeInsets.only(right: 5, left: 5),
+                margin: const EdgeInsets.only(right: 5, left: 5),
                 child: Text("・Description", style: TextStyle(fontSize: 20))),
             // Description表示
             Container(
                 height: 150,
                 width: double.infinity,
-                margin: EdgeInsets.only(right: 25, left: 25),
+                margin: const EdgeInsets.only(right: 25, left: 25),
                 child: Text(_selectedSpot.description,
                     style: TextStyle(fontSize: 14))),
             Expanded(
