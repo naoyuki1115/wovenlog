@@ -58,10 +58,8 @@ class SpotListScreen extends StatelessWidget {
         body: Column(children: [
           SizedBox(height: 10,),
           SpotListView(),
-          // Consumer(builder:(BuildContext context, value, child){
-          //   return SpotListView();
-          // }),
-        ]));
+        ])
+    );
   }
 }
 
@@ -205,57 +203,4 @@ class LikeWidget extends StatelessWidget {
 
 }
 
-// // Like widget作成（Statefull App)
-// // make Widget
-// class LikeWidget extends StatefulWidget {
-//   const LikeWidget({Key? key}) : super(key: key);
-//   @override
-//   State<LikeWidget> createState() => LikeWidget_State();
-// }
 
-// // make State
-// class LikeWidget_State extends State<LikeWidget> {
-
-//   bool _isLiked = false;
-//   int likeNum = 0;
-  
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container(
-//       //padding: EdgeInsets.only(right: 12, left: 12),
-//       child:Column(
-//         mainAxisAlignment: MainAxisAlignment.end, 
-//         children: [
-//           Expanded(child: _buildLikeButton()),
-//           Expanded(child: Text(likeNum.toString()),),
-//         ]
-//       ),
-//     );
-//   }
-  
-//   //Likeボタン押した際に動作
-//   void _toggleLike() {
-//     setState(() {
-//       if(_isLiked){
-//         _isLiked = false;
-//         likeNum--;
-//       } else{
-//         _isLiked = true;
-//         likeNum++;
-//       }
-//     });
-//   }
-
-//   //Likeボタン作成
-//   Widget _buildLikeButton(){
-//     return IconButton(
-//       iconSize: 15,
-//       padding: const EdgeInsets.only(right: 8, left: 8),
-//       icon: (_isLiked
-//           ? const Icon(Icons.favorite)
-//           : const Icon(Icons.favorite_border)),
-//       color: kPrimaryColor,
-//       onPressed: _toggleLike,
-//     );
-//   }  
-// }
