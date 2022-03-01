@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wovenlog/dummy_data/spot_list.dart';
 
 import '../screens/login_screen.dart';
 import '../screens/top_screen.dart';
+import 'package:wovenlog/screens/spot_list_screen.dart';
 import '../dummy_data/selected_category_list.dart';
 
 void main() {
@@ -17,12 +19,15 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       child: const MaterialApp(
         title: 'WovenLog',
-        home: TopScreen(),
+        home: SpotListScreen(),//TopScreen(),
       ),
       providers: [
         ChangeNotifierProvider(
           create: (context) => SelectedCategoryList(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SpotList(),
+        ),
       ],
     );
   }
