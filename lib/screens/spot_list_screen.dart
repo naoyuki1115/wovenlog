@@ -17,10 +17,24 @@ class SpotListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _spotListInstance = Provider.of<SpotList>(context);
+<<<<<<< HEAD
 
     //カテゴリIDで絞り込み
     //_spotListInstance.narrowDownSpotListByCatsId(catsId);
 
+||||||| b67521c
+
+    //カテゴリIDで絞り込み
+    //_spotListInstance.narrowDownSpotListByCatsId(catsId);
+    
+=======
+    
+    //カテゴリIDで絞り込み
+    if(_spotListInstance.isFirst){
+      _spotListInstance.narrowDownSpotListByCatsId(catsId);
+      _spotListInstance.switchIsFirst();
+    }
+>>>>>>> 8f298507abb6381fa46c6bbfd52d6f50e6a3d2b5
     //カテゴリIDからカテゴリ名を取得
     String catsName = _spotListInstance.getCatsName();
 
@@ -84,16 +98,25 @@ class CustomButtomBar extends StatelessWidget {
     String? _thirdCatsId =
         _selectedCategoryList.selectedCategoryList[2].categoryId;
 
-    //表示するカテゴリID（上位3つ）
+    //表示するカテゴリIDリスト化（上位3つ）
     List favoriteCats = [
       _firstCatsId,
       _secondCatsId,
       _thirdCatsId,
     ];
+<<<<<<< HEAD
 
     // void _switchCats(){
     // }
 
+||||||| b67521c
+
+    // void _switchCats(){
+    // }
+    
+=======
+    
+>>>>>>> 8f298507abb6381fa46c6bbfd52d6f50e6a3d2b5
     return BottomNavigationBar(
       backgroundColor: kAppBarColor,
       unselectedItemColor: kBackgroundColor,
@@ -189,6 +212,7 @@ class _SpotListScreen extends State<SpotListScreen> {
 
   @override
   Widget build(BuildContext context) {
+<<<<<<< HEAD
     return Scaffold(
       appBar: AppBar(
         title: Text("First Screen"),
@@ -202,6 +226,27 @@ class _SpotListScreen extends State<SpotListScreen> {
           TextField(
             controller: _controller,
             onChanged: changeTextField,
+||||||| b67521c
+    return Container(
+      padding: EdgeInsets.only(right: 12, left: 12),
+      child:Row(
+        mainAxisAlignment: MainAxisAlignment.end, 
+        children: [
+          _buildLikeButton(),
+          SizedBox(
+            child: Text(likeNum.toString()),
+            width: 20,
+=======
+    return Container(
+      //padding: EdgeInsets.only(right: 12, left: 12),
+      child:Column(
+        mainAxisAlignment: MainAxisAlignment.end, 
+        children: [
+          Expanded(child: _buildLikeButton()),
+          Expanded(
+            child: Text(likeNum.toString()),
+            //width: 20,
+>>>>>>> 8f298507abb6381fa46c6bbfd52d6f50e6a3d2b5
           ),
           Container(
             alignment: Alignment.centerLeft,
