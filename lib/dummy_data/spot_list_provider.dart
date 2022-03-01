@@ -14,65 +14,53 @@ class SpotListNotifier extends ChangeNotifier {
   String? categoryName;
   XFile? imageFile;
   String message = "";
-  ImagePicker? picker;
+  // ImagePicker? picker;
 
   List<Spot> get selectedCategoryList => _spotList;
 
-  SpotListNotifier() {
-    picker = ImagePicker();
-  }
+  // SpotListNotifier() {
+  //   picker = ImagePicker();
+  // }
 
   Future getImage() async {
-    // final ImagePicker picker = ImagePicker();
-    final pickedFile = await picker!.pickImage(source: ImageSource.gallery);
-    // PickedFile pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    ImagePicker picker = ImagePicker();
+    imageFile = await picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedFile != null) {
-      imageFile = XFile(pickedFile.path);
+    // if (imageFile != null) {
+    //   var imagePath = XFile(imageFile!.path);
+    //   print(imagePath);
 
-      await saveToSharedPreferences(imageFile!);
-
-      print("image picked");
-    } else {
-      message = "No image selected";
-      print("no image");
-    }
+    //   print("image picked");
+    // } else {
+    //   message = "No image selected";
+    // }
   }
 
-  Future saveToSharedPreferences(XFile image) async {
-    final path = await localPath;
-    final String fileName = basename(image.path);
-    final imagePath = '$path/$fileName';
-  }
+  // Future saveToSharedPreferences(XFile image) async {
+  //   final path = await localPath;
+  //   final String fileName = basename(image.path);
+  //   final imagePath = '$path/$fileName';
+  // }
 
-  Future get localPath async {
-    Directory appDocDir = await getApplicationDocumentsDirectory();
-    String path = appDocDir.path;
-    return path;
-  }
+  // Future get localPath async {
+  //   Directory appDocDir = await getApplicationDocumentsDirectory();
+  //   String path = appDocDir.path;
+  //   return path;
+  // }
 
-  Future sharedPreferencesWrite(imagePath) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString('sample_image_key_220301', imagePath);
-  }
+  // Future sharedPreferencesWrite(imagePath) async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.setString('sample_image_key_220301', imagePath);
+  // }
 
-  Future<Uint8List> sharedPreferencesRead() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String imagePath = prefs.getString('sample_image_key_220301').toString();
+  // Future<Uint8List> sharedPreferencesRead() async {
+  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   String imagePath = prefs.getString('sample_image_key_220301').toString();
 
-    ByteData byte = await rootBundle.load(imagePath);
-    final Uint8List list = byte.buffer.asUint8List();
-    return list;
-  }
-
-/*
-
-
-i
-
-
-
-*/
+  //   ByteData byte = await rootBundle.load(imagePath);
+  //   final Uint8List list = byte.buffer.asUint8List();
+  //   return list;
+  // }
 
   void addNewSpot(String name, String url, String description, String? categoryName) {
     String categoryLength = _spotList.length.toString();
@@ -93,6 +81,7 @@ i
         description: description,
       );
       _spotList.add(_newSpot);
+      print(_newSpot.image);
       print(_spotList.length);
     } else {
       message = "No image selected";

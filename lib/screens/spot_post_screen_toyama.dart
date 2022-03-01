@@ -1,6 +1,6 @@
 // import 'dart:async';
-import 'dart:io';
-import 'dart:typed_data';
+// import 'dart:io';
+// import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 // import 'package:image_picker/image_picker.dart';
@@ -39,11 +39,6 @@ class SpotPostScreen extends StatelessWidget {
               flex: 1,
               child: Container(),
             ),
-            ImagePreviewSection(),
-            Expanded(
-              flex: 1,
-              child: Container(),
-            ),
             const AddImage(),
             Expanded(
               flex: 1,
@@ -58,33 +53,6 @@ class SpotPostScreen extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class ImagePreviewSection extends StatelessWidget {
-  const ImagePreviewSection({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    final _spotListNotifier = Provider.of<SpotListNotifier>(context);
-
-    return FutureBuilder(
-        future: _spotListNotifier.sharedPreferencesRead(),
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          if (snapshot.hasData) {
-            Uint8List image = snapshot.data;
-            return Center(
-              // child: Image.file(File(_spotListNotifier.imageFile!.path)),
-              child: Image.memory(
-                image,
-              ),
-            );
-          } else {
-            return Center(
-              child: Text("Image does not exist"),
-            );
-          }
-        });
   }
 }
 
