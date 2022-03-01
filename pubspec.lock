@@ -184,6 +184,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.7.0"
+<<<<<<< HEAD
+||||||| merged common ancestors
+<<<<<<<<< Temporary merge branch 1
+  multi_image_picker:
+    dependency: "direct main"
+    description:
+      name: multi_image_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.8.01"
+||||||||| 47d6dd2
+=========
+=======
+  multi_image_picker:
+    dependency: "direct main"
+    description:
+      name: multi_image_picker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.8.01"
+>>>>>>> eed13a101b3a3efec949e471c5b2ebb0b81cf6f5
   nested:
     dependency: transitive
     description:
@@ -211,7 +232,14 @@ packages:
       name: path_parsing
       url: "https://pub.dartlang.org"
     source: hosted
+<<<<<<< HEAD
     version: "1.0.0"
+||||||| merged common ancestors
+    version: "0.2.1"
+<<<<<<<<< Temporary merge branch 1
+=======
+    version: "0.2.1"
+>>>>>>> eed13a101b3a3efec949e471c5b2ebb0b81cf6f5
   path_provider:
     dependency: "direct main"
     description:
