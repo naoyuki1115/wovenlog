@@ -1,19 +1,75 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'spot_class.dart';
+import 'category_list.dart';
 
 class SpotListNotifier extends ChangeNotifier {
+  String? categoryName;
+
   List<Spot> get selectedCategoryList => _spotList;
 
-  void addNewSpot(String name, String url, String description) {
-    Spot _newSpot = Spot(
-      name: name,
-      url: url,
-      description: description,
-    );
+  XFile? imageFile;
+  String message = "";
 
-    _spotList.add(_newSpot);
-    print(_spotList.length);
+  Future getImage() async {
+    final ImagePicker picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      imageFile = XFile(pickedFile.path);
+    } else {
+      message = "No image selected";
+    }
+  }
+
+  void addNewSpot(String name, String url, String description, String? categoryName) {
+    String categoryLength = _spotList.length.toString();
+
+    int index = categoryList.indexWhere((element) => element.name == categoryName);
+
+    // Spot _newSpot = Spot(
+    //   id: "spot00$categoryLength",
+    //   name: name,
+    //   address: "undefined",
+    //   latitude: null,
+    //   longitude: null,
+    //   url: url,
+    //   image: imageFile!.path,
+    //   createdDate: DateTime(2022, 1, 1),
+    //   categoryId: categoryList[index].id,
+    //   description: description,
+    // );
+    // _spotList.add(_newSpot);
+    // print(_spotList.length);
+
+    if (imageFile != null) {
+      Spot _newSpot = Spot(
+        id: "spot00$categoryLength",
+        name: name,
+        address: "undefined",
+        latitude: null,
+        longitude: null,
+        url: url,
+        image: imageFile!.path,
+        createdDate: DateTime(2022, 1, 1),
+        categoryId: categoryList[index].id,
+        description: description,
+      );
+      _spotList.add(_newSpot);
+      print(_spotList.length);
+    } else {
+      message = "No image selected";
+      print(message);
+    }
+  }
+
+  Future<void> saveImagePath() async {
+    if (imageFile != null) {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      String path = imageFile!.path;
+    }
   }
 
   final List<Spot> _spotList = <Spot>[
