@@ -1,17 +1,14 @@
-import 'dart:async';
+// import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:image_picker/image_picker.dart';
+// import 'package:image_picker/image_picker.dart';
 
 import '../constants.dart';
 import '../dummy_data/category_list.dart';
-import '../dummy_data/spot_class.dart';
 import '../dummy_data/spot_list_provider.dart';
 import '../screens/top_screen.dart';
-
-// import 'package:image_gallery_saver/image_gallery_saver.dart';
-// import 'package:path_provider/path_provider.dart';
-// import 'package:wovenlog/screens/spot_list_screen.dart';
 
 class SpotPostScreen extends StatelessWidget {
   const SpotPostScreen({Key? key}) : super(key: key);
@@ -42,6 +39,11 @@ class SpotPostScreen extends StatelessWidget {
               flex: 1,
               child: Container(),
             ),
+            ImagePreviewSection(),
+            Expanded(
+              flex: 1,
+              child: Container(),
+            ),
             const AddImage(),
             Expanded(
               flex: 1,
@@ -56,6 +58,33 @@ class SpotPostScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class ImagePreviewSection extends StatelessWidget {
+  const ImagePreviewSection({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final _spotListNotifier = Provider.of<SpotListNotifier>(context);
+
+    return FutureBuilder(
+        future: _spotListNotifier.sharedPreferencesRead(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            Uint8List image = snapshot.data;
+            return Center(
+              // child: Image.file(File(_spotListNotifier.imageFile!.path)),
+              child: Image.memory(
+                image,
+              ),
+            );
+          } else {
+            return Center(
+              child: Text("Image does not exist"),
+            );
+          }
+        });
   }
 }
 
@@ -75,10 +104,6 @@ class _AddProfileState extends State<AddProfile> {
   String _spotName = '';
   String _spotURL = '';
   String _spotDescription = '';
-  // String? _spotCategory;
-
-  // function(value) => setState(() => _spotCategory = value);
-  // getCategoryName(value) => setState(() => _spotCategory = value);
 
   @override
   void initState() {
@@ -100,8 +125,6 @@ class _AddProfileState extends State<AddProfile> {
     void _saveFormContentsToSpotList() {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-        // _spotListNotifier.getImage();
-
         _spotListNotifier.addNewSpot(_spotName, _spotURL, _spotDescription, _spotListNotifier.categoryName);
       }
     }
@@ -244,9 +267,6 @@ class PullDownButton extends StatefulWidget {
 }
 
 class _PullDownButtonState extends State<PullDownButton> {
-  // _selectedCategoryはプルダウンから選択されたテキストの受け皿
-  // String? selectedCategory = null;
-
   @override
   Widget build(BuildContext context) {
     final _spotListNotifier = Provider.of<SpotListNotifier>(context);
@@ -257,7 +277,6 @@ class _PullDownButtonState extends State<PullDownButton> {
         style: TextStyle(color: kFontColor, fontSize: 16),
       ),
       isExpanded: true,
-      // vColor.fromARGB(255, 114, 114, 114)る値、_selectedCategoryをそれと定義
       value: _spotListNotifier.categoryName,
       icon: const Icon(Icons.arrow_drop_down),
       iconSize: 40,
@@ -265,9 +284,7 @@ class _PullDownButtonState extends State<PullDownButton> {
       underline: Container(),
       // newValue=onChangedにて使用する引数
       onChanged: (newvalue) {
-        // _selectedCategoryの値の状態をstatとして持ち、setstateで変更し管理する
         setState(() {
-          // selectedCategory = newvalue as String?;
           _spotListNotifier.categoryName = newvalue.toString();
         });
       },
@@ -292,20 +309,20 @@ class AddImage extends StatefulWidget {
 }
 
 class _AddImageState extends State<AddImage> {
-  XFile? _image;
-  ImagePicker picker = ImagePicker();
+  // XFile? _image;
+  // ImagePicker picker = ImagePicker();
 
-  Future _getImage() async {
-    XFile? image = await picker.pickImage(source: ImageSource.gallery);
+  // Future _getImage() async {
+  //   XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
-    setState(() {
-      if (image != null) {
-        _image = XFile(image.path);
-      } else {
-        const Text('No image selected.');
-      }
-    });
-  }
+  //   setState(() {
+  //     if (image != null) {
+  //       _image = XFile(image.path);
+  //     } else {
+  //       const Text('No image selected.');
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {

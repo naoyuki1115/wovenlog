@@ -1,5 +1,10 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'package:flutter/services.dart';
+import 'package:path/path.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'spot_class.dart';
@@ -7,42 +12,72 @@ import 'category_list.dart';
 
 class SpotListNotifier extends ChangeNotifier {
   String? categoryName;
+  XFile? imageFile;
+  String message = "";
+  ImagePicker? picker;
 
   List<Spot> get selectedCategoryList => _spotList;
 
-  XFile? imageFile;
-  String message = "";
+  SpotListNotifier() {
+    picker = ImagePicker();
+  }
 
   Future getImage() async {
-    final ImagePicker picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    // final ImagePicker picker = ImagePicker();
+    final pickedFile = await picker!.pickImage(source: ImageSource.gallery);
+    // PickedFile pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       imageFile = XFile(pickedFile.path);
+
+      await saveToSharedPreferences(imageFile!);
+
+      print("image picked");
     } else {
       message = "No image selected";
+      print("no image");
     }
   }
+
+  Future saveToSharedPreferences(XFile image) async {
+    final path = await localPath;
+    final String fileName = basename(image.path);
+    final imagePath = '$path/$fileName';
+  }
+
+  Future get localPath async {
+    Directory appDocDir = await getApplicationDocumentsDirectory();
+    String path = appDocDir.path;
+    return path;
+  }
+
+  Future sharedPreferencesWrite(imagePath) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('sample_image_key_220301', imagePath);
+  }
+
+  Future<Uint8List> sharedPreferencesRead() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String imagePath = prefs.getString('sample_image_key_220301').toString();
+
+    ByteData byte = await rootBundle.load(imagePath);
+    final Uint8List list = byte.buffer.asUint8List();
+    return list;
+  }
+
+/*
+
+
+i
+
+
+
+*/
 
   void addNewSpot(String name, String url, String description, String? categoryName) {
     String categoryLength = _spotList.length.toString();
 
     int index = categoryList.indexWhere((element) => element.name == categoryName);
-
-    // Spot _newSpot = Spot(
-    //   id: "spot00$categoryLength",
-    //   name: name,
-    //   address: "undefined",
-    //   latitude: null,
-    //   longitude: null,
-    //   url: url,
-    //   image: imageFile!.path,
-    //   createdDate: DateTime(2022, 1, 1),
-    //   categoryId: categoryList[index].id,
-    //   description: description,
-    // );
-    // _spotList.add(_newSpot);
-    // print(_spotList.length);
 
     if (imageFile != null) {
       Spot _newSpot = Spot(
