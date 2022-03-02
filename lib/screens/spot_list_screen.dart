@@ -22,7 +22,7 @@ class SpotListScreen extends StatelessWidget {
     final _spotListInstance = Provider.of<SpotList>(context);
 
     //カテゴリIDで絞り込み
-    if (_spotListInstance.isFirst) {
+    if (_spotListInstance.getIsFirst()) {
       _spotListInstance.narrowDownSpotListByCatsId(catsId);
       _spotListInstance.switchIsFirst();
     }

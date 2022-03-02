@@ -7,9 +7,12 @@ import 'package:wovenlog/dummy_data/category_list.dart';
 class SpotList extends ChangeNotifier {
 
   //最初の読み込みかどうかStateを保持
-  bool isFirst = true;
+  bool _isFirst = true;
+  bool getIsFirst(){
+    return _isFirst;
+  }
   void switchIsFirst(){
-    isFirst = !isFirst;
+    _isFirst = !_isFirst;
     notifyListeners();
   }
 
