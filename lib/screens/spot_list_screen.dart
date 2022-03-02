@@ -10,7 +10,6 @@ import '../dummy_data/category_list.dart';
 import '../dummy_data/selected_category_list.dart';
 
 class SpotListScreen extends StatefulWidget {
-  // final catsId = "category0001";
   final String? categoryId;
 
   const SpotListScreen({
@@ -38,40 +37,43 @@ class _SpotListScreenState extends State<SpotListScreen> {
     final _spotListNotifier = Provider.of<SpotList>(context);
 
     return Scaffold(
-        appBar: AppBar(
-            title: Text(
-              _spotListNotifier.selectedCategoryName, //"[Cats name]",
-              style: TextStyle(color: kFontColor),
+      appBar: AppBar(
+          title: Text(
+            _spotListNotifier.selectedCategoryName,
+            style: const TextStyle(color: kFontColor),
+          ),
+          backgroundColor: kAppBarColor,
+          leading: IconButton(
+            icon: const Icon(
+              Icons.arrow_back,
+              color: kPrimaryColor,
             ),
-            backgroundColor: kAppBarColor,
-            leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back,
-                color: kPrimaryColor,
-              ),
-              //一つ前に戻る
-              onPressed: () => {Navigator.pop(context)},
-            ),
-            actions: [
-              IconButton(
-                  icon: const Icon(
-                    Icons.add,
-                    color: kPrimaryColor,
-                  ),
-                  onPressed: () => {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => SpotPostScreen()),
-                        )
-                      }),
-            ]),
-        bottomNavigationBar: CustomButtomBar(),
-        body: Column(children: [
+            //一つ前に戻る
+            onPressed: () => {Navigator.pop(context)},
+          ),
+          actions: [
+            IconButton(
+                icon: const Icon(
+                  Icons.add,
+                  color: kPrimaryColor,
+                ),
+                onPressed: () => {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => SpotPostScreen()),
+                      )
+                    }),
+          ]),
+      bottomNavigationBar: const CustomButtomBar(),
+      body: Column(
+        children: const [
           SizedBox(
             height: 10,
           ),
           SpotListView(),
-        ]));
+        ],
+      ),
+    );
   }
 }
 
@@ -103,7 +105,7 @@ class CustomButtomBar extends StatelessWidget {
       selectedItemColor: kPrimaryColor,
       currentIndex: _spotListNotifier.selectedIndex,
       items: [
-        _buildBottomIcon(favoriteCats[0]), //(_firstCatsId),
+        _buildBottomIcon(favoriteCats[0]),
         _buildBottomIcon(favoriteCats[1]),
         _buildBottomIcon(favoriteCats[2]),
       ],
@@ -140,45 +142,47 @@ class SpotListView extends StatelessWidget {
 
     return Expanded(
       child: ListView.builder(
-          itemCount: _spotListNotifier.selectedSpotList.length, //リストからSpot数取得
-          itemBuilder: (context, index) {
-            String spotId = _spotListNotifier.selectedSpotList[index].id.toString();
-            return Card(
-              child: ListTile(
-                  //tileColor: Colors.blue,
-                  leading: SizedBox(
-                    width: 100,
-                    height: 75,
-                    child: Image.asset(
-                      _spotListNotifier.selectedSpotList[index].image.toString(),
-                    ),
-                  ),
-                  title: Text(_spotListNotifier.selectedSpotList[index].name.toString()), //spotList[index].name),
-                  subtitle: Text(_spotListNotifier.selectedSpotList[index].address.toString()),
-                  trailing: SizedBox(
-                    width: 90,
-                    child: LikeWidget(
-                      userId: 'user0001',
-                      spotId: spotId,
-                    ),
-                  ), //LikeWidget(),//Icon(Icons.more_vert),
-                  enabled: true,
-                  onTap: () {
-                    // String spotId = oneCatsSpotList[index].id.toString();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SpotDetailScreen(spotId: spotId)),
-                    );
-                  }),
-            );
-          }),
+        itemCount: _spotListNotifier.selectedSpotList.length, //リストからSpot数取得
+        itemBuilder: (context, index) {
+          String spotId = _spotListNotifier.selectedSpotList[index].id.toString();
+          return Card(
+            child: ListTile(
+              //tileColor: Colors.blue,
+              leading: SizedBox(
+                width: 100,
+                height: 75,
+                child: Image.asset(
+                  _spotListNotifier.selectedSpotList[index].image.toString(),
+                ),
+              ),
+              title: Text(_spotListNotifier.selectedSpotList[index].name.toString()),
+              subtitle: Text(_spotListNotifier.selectedSpotList[index].address.toString()),
+              trailing: SizedBox(
+                width: 90,
+                child: LikeWidget(
+                  userId: 'user0001',
+                  spotId: spotId,
+                ),
+              ),
+              enabled: true,
+              onTap: () {
+                // String spotId = oneCatsSpotList[index].id.toString();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SpotDetailScreen(spotId: spotId)),
+                );
+              },
+            ),
+          );
+        },
+      ),
     );
   }
 }
 
 class LikeWidget extends StatelessWidget {
-  final userId;
-  final spotId;
+  final String? userId;
+  final String? spotId;
   const LikeWidget({Key? key, this.userId, this.spotId}) : super(key: key);
 
   @override
@@ -186,14 +190,15 @@ class LikeWidget extends StatelessWidget {
     final _likeListInstance = Provider.of<LikeList>(context);
     int _likeNums = _likeListInstance.getLikeNums(spotId);
 
-    return Container(
-        //padding: EdgeInsets.only(right: 12, left: 12),
-        child: Column(mainAxisAlignment: MainAxisAlignment.end, children: [
-      Expanded(child: _buildLikeButton(_likeListInstance)),
-      Expanded(
-        child: Text(_likeNums.toString()),
-      ),
-    ]));
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Expanded(child: _buildLikeButton(_likeListInstance)),
+        Expanded(
+          child: Text(_likeNums.toString()),
+        ),
+      ],
+    );
   }
 
   //Likeボタン作成
@@ -201,13 +206,14 @@ class LikeWidget extends StatelessWidget {
     bool _isLikeExsited = _likeListInstance.getIsLikeExisted(userId, spotId);
 
     return IconButton(
-        iconSize: 15,
-        padding: const EdgeInsets.only(right: 8, left: 8),
-        icon: (_isLikeExsited ? const Icon(Icons.favorite) : const Icon(Icons.favorite_border)),
-        color: kPrimaryColor,
-        onPressed: () {
-          DateTime _createdDate = DateTime.now();
-          _likeListInstance.addOrRemoveLike(userId, spotId, _createdDate);
-        });
+      iconSize: 15,
+      padding: const EdgeInsets.only(right: 8, left: 8),
+      icon: (_isLikeExsited ? const Icon(Icons.favorite) : const Icon(Icons.favorite_border)),
+      color: kPrimaryColor,
+      onPressed: () {
+        DateTime _createdDate = DateTime.now();
+        _likeListInstance.addOrRemoveLike(userId, spotId, _createdDate);
+      },
+    );
   }
 }
