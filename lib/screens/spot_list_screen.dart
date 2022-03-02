@@ -161,7 +161,6 @@ class SpotListView extends StatelessWidget {
                   ),//LikeWidget(),//Icon(Icons.more_vert),
                   enabled: true,
                   onTap: () {
-                    // String spotId = oneCatsSpotList[index].id.toString();
                     Navigator.push(
                       context,
                       MaterialPageRoute(

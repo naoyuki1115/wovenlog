@@ -6,7 +6,8 @@ import '../constants.dart';
 import '../screens/top_edit_screen.dart';
 
 class TopScreen extends StatelessWidget {
-  const TopScreen({Key? key}) : super(key: key);
+  final userId;
+  const TopScreen({Key? key, this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:wovenlog/constants.dart';
+import 'package:wovenlog/screens/top_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -18,16 +19,28 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
 
   void authentication() {
+    String _userId;
+
     //入力有無判定
+    if (userName == '' || password == '') {
+      _loginState = false;
+    } else {
+      _loginState = true;
+    }
+
     //ログイン機能の関数
     //LoginFunction(userName, password);
-    //_loginState = false;
+    _userId = "user0001";
 
     //ログイン承認成功時
     if (_loginState) {
       _errMsg = 'Authentication successed';
       //画面遷移
-      //Navigater
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => TopScreen(userId: _userId)),
+      );
       //ログイン承認失敗時
     } else {
       //エラーメッセージ
@@ -78,11 +91,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           onSaved: (value) => userName = value,
                           fildName: 'User Name',
                         ),
-
-                        SizedBox(
-                          height: 20,
-                        ),
-
+                        const SizedBox(height: 20),
                         // パスワード入力フォーム
                         CustomFormField(
                           onSaved: (value) => password = value,
