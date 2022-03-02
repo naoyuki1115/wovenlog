@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -107,7 +109,7 @@ class _SpotPostScreenState extends State<SpotPostScreen> {
                 ),
               ),
               Expanded(
-                flex: 4,
+                flex: 2,
                 child: Container(),
               ),
             ],
@@ -241,7 +243,6 @@ class _PullDownButtonState extends State<PullDownButton> {
         style: TextStyle(fontSize: 17, color: Color.fromARGB(255, 97, 97, 97)),
       ),
       isExpanded: true,
-      // vColor.fromARGB(255, 114, 114, 114)る値、_selectedCategoryをそれと定義
       value: selectedCategory,
       icon: const Icon(Icons.arrow_drop_down),
       iconSize: 40,
@@ -275,51 +276,157 @@ class AddImage extends StatefulWidget {
 
 class _AddImageState extends State<AddImage> {
   XFile? _image;
+  File? _file;
+  bool _imageExist = false;
   ImagePicker picker = ImagePicker();
 
   Future _getImage() async {
+    // ImagePickerを使用し画像Pathを取得
     XFile? image = await picker.pickImage(source: ImageSource.gallery);
 
     setState(() {
       if (image != null) {
         _image = XFile(image.path);
-      } else {
-        const Text('No image selected.');
+        // File型に変換（Image .file()はXfile非対応のため）
+        _file = File(image.path);
+        // 画像取得有無の確認用に_imageExistを使用
+        _imageExist = true;
       }
     });
   }
 
+  Future<String> _checkImage() async {
+    // FutureBuilderで監視されるstate
+    if (_imageExist) {
+      return "finished";
+    } else {
+      return "Please select image";
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 60,
-          width: 60,
-          padding: const EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: kAppBarColor,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                spreadRadius: 1,
-                blurRadius: 3,
-                offset: const Offset(2, 2),
+    return FutureBuilder<String>(
+      future: _checkImage(), // a previously-obtained Future<String> or null
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        List<Widget> children;
+        if (snapshot.data == "finished") {
+          children = <Widget>[
+            Container(
+                height: 150,
+                width: 150,
+                child: Image.file(
+                  _file!,
+                  fit: BoxFit.fill,
+                )),
+          ];
+        } else if (snapshot.data == "Please select image") {
+          children = <Widget>[
+            // 画像未取得時の画面
+            SizedBox(
+              height: 150, // 取得した画像のサイズ＝元のUIのサイズにしないとSubmitボタンが崩れるためSizedboxを使用
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 60,
+                    width: 60,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: kAppBarColor,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.3),
+                          spreadRadius: 1,
+                          blurRadius: 3,
+                          offset: const Offset(2, 2),
+                        ),
+                      ],
+                    ),
+                    child: IconButton(
+                      onPressed: _getImage,
+                      icon: const Icon(Icons.add),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  const Text(
+                    "Upload image",
+                    style: TextStyle(fontSize: 20, color: kFontColor),
+                  ),
+                ],
               ),
-            ],
+            ),
+          ];
+        } else {
+          // 画像取得中の画面
+          children = const <Widget>[
+            SizedBox(
+              width: 60,
+              height: 60,
+              child: CircularProgressIndicator(),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 16),
+              child: Text('Awaiting result...'),
+            )
+          ];
+        }
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: children,
           ),
-          child: IconButton(
-            onPressed: _getImage,
-            icon: const Icon(Icons.add),
-          ),
+        );
+      },
+    );
+  }
+}
+
+// Submitボタン
+class Submit extends StatefulWidget {
+  const Submit({Key? key}) : super(key: key);
+
+  @override
+  _SubmitState createState() => _SubmitState();
+}
+
+String errMsg = '';
+bool postState = false;
+
+void submitData() {
+  if (postState) {
+    //画面遷移
+    // 登録処理
+  } else {
+    errMsg = 'Please fill some required info';
+  }
+}
+
+class _SubmitState extends State<Submit> {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 300,
+      height: 60,
+      child: TextButton(
+        child: const Text(
+          "Submit",
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 10),
-        const Text(
-          "Upload image",
-          style: TextStyle(fontSize: 20, color: kFontColor),
+        style: TextButton.styleFrom(
+          primary: const Color(0xffD80C28),
+          backgroundColor: kSecondaryColor,
+          shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.all(Radius.circular(100))),
         ),
-      ],
+        onPressed: () {
+          setState(() {
+            // Submit成功可否の表示＆Listへの登録
+            submitData();
+          });
+        },
+      ),
     );
   }
 }

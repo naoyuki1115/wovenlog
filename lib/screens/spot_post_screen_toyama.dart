@@ -20,7 +20,8 @@ class SpotPostScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(
           'Post',
-          style: TextStyle(fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
         ),
         backgroundColor: kAppBarColor,
         leading: IconButton(
@@ -93,7 +94,8 @@ class _AddProfileState extends State<AddProfile> {
     void _saveFormContentsToSpotList() {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
-        _spotListNotifier.addNewSpot(_spotName, _spotURL, _spotDescription, _spotListNotifier.categoryName);
+        _spotListNotifier.addNewSpot(_spotName, _spotURL, _spotDescription,
+            _spotListNotifier.categoryName);
       }
     }
 
