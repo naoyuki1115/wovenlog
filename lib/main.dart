@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       child: MaterialApp(
         title: 'WovenLog',
-        home: SpotListScreen(), //TopScreen(),
+        home: LoginScreen(), //TopScreen(),
       ),
       providers: [
         ChangeNotifierProvider(
