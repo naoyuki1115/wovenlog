@@ -10,9 +10,6 @@ class TopScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // This provider of _selectedCategoryList is not needed in case of using SharedPreferences.
-    // final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(

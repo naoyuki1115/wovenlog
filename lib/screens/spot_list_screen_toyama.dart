@@ -5,13 +5,13 @@ import '../constants.dart';
 import '../screens/spot_post_screen.dart';
 import '../screens/spot_detail_screen.dart';
 import '../dummy_data/like_list.dart';
-import '../dummy_data/spot_list.dart';
+import '../dummy_data/spot_list_notifier.dart';
 import '../dummy_data/category_list.dart';
 import '../dummy_data/selected_category_list.dart';
 
-class SpotListScreen extends StatelessWidget {
+class SpotListScreen extends StatefulWidget {
   // final catsId = "category0001";
-  final categoryId;
+  final String? categoryId;
 
   const SpotListScreen({
     Key? key,
@@ -19,26 +19,36 @@ class SpotListScreen extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<SpotListScreen> createState() => _SpotListScreenState();
+}
+
+class _SpotListScreenState extends State<SpotListScreen> {
+  String catsName = '';
+
+  @override
+  void initState() {
+    print('init state');
+    super.initState();
+
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      print('callback func');
+      final _spotListNoifier = Provider.of<SpotListNotifier>(context, listen: false);
+      // catsName = _spotListNoifier.getCategoryNameById(widget.categoryId);
+      _spotListNoifier.updateSelectedSpotList(widget.categoryId);
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final _spotListInstance = Provider.of<SpotList>(context);
-
-    _spotListInstance.setSpotListByCategoryId(categoryId);
-    String catsName = _spotListInstance.getCatsName();
-
-    /* ------------------------------------------*/
-    //カテゴリIDで絞り込み
-    // if (_spotListInstance.isFirst) {
-    //   _spotListInstance.narrowDownSpotListByCatsId(categoryId);
-    //   _spotListInstance.switchIsFirst();
-    // }
-    //カテゴリIDからカテゴリ名を取得
-    // String catsName = _spotListInstance.getCatsName();
-    /* ------------------------------------------*/
+    final _spotListNotifier = Provider.of<SpotListNotifier>(context);
+    print('build spot list screen');
+    // catsName = _spotListNotifier.selectedCategoryName;
+    // String catsName = _spotListNotifier.getCategoryNameById(widget.categoryId);
 
     return Scaffold(
         appBar: AppBar(
             title: Text(
-              catsName, //"[Cats name]",
+              _spotListNotifier.selectedCategoryName, //"[Cats name]",
               style: TextStyle(color: kFontColor),
             ),
             backgroundColor: kAppBarColor,
@@ -80,7 +90,7 @@ class CustomButtomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _spotListInstance = Provider.of<SpotList>(context);
+    final _spotListNotifier = Provider.of<SpotListNotifier>(context);
     final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
 
     //表示するカテゴリID（上位3つ）
@@ -99,6 +109,7 @@ class CustomButtomBar extends StatelessWidget {
       backgroundColor: kAppBarColor,
       unselectedItemColor: kBackgroundColor,
       selectedItemColor: kPrimaryColor,
+      currentIndex: _spotListNotifier.selectedIndex,
       items: [
         _buildBottomIcon(favoriteCats[0]), //(_firstCatsId),
         _buildBottomIcon(favoriteCats[1]),
@@ -107,9 +118,14 @@ class CustomButtomBar extends StatelessWidget {
       onTap: (index) {
         // print(index);
         // print(favoriteCats[index]);
-        _spotListInstance.updateSelectedSpotList(favoriteCats[index]);
+        // _spotListInstance.updateSelectedSpotList(favoriteCats[index]);
         // _spotListInstance.narrowDownSpotListByCatsId(favoriteCats[index]);
         // _spotListInstance.getCatsSpotList();
+
+        print('==========================');
+        print('push bottom navigation button');
+        _spotListNotifier.updateSelectedSpotList(favoriteCats[index]);
+        _spotListNotifier.setSelectedIndex(index);
       },
     );
   }
@@ -136,35 +152,27 @@ class SpotListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _spotListInstance = Provider.of<SpotList>(context);
-    // List oneCatsSpotList = _spotListInstance.catsSpotList;
-    List oneCatsSpotList = _spotListInstance.updateList();
-    print(oneCatsSpotList[0].name);
+    final _spotListNotifier = Provider.of<SpotListNotifier>(context);
 
-    /* ------------------------------------------*/
-    //カテゴリIDと一致するSpotに絞り込み
-    print("i think");
-    // _spotListInstance.upadateCatsSpotList();
-    print('here');
-    // print(_spotListInstance.testList[0]);
-    print(_spotListInstance.catsSpotList[0].name);
-    print(_spotListInstance.catsSpotList[1].name);
-    // List oneCatsSpotList = _spotListInstance.getCatsSpotList();
-    // List oneCatsSpotList = _spotListInstance.catsSpotList;
-    /* ------------------------------------------*/
+    print('build spot list view');
 
     return Expanded(
       child: ListView.builder(
-          itemCount: oneCatsSpotList.length, //リストからSpot数取得
+          itemCount: _spotListNotifier.selectedSpotList.length, //リストからSpot数取得
           itemBuilder: (context, index) {
-            String spotId = oneCatsSpotList[index].id.toString();
+            String spotId = _spotListNotifier.selectedSpotList[index].id.toString();
             return Card(
               child: ListTile(
                   //tileColor: Colors.blue,
-                  leading:
-                      Container(width: 100, height: 75, child: Image.asset(oneCatsSpotList[index].image.toString())),
-                  title: Text(oneCatsSpotList[index].name.toString()), //spotList[index].name),
-                  subtitle: Text(oneCatsSpotList[index].address.toString()),
+                  leading: SizedBox(
+                    width: 100,
+                    height: 75,
+                    child: Image.asset(
+                      _spotListNotifier.selectedSpotList[index].image.toString(),
+                    ),
+                  ),
+                  title: Text(_spotListNotifier.selectedSpotList[index].name.toString()), //spotList[index].name),
+                  subtitle: Text(_spotListNotifier.selectedSpotList[index].address.toString()),
                   trailing: SizedBox(
                     width: 90,
                     child: LikeWidget(

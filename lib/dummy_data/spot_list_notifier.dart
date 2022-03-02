@@ -2,90 +2,48 @@ import 'package:flutter/material.dart';
 
 import './spot_class.dart';
 import './category_list.dart';
+import './selected_category_list.dart';
 
-class SpotList extends ChangeNotifier {
-  //カテゴリで絞り込み後リスト（Providerで監視）
-  List<Spot> _catsSpotList = <Spot>[];
+class SpotListNotifier extends ChangeNotifier {
+  List<Spot> _selectedSpotList = <Spot>[];
 
-  List newSpotList = [];
-  List testList = [];
+  List<Spot> get selectedSpotList => _selectedSpotList;
 
-  List<Spot> get catsSpotList => _catsSpotList;
+  String selectedCategoryName = '';
 
-  //最初の読み込みかどうかStateを保持
-  bool isFirst = true;
+  int selectedIndex = 0;
 
-  void setSpotListByCategoryId(categoryId) {
-    _catsSpotList = spotList.where((_list) => _list.categoryId == categoryId).toList();
+  // String getCategoryNameById(categoryId) {
+  //   _selectedSpotList = _spotList
+  //       .where(
+  //         (element) => element.categoryId == categoryId,
+  //       )
+  //       .toList();
+  //   String _tempId = _selectedSpotList.first.categoryId.toString();
+  //   String _catsName = categoryList
+  //       .singleWhere(
+  //         (element) => element.id == _tempId,
+  //       )
+  //       .name
+  //       .toString();
+  //   print('return category name');
+  //   notifyListeners();
+  //   return _catsName;
+  // }
+
+  void setSelectedIndex(index) {
+    selectedIndex = index;
+    notifyListeners();
   }
 
   void updateSelectedSpotList(categoryId) {
-    newSpotList = [];
-    // print(_catsSpotList);
-    _catsSpotList = spotList.where((_list) => _list.categoryId == categoryId).toList();
-    testList = _catsSpotList;
-    print(_catsSpotList[0].name);
-    print(_catsSpotList.length);
+    _selectedSpotList = _spotList.where((element) => element.categoryId == categoryId).toList();
+    String _tempId = _selectedSpotList.first.categoryId.toString();
+    selectedCategoryName = categoryList.singleWhere((element) => element.id == _tempId).name.toString();
     notifyListeners();
   }
 
-  List updateList() {
-    return _catsSpotList;
-  }
-
-  void switchIsFirst() {
-    isFirst = !isFirst;
-    // notifyListeners();
-  }
-
-  //指定のカテゴリIDでSpotリストを絞り込み（Providerへ通知）
-  void narrowDownSpotListByCatsId(_catsId) {
-    this._catsSpotList = spotList.where((_list) => _list.categoryId == _catsId).toList();
-    print(_catsSpotList[0].name);
-    print(isFirst);
-    notifyListeners();
-  }
-
-  //カテゴリで絞り込み後のSpotリスト取得
-  List getCatsSpotList() {
-    print('getList');
-    return _catsSpotList;
-  }
-
-  //カテゴリで絞り込み後のSpotリストをアップデート
-  void upadateCatsSpotList() {
-    if (_catsSpotList.isNotEmpty) {
-      String _catsId = _catsSpotList.first.categoryId.toString();
-      narrowDownSpotListByCatsId(_catsId); //Provider通知済み
-    }
-  }
-
-  //現在絞り込んでいるカテゴリ名を取得
-  String getCatsName() {
-    String _catsId;
-    String _catsName;
-    if (_catsSpotList.isNotEmpty) {
-      _catsId = _catsSpotList.first.categoryId.toString();
-      _catsName = categoryList.singleWhere((_list) => _list.id == _catsId).name.toString();
-    } else {
-      _catsName = 'error';
-    }
-    return _catsName;
-  }
-
-  //指定のSpotIDと一致するSpot情報を取得
-  Spot getSpotInfo(_spotId) {
-    return spotList.singleWhere((_list) => _list.id == _spotId);
-  }
-
-  //Spot追加（Providerへ通知）
-  void addSpot(Spot _addedSpot) {
-    spotList.add(_addedSpot);
-    notifyListeners();
-  }
-
-  //Spotリスト（Providerで監視）
-  List<Spot> spotList = [
+  final List<Spot> _spotList = <Spot>[
     Spot(
       id: "spot0001",
       name: "McDonald's",

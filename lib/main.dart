@@ -5,11 +5,12 @@ import 'package:go_router/go_router.dart';
 import './screens/login_screen.dart';
 import './screens/top_screen.dart';
 import './screens/top_edit_screen.dart';
-import './screens/spot_list_screen.dart';
+// TODO:
+import './screens/spot_list_screen_toyama.dart';
 import './screens/spot_detail_screen.dart';
 import './screens/spot_post_screen.dart';
 import './dummy_data/selected_category_list.dart';
-import './dummy_data/spot_list.dart';
+import './dummy_data/spot_list_notifier.dart';
 import './dummy_data/like_list.dart';
 
 void main() {
@@ -35,10 +36,10 @@ class MyApp extends StatelessWidget {
         builder: (context, state) => const TopEditScreen(),
       ),
       GoRoute(
-        path: '/spot_list_screen',
-        builder: (context, state) => const SpotListScreen(),
-        // path: '/spot_list_screen/:categoryId',
-        // builder: (context, state) => SpotListScreen(categoryId: state.params['categoryId']!),
+        // path: '/spot_list_screen',
+        // builder: (context, state) => const SpotListScreen(),
+        path: '/spot_list_screen/:categoryId',
+        builder: (context, state) => SpotListScreen(categoryId: state.params['categoryId']!),
       ),
       GoRoute(
         path: '/spot_detail_screen/:spotId',
@@ -63,7 +64,7 @@ class MyApp extends StatelessWidget {
           create: (context) => SelectedCategoryList(),
         ),
         ChangeNotifierProvider(
-          create: (context) => SpotList(),
+          create: (context) => SpotListNotifier(),
         ),
         ChangeNotifierProvider(
           create: (context) => LikeList(),
