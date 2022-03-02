@@ -7,10 +7,6 @@ import '../constants.dart';
 import '../dummy_data/category_list.dart';
 import 'spot_list_screen.dart';
 
-void main() {
-  runApp(SpotPostScreen());
-}
-
 class SpotPostScreen extends StatefulWidget {
   const SpotPostScreen({Key? key}) : super(key: key);
 
@@ -50,7 +46,7 @@ class _SpotPostScreenState extends State<SpotPostScreen> {
             onPressed: () {
               Navigator.pop(
                 context,
-                MaterialPageRoute(builder: (context) => SpotListScreen()),
+                MaterialPageRoute(builder: (context) => const SpotListScreen()),
               );
             },
           ),
@@ -66,21 +62,21 @@ class _SpotPostScreenState extends State<SpotPostScreen> {
               ),
               // Submitエラー表示
               ConstrainedBox(
-                constraints: BoxConstraints(minHeight: 30.0),
+                constraints: const BoxConstraints(minHeight: 30.0),
                 child: Text(
                   _errMsg, //loginボタン押下後に表示内容更新
-                  style: TextStyle(color: kPrimaryColor),
+                  style: const TextStyle(color: kPrimaryColor),
                 ),
               ),
               // 入力フォーム
-              AddProfile(),
+              const AddProfile(),
               // 空白
               Expanded(
                 flex: 1,
                 child: Container(),
               ),
               // 画像投稿フォーム
-              AddImage(),
+              const AddImage(),
               Expanded(
                 flex: 1,
                 child: Container(),
@@ -182,7 +178,7 @@ class _AddProfileState extends State<AddProfile> {
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(23)),
-                    child: PullDownButton()),
+                    child: const PullDownButton()),
                 const SizedBox(
                   height: 10,
                 ),
