@@ -1,11 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:wovenlog/dummy_data/spot_class.dart';
-import 'package:wovenlog/dummy_data/user_class.dart';
-
 import 'like_class.dart';
-import 'package:wovenlog/dummy_data/user_list.dart';
-import 'package:wovenlog/dummy_data/spot_list.dart';
 
 
 class LikeList extends ChangeNotifier{

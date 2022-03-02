@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wovenlog/constants.dart';
+import 'package:wovenlog/dummy_data/like_class.dart';
 import 'package:wovenlog/dummy_data/like_list.dart';
 import 'package:wovenlog/dummy_data/spot_list.dart';
 import 'package:wovenlog/dummy_data/category_list.dart';
@@ -63,6 +64,7 @@ class SpotListScreen extends StatelessWidget {
   }
 }
 
+//ボトムバー
 class CustomButtomBar extends StatelessWidget {
   const CustomButtomBar({Key? key,}) : super(key: key);
 
@@ -94,7 +96,6 @@ class CustomButtomBar extends StatelessWidget {
       ],
       onTap: (index){
         _spotListInstance.narrowDownSpotListByCatsId(favoriteCats[index]);
-        //_spotListInstance.getCatsSpotList();
       },
     );
   }
@@ -121,44 +122,50 @@ class SpotListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _spotListInstance = Provider.of<SpotList>(context); 
+    final _likeListInstance = Provider.of<LikeList>(context);
 
-    //カテゴリIDと一致するSpotに絞り込み
+    /*表示させるカテゴリのSpotリストを取得*/
+    //追加/削除した分を反映
     _spotListInstance.upadateCatsSpotList();
+    //いいね順で並び替え
+    _spotListInstance.sortLikeNumOrder(_likeListInstance);
+    //カテゴリで絞り込んだSpotリストを取得
     List oneCatsSpotList = _spotListInstance.getCatsSpotList();
 
     return Expanded(
       child: ListView.builder(
-          itemCount: oneCatsSpotList.length,//リストからSpot数取得
-          itemBuilder: (context, index) {
-            String spotId = oneCatsSpotList[index].id.toString();
-            return Card(
-              child: ListTile(
-                  //tileColor: Colors.blue,
-                  leading: Container(
-                      width: 100,
-                      height: 75,
-                      child: Image.asset(oneCatsSpotList[index].image.toString())),
-                  title: Text(oneCatsSpotList[index].name.toString()),//spotList[index].name),
-                  subtitle: Text(oneCatsSpotList[index].address.toString()),
-                  trailing: SizedBox(
-                    width:90, 
-                    child: LikeWidget(userId: 'user0001', spotId: spotId,),
-                  ),//LikeWidget(),//Icon(Icons.more_vert),
-                  enabled: true,
-                  onTap: () {
-                    // String spotId = oneCatsSpotList[index].id.toString();
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SpotDetailScreen(spotId:spotId)),
-                    );
-                  }
-                ),
-            );
-          }),
+        itemCount: oneCatsSpotList.length,//リストからSpot数取得
+        itemBuilder: (context, index) {
+          String spotId = oneCatsSpotList[index].id.toString();
+          return Card(
+            child: ListTile(
+              //tileColor: Colors.blue,
+              leading: Container(
+                  width: 100,
+                  height: 75,
+                  child: Image.asset(oneCatsSpotList[index].image.toString())),
+              title: Text(oneCatsSpotList[index].name.toString()),//spotList[index].name),
+              subtitle: Text(oneCatsSpotList[index].address.toString()),
+              trailing: SizedBox(
+                width:90, 
+                child: LikeWidget(userId: 'user0001', spotId: spotId,),
+              ),
+              enabled: true,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SpotDetailScreen(spotId:spotId)),
+                );
+              }
+            ),
+          );
+        }
+      ),
     );
   }
 }
 
+//いいねSection
 class LikeWidget extends StatelessWidget {
   final userId;
   final spotId;
@@ -169,7 +176,6 @@ class LikeWidget extends StatelessWidget {
     final _likeListInstance = Provider.of<LikeList>(context);
     int _likeNums = _likeListInstance.getLikeNums(spotId);
     
-
     return Container(
       //padding: EdgeInsets.only(right: 12, left: 12),
       child:Column(
@@ -191,8 +197,8 @@ class LikeWidget extends StatelessWidget {
       iconSize: 15,
       padding: const EdgeInsets.only(right: 8, left: 8),
       icon: (_isLikeExsited
-          ? const Icon(Icons.favorite)
-          : const Icon(Icons.favorite_border)),
+              ? const Icon(Icons.favorite)
+              : const Icon(Icons.favorite_border)),
       color: kPrimaryColor,
       onPressed: (){
           DateTime _createdDate = DateTime.now();

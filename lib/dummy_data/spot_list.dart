@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wovenlog/dummy_data/like_list.dart';
 
 import 'spot_class.dart';
 import 'package:wovenlog/dummy_data/category_list.dart';
@@ -7,7 +8,6 @@ class SpotList extends ChangeNotifier {
 
   //最初の読み込みかどうかStateを保持
   bool isFirst = true;
-
   void switchIsFirst(){
     isFirst = !isFirst;
     notifyListeners();
@@ -24,7 +24,7 @@ class SpotList extends ChangeNotifier {
     return _catsSpotList;
   }
 
-  //カテゴリで絞り込み後のSpotリストをアップデート
+  //カテゴリで絞り込み後のSpotリストをアップデート（追加/削除した分を反映）
   void upadateCatsSpotList(){
     if(_catsSpotList.isNotEmpty){
       String _catsId = _catsSpotList.first.categoryId.toString();
@@ -53,6 +53,22 @@ class SpotList extends ChangeNotifier {
   //Spot追加（Providerへ通知）
   void addSpot(Spot _addedSpot){
     spotList.add(_addedSpot);
+    notifyListeners();
+  }
+
+  //いいね順で並び替え機能
+  void sortLikeNumOrder(LikeList _likeListInstance){
+    
+    List<Spot> _tempList = [];
+    //SpotインスタンスとLike数を組み合わせたリストを作成
+    List spotLikeNumList = _catsSpotList.map((e) => [_likeListInstance.getLikeNums(e.id),e]).toList();
+    //Like数で並び替え
+    spotLikeNumList.sort((a, b) => -a[0].compareTo(b[0]),);
+    //Like数の列を取り除く
+    spotLikeNumList.forEach((element) {_tempList.add(element[1]);});
+    //並び替えしたもので書き換え
+    _catsSpotList = _tempList;
+
     notifyListeners();
   }
 
