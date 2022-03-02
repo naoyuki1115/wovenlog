@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import './spot_class.dart';
 import './category_list.dart';
-import './selected_category_list.dart';
 
 class SpotListNotifier extends ChangeNotifier {
   List<Spot> _selectedSpotList = <Spot>[];
@@ -12,24 +11,6 @@ class SpotListNotifier extends ChangeNotifier {
   String selectedCategoryName = '';
 
   int selectedIndex = 0;
-
-  // String getCategoryNameById(categoryId) {
-  //   _selectedSpotList = _spotList
-  //       .where(
-  //         (element) => element.categoryId == categoryId,
-  //       )
-  //       .toList();
-  //   String _tempId = _selectedSpotList.first.categoryId.toString();
-  //   String _catsName = categoryList
-  //       .singleWhere(
-  //         (element) => element.id == _tempId,
-  //       )
-  //       .name
-  //       .toString();
-  //   print('return category name');
-  //   notifyListeners();
-  //   return _catsName;
-  // }
 
   void setSelectedIndex(index) {
     selectedIndex = index;

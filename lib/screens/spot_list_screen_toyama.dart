@@ -23,17 +23,12 @@ class SpotListScreen extends StatefulWidget {
 }
 
 class _SpotListScreenState extends State<SpotListScreen> {
-  String catsName = '';
-
   @override
   void initState() {
-    print('init state');
     super.initState();
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      print('callback func');
       final _spotListNoifier = Provider.of<SpotListNotifier>(context, listen: false);
-      // catsName = _spotListNoifier.getCategoryNameById(widget.categoryId);
       _spotListNoifier.updateSelectedSpotList(widget.categoryId);
     });
   }
@@ -41,9 +36,6 @@ class _SpotListScreenState extends State<SpotListScreen> {
   @override
   Widget build(BuildContext context) {
     final _spotListNotifier = Provider.of<SpotListNotifier>(context);
-    print('build spot list screen');
-    // catsName = _spotListNotifier.selectedCategoryName;
-    // String catsName = _spotListNotifier.getCategoryNameById(widget.categoryId);
 
     return Scaffold(
         appBar: AppBar(
@@ -116,14 +108,6 @@ class CustomButtomBar extends StatelessWidget {
         _buildBottomIcon(favoriteCats[2]),
       ],
       onTap: (index) {
-        // print(index);
-        // print(favoriteCats[index]);
-        // _spotListInstance.updateSelectedSpotList(favoriteCats[index]);
-        // _spotListInstance.narrowDownSpotListByCatsId(favoriteCats[index]);
-        // _spotListInstance.getCatsSpotList();
-
-        print('==========================');
-        print('push bottom navigation button');
         _spotListNotifier.updateSelectedSpotList(favoriteCats[index]);
         _spotListNotifier.setSelectedIndex(index);
       },
