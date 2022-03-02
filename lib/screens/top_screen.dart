@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 
-import '../dummy_data/selected_category_list.dart';
 import '../constants.dart';
+import '../dummy_data/selected_category_list.dart';
 
 class TopScreen extends StatelessWidget {
   const TopScreen({Key? key}) : super(key: key);

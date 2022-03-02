@@ -9,6 +9,8 @@ import './screens/spot_list_screen.dart';
 import './screens/spot_detail_screen.dart';
 import './screens/spot_post_screen.dart';
 import './dummy_data/selected_category_list.dart';
+import './dummy_data/spot_list.dart';
+import './dummy_data/like_list.dart';
 
 void main() {
   runApp(MyApp());
@@ -33,10 +35,10 @@ class MyApp extends StatelessWidget {
         builder: (context, state) => const TopEditScreen(),
       ),
       GoRoute(
-        // path: '/spot_list_screen',
-        // builder: (context, state) => const SpotListScreen(),
-        path: '/spot_list_screen/:categoryId',
-        builder: (context, state) => SpotListScreen(categoryId: state.params['categoryId']!),
+        path: '/spot_list_screen',
+        builder: (context, state) => const SpotListScreen(),
+        // path: '/spot_list_screen/:categoryId',
+        // builder: (context, state) => SpotListScreen(categoryId: state.params['categoryId']!),
       ),
       GoRoute(
         path: '/spot_detail_screen/:spotId',
@@ -59,7 +61,13 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) => SelectedCategoryList(),
-        )
+        ),
+        ChangeNotifierProvider(
+          create: (context) => SpotList(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => LikeList(),
+        ),
       ],
     );
   }
