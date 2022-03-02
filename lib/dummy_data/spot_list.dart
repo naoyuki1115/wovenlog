@@ -24,6 +24,10 @@ class SpotList extends ChangeNotifier {
     notifyListeners();
   }
 
+  Spot getSpotInfo(spotId) {
+    return _spotList.singleWhere((element) => element.id == spotId);
+  }
+
   final List<Spot> _spotList = <Spot>[
     Spot(
       id: "spot0001",

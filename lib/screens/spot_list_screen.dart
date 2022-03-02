@@ -138,8 +138,6 @@ class SpotListView extends StatelessWidget {
   Widget build(BuildContext context) {
     final _spotListNotifier = Provider.of<SpotList>(context);
 
-    print('build spot list view');
-
     return Expanded(
       child: ListView.builder(
           itemCount: _spotListNotifier.selectedSpotList.length, //リストからSpot数取得
