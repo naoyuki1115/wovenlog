@@ -18,7 +18,13 @@ class TopEditScreen extends StatelessWidget {
           style: TextStyle(color: kFontColor),
         ),
         backgroundColor: kAppBarColor,
-        leading: IconButton(icon: const Icon(Icons.menu, color: kPrimaryColor), onPressed: () => context.pop()),
+        leading: IconButton(
+          icon: const Icon(
+            Icons.menu,
+            color: kPrimaryColor,
+          ),
+          onPressed: () => context.pop(),
+        ),
       ),
       body: const Padding(
         padding: EdgeInsets.symmetric(vertical: 30.0, horizontal: 20.0),

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
 import '../constants.dart';
-import '../screens/spot_post_screen.dart';
-import '../screens/spot_detail_screen.dart';
 import '../dummy_data/like_list.dart';
 import '../dummy_data/spot_list.dart';
 import '../dummy_data/category_list.dart';
@@ -38,32 +37,29 @@ class _SpotListScreenState extends State<SpotListScreen> {
 
     return Scaffold(
       appBar: AppBar(
-          title: Text(
-            _spotListNotifier.selectedCategoryName,
-            style: const TextStyle(color: kFontColor),
+        title: Text(
+          _spotListNotifier.selectedCategoryName,
+          style: const TextStyle(color: kFontColor),
+        ),
+        backgroundColor: kAppBarColor,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: kPrimaryColor,
           ),
-          backgroundColor: kAppBarColor,
-          leading: IconButton(
+          //一つ前に戻る
+          onPressed: () => context.pop(),
+        ),
+        actions: [
+          IconButton(
             icon: const Icon(
-              Icons.arrow_back,
+              Icons.add,
               color: kPrimaryColor,
             ),
-            //一つ前に戻る
-            onPressed: () => {Navigator.pop(context)},
+            onPressed: () => context.push('/spot_post_screen'),
           ),
-          actions: [
-            IconButton(
-                icon: const Icon(
-                  Icons.add,
-                  color: kPrimaryColor,
-                ),
-                onPressed: () => {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => SpotPostScreen()),
-                      )
-                    }),
-          ]),
+        ],
+      ),
       bottomNavigationBar: const CustomButtomBar(),
       body: Column(
         children: const [
@@ -165,13 +161,7 @@ class SpotListView extends StatelessWidget {
                 ),
               ),
               enabled: true,
-              onTap: () {
-                // String spotId = oneCatsSpotList[index].id.toString();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SpotDetailScreen(spotId: spotId)),
-                );
-              },
+              onTap: () => context.push('/spot_detail_screen/$spotId'),
             ),
           );
         },

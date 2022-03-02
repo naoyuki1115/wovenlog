@@ -68,7 +68,7 @@ class GridViewSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
-    final categoryId = 'category0001';
+    const categoryId = 'category0001';
 
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
