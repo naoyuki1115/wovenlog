@@ -4,11 +4,6 @@ import 'package:image_picker/image_picker.dart';
 
 import '../constants.dart';
 import '../dummy_data/category_list.dart';
-import '../screens/spot_list_screen.dart';
-
-void main() {
-  runApp(SpotPostScreen());
-}
 
 class SpotPostScreen extends StatefulWidget {
   const SpotPostScreen({Key? key}) : super(key: key);
@@ -47,10 +42,6 @@ class _SpotPostScreenState extends State<SpotPostScreen> {
             icon: const Icon(Icons.arrow_back_ios_new, color: kPrimaryColor),
             onPressed: () {
               context.pop();
-              // Navigator.pop(
-              //   context,
-              //   MaterialPageRoute(builder: (context) => SpotListScreen()),
-              // );
             },
           ),
         ),
