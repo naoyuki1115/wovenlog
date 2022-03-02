@@ -5,12 +5,11 @@ import 'package:go_router/go_router.dart';
 import './screens/login_screen.dart';
 import './screens/top_screen.dart';
 import './screens/top_edit_screen.dart';
-// TODO:
-import './screens/spot_list_screen_toyama.dart';
+import './screens/spot_list_screen.dart';
 import './screens/spot_detail_screen.dart';
 import './screens/spot_post_screen.dart';
 import './dummy_data/selected_category_list.dart';
-import './dummy_data/spot_list_notifier.dart';
+import './dummy_data/spot_list.dart';
 import './dummy_data/like_list.dart';
 
 void main() {
@@ -64,7 +63,7 @@ class MyApp extends StatelessWidget {
           create: (context) => SelectedCategoryList(),
         ),
         ChangeNotifierProvider(
-          create: (context) => SpotListNotifier(),
+          create: (context) => SpotList(),
         ),
         ChangeNotifierProvider(
           create: (context) => LikeList(),
