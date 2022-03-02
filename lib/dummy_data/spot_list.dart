@@ -17,7 +17,7 @@ class SpotList extends ChangeNotifier {
   }
 
   //指定のカテゴリIDでSpotリストを絞り込み（Providerへ通知）
-  void narrowDownSpotListByCatsId(_catsId){
+  void filterSpotListByCatsId(_catsId){
     _catsSpotList = spotList.where((_list) => _list.categoryId == _catsId).toList();
     notifyListeners();
   }
@@ -31,7 +31,7 @@ class SpotList extends ChangeNotifier {
   void upadateCatsSpotList(){
     if(_catsSpotList.isNotEmpty){
       String _catsId = _catsSpotList.first.categoryId.toString();
-      narrowDownSpotListByCatsId(_catsId);//Provider通知済み
+      filterSpotListByCatsId(_catsId);//Provider通知済み
     }
   }
 
@@ -71,7 +71,17 @@ class SpotList extends ChangeNotifier {
     spotLikeNumList.forEach((element) {_tempList.add(element[1]);});
     //並び替えしたもので書き換え
     _catsSpotList = _tempList;
+    notifyListeners();
+  }
 
+  //個数で絞り込み
+  void filterBy(int num){
+    List<Spot> _tempList = [];
+    //指定個数分取り出し
+    for (int i=0; i<=num-1; i++){
+      _tempList.add(_catsSpotList[i]);
+    }
+    _catsSpotList = _tempList;
     notifyListeners();
   }
 
@@ -469,6 +479,19 @@ class SpotList extends ChangeNotifier {
       createdDate: DateTime(2020, 1, 1),
       categoryId: 'category0003',
       description: '皇居前広場',
+    ),
+    Spot(
+      id: "spot0031",
+      name: "あああああああ",
+      address: "いいいいいい",
+      latitude: 35.6811152,
+      longitude: 139.7560612,
+      url:
+          "https://www.google.com/maps/place/Imperial+Palace+Front+Gardens/@35.6811152,139.7560612,16.25z/data=!4m9!1m3!2m2!1z6Kaz5YWJ5ZCN5omA!6e1!3m4!1s0x60188bf5d740e7a7:0xf04856902f747!8m2!3d35.6806711!4d139.7572871",
+      image: "assets/images/spot_images/spot0022.jpg",
+      createdDate: DateTime(2020, 1, 1),
+      categoryId: 'category0001',
+      description: 'うううう',
     ),
   ];
 }

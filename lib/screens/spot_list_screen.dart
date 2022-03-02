@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wovenlog/constants.dart';
-import 'package:wovenlog/dummy_data/like_class.dart';
 import 'package:wovenlog/dummy_data/like_list.dart';
 import 'package:wovenlog/dummy_data/spot_list.dart';
 import 'package:wovenlog/dummy_data/category_list.dart';
@@ -23,7 +22,7 @@ class SpotListScreen extends StatelessWidget {
 
     //カテゴリIDで絞り込み
     if (_spotListInstance.getIsFirst()) {
-      _spotListInstance.narrowDownSpotListByCatsId(catsId);
+      _spotListInstance.filterSpotListByCatsId(catsId);
       _spotListInstance.switchIsFirst();
     }
     //カテゴリIDからカテゴリ名を取得
@@ -105,7 +104,7 @@ class CustomButtomBar extends StatelessWidget {
         _buildBottomIcon(favoriteCats[2]),
       ],
       onTap: (index) {
-        _spotListInstance.narrowDownSpotListByCatsId(favoriteCats[index]);
+        _spotListInstance.filterSpotListByCatsId(favoriteCats[index]);
       },
     );
   }
@@ -141,6 +140,8 @@ class SpotListView extends StatelessWidget {
     _spotListInstance.upadateCatsSpotList();
     //いいね順で並び替え
     _spotListInstance.sortLikeNumOrder(_likeListInstance);
+    //上位10個を取得
+    _spotListInstance.filterBy(10);
     //カテゴリで絞り込んだSpotリストを取得
     List oneCatsSpotList = _spotListInstance.getCatsSpotList();
 
