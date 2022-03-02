@@ -38,8 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
       //画面遷移
       Navigator.push(
         context,
-        MaterialPageRoute(
-            builder: (context) => TopScreen(userId: _userId)),
+        MaterialPageRoute(builder: (context) => TopScreen(userId: _userId)),
       );
       //ログイン承認失敗時
     } else {
@@ -66,10 +65,10 @@ class _LoginScreenState extends State<LoginScreen> {
               Expanded(child: Container()), //余白]
               //認証NGメッセージ表示場所
               ConstrainedBox(
-                constraints: BoxConstraints(minHeight: 30.0),
+                constraints: const BoxConstraints(minHeight: 30.0),
                 child: Text(
                   _errMsg, //loginボタン押下後に表示内容更新
-                  style: TextStyle(color: kPrimaryColor),
+                  style: const TextStyle(color: kPrimaryColor),
                 ),
               ),
 
@@ -77,10 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Container(
                 child: Row(children: [
                   //左の余白
-                  Expanded(
-                    flex: 1,
-                    child: Container(),
-                  ), //余白
+                  Expanded(flex: 1, child: Container()), //余白
                   //入力フォーム
                   Expanded(
                     flex: 8,
