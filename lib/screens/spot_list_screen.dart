@@ -82,51 +82,23 @@ class CustomButtomBar extends StatelessWidget {
     final _spotListNotifier = Provider.of<SpotList>(context);
     final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
 
-    _spotListNotifier.selectedCategoryId;
-    _spotListNotifier.selectedIndex;
-
-    // List list = _selectedCategoryList.getCategoryInfoForBottomBar(
-    //   _spotListNotifier.selectedCategoryId,
-    //   _spotListNotifier.selectedIndex,
-    // );
-
     int selectedIndex = _selectedCategoryList.getCategoryInfoForBottomBar(
       _spotListNotifier.selectedCategoryId,
       _spotListNotifier.selectedIndex,
     );
 
-    //表示するカテゴリID（上位3つ）
-    // String? _firstCatsId = _selectedCategoryList.selectedCategoryList[0].categoryId;
-    // String? _secondCatsId = _selectedCategoryList.selectedCategoryList[1].categoryId;
-    // String? _thirdCatsId = _selectedCategoryList.selectedCategoryList[2].categoryId;
-
-    //表示するカテゴリIDリスト化（上位3つ）
-    // List favoriteCats = [
-    // _firstCatsId,
-    //   _spotListNotifier.selectedCategoryId,
-    //   _secondCatsId,
-    //   _thirdCatsId,
-    // ];
-
     return BottomNavigationBar(
       backgroundColor: kAppBarColor,
       unselectedItemColor: kBackgroundColor,
       selectedItemColor: kPrimaryColor,
-      // currentIndex: _spotListNotifier.selectedIndex,
       currentIndex: selectedIndex,
       items: [
         _buildBottomIcon(_selectedCategoryList.favoriteCats[0]),
         _buildBottomIcon(_selectedCategoryList.favoriteCats[1]),
         _buildBottomIcon(_selectedCategoryList.favoriteCats[2]),
-        // _buildBottomIcon(favoriteCats[0]),
-        // _buildBottomIcon(favoriteCats[1]),
-        // _buildBottomIcon(favoriteCats[2]),
       ],
       onTap: (index) {
-        // _spotListNotifier.updateSelectedSpotList(favoriteCats[index]);
-        print('tapped index = $index');
         _spotListNotifier.updateSelectedSpotList(_selectedCategoryList.favoriteCats[index]);
-
         _spotListNotifier.setSelectedIndex(index);
       },
     );
