@@ -193,21 +193,43 @@ class SelectedCategoryList extends ChangeNotifier {
     //   _thirdCategoryId = categoryList[_sortedList[2]].id;
     // }
 
+//     if (bottomBarIndex == 0) {
+//       if (categoryId != '') {
+//         _firstCategoryId = categoryId;
+//         _secondCategoryId = categoryList[_sortedList[0]].id;
+//         _thirdCategoryId = categoryList[_sortedList[1]].id;
+//       }
+//     } else if (bottomBarIndex == 1) {
+//       if (categoryId == categoryList[_sortedList[0]].id) {
+//         bottomBarIndex = 1;
+//         _firstCategoryId = beforeId;
+//         _secondCategoryId = categoryList[_sortedList[0]].id;
+//         _thirdCategoryId = categoryList[_sortedList[1]].id;
+//       }
+//     } else {
+//       if (categoryId == categoryList[_sortedList[1]].id) {
+//         bottomBarIndex = 2;
+//         _firstCategoryId = beforeId;
+//         _secondCategoryId = categoryList[_sortedList[0]].id;
+//         _thirdCategoryId = categoryList[_sortedList[1]].id;
+//       }
+//     }
+// /*
     if (bottomBarIndex == 0) {
       if (categoryId == categoryList[_sortedList[0]].id) {
-        bottomBarIndex = 0;
+        // bottomBarIndex = 0;
+
       } else if (categoryId != '') {
-        print('here?');
-        bottomBarIndex = 0;
+        // print('here?');
+        // bottomBarIndex = 0;
         _firstCategoryId = categoryId;
         _secondCategoryId = categoryList[_sortedList[0]].id;
         _thirdCategoryId = categoryList[_sortedList[1]].id;
       }
     } else if (bottomBarIndex == 1) {
       if (categoryId == categoryList[_sortedList[1]].id) {
-        bottomBarIndex = 1;
       } else if (categoryId == categoryList[_sortedList[0]].id) {
-        bottomBarIndex = 1;
+        // bottomBarIndex = 1;
         _firstCategoryId = beforeId;
         _secondCategoryId = categoryList[_sortedList[0]].id;
         _thirdCategoryId = categoryList[_sortedList[1]].id;
@@ -220,9 +242,9 @@ class SelectedCategoryList extends ChangeNotifier {
       // }
     } else if (bottomBarIndex == 2) {
       if (categoryId == categoryList[_sortedList[2]].id) {
-        bottomBarIndex = 2;
+        // bottomBarIndex = 2;
       } else if (categoryId == categoryList[_sortedList[1]].id) {
-        bottomBarIndex = 2;
+        // bottomBarIndex = 2;
         _firstCategoryId = beforeId;
         _secondCategoryId = categoryList[_sortedList[0]].id;
         _thirdCategoryId = categoryList[_sortedList[1]].id;
@@ -233,7 +255,7 @@ class SelectedCategoryList extends ChangeNotifier {
     //   _secondCategoryId = categoryList[_sortedList[1]].id;
     //   _thirdCategoryId = categoryList[_sortedList[2]].id;
     // }
-
+// */
     favoriteCats = [
       _firstCategoryId,
       _secondCategoryId,
