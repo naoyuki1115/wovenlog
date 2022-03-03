@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:path/path.dart' as path;
+// import 'package:path_provider/path_provider.dart' as syspaths;
 
 import 'spot_class.dart';
 import 'category_list.dart';
@@ -61,6 +63,7 @@ class SpotListNotifier extends ChangeNotifier {
     int index =
         categoryList.indexWhere((element) => element.name == categoryName);
 
+    // if (imageFile != null) {
     if (imageFile != null) {
       Spot _newSpot = Spot(
         id: "spot00$categoryLength",

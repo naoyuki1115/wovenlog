@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+// import 'package:path/path.dart' as path;
+// import 'package:path_provider/path_provider.dart' as syspaths;
 
 import '../constants.dart';
 import '../dummy_data/category_list.dart';
@@ -108,6 +110,7 @@ class _InputScreenState extends State<InputScreen> {
             ),
             // 入力フォーム
             Row(
+              //テキストフォームの成形のためExpanedを使用
               children: [
                 Expanded(
                   flex: 1,
@@ -153,14 +156,13 @@ class _InputScreenState extends State<InputScreen> {
                 ),
               ],
             ),
-
             // 空白
             Expanded(
               flex: 1,
               child: Container(),
             ),
             // 画像投稿フォーム
-            const AddImage(),
+            AddImage(),
             // 空白
             Expanded(
               flex: 1,
@@ -238,7 +240,8 @@ class _PullDownButtonState extends State<PullDownButton> {
 
 // 画像投稿機能
 class AddImage extends StatefulWidget {
-  const AddImage({Key? key}) : super(key: key);
+  // final Function onSelectImage;
+  // AddImage(this.onSelectImage);
 
   @override
   _AddImageState createState() => _AddImageState();
@@ -248,7 +251,6 @@ class _AddImageState extends State<AddImage> {
   XFile? _image;
   File? _file;
   bool _imageExist = false;
-
   ImagePicker picker = ImagePicker();
 
   Future<String> _checkImage() async {
@@ -275,8 +277,17 @@ class _AddImageState extends State<AddImage> {
           _file = File(image.path);
           // 画像取得有無の確認用に_imageExistを使用
           _imageExist = true;
+        } else {
+          _imageExist = false;
         }
       });
+      // アプリケーション専用のファイル配置ディレクトリへのパスを取得（）
+      // final appDir = await syspaths.getApplicationDocumentsDirectory();
+      // //画像名を取得(〜.jpg)
+      // final fileName = path.basename(_image!.path);
+
+      // final savedImage = await _file!.copy('${appDir.path}/$fileName');
+      // widget.onSelectImage(savedImage);
     }
 
     return FutureBuilder<String>(
