@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:wovenlog/constants.dart';
-import 'package:wovenlog/screens/top_screen.dart';
+import 'package:go_router/go_router.dart';
+
+import '../constants.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -15,35 +16,17 @@ class _LoginScreenState extends State<LoginScreen> {
   String userName = '';
   String password = '';
   String _errMsg = '';
-  bool _loginState = false;
   final _formKey = GlobalKey<FormState>();
 
-  void authentication() {
-    String _userId;
-
+  //認証機能（通常はスクリーン画面(View)で認証処理せず、ViewModelで実施？）
+  bool _authentication(String _userName, String _password) {
     //入力有無判定
-    if (userName == '' || password == '') {
-      _loginState = false;
+    if (_userName == '' || _password == '') {
+      return false;
     } else {
-      _loginState = true;
-    }
-
-    //ログイン機能の関数
-    //LoginFunction(userName, password);
-    _userId = "user0001";
-
-    //ログイン承認成功時
-    if (_loginState) {
-      _errMsg = 'Authentication successed';
-      //画面遷移
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => TopScreen(userId: _userId)),
-      );
-      //ログイン承認失敗時
-    } else {
-      //エラーメッセージ
-      _errMsg = 'Authentication failed';
+      //DBとユーザ認証
+      //loginFunction(userName, password);
+      return true;
     }
   }
 
@@ -126,12 +109,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     setState(() {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        authentication();
+                        _authentication(userName, password)
+                          ? context.go('/top_screen') //ログイン承認成功時ページ遷移
+                          : _errMsg = 'Authentication failed'; //ログイン承認失敗時エラーメッセージ
                       }
                     });
                   }),
               Expanded(child: Container()), //余白
-            ])));
+            ])
+        )
+    );
   }
 }
 

@@ -1,66 +1,34 @@
 import 'package:flutter/material.dart';
 
-import 'spot_class.dart';
-import 'package:wovenlog/dummy_data/category_list.dart';
+import './spot_class.dart';
+import './category_list.dart';
 
 class SpotList extends ChangeNotifier {
+  List<Spot> _selectedSpotList = <Spot>[];
 
-  //最初の読み込みかどうかStateを保持
-  bool isFirst = true;
+  List<Spot> get selectedSpotList => _selectedSpotList;
 
-  void switchIsFirst(){
-    isFirst = !isFirst;
+  String selectedCategoryName = '';
+
+  int selectedIndex = 0;
+
+  void setSelectedIndex(index) {
+    selectedIndex = index;
     notifyListeners();
   }
 
-  //指定のカテゴリIDでSpotリストを絞り込み（Providerへ通知）
-  void narrowDownSpotListByCatsId(_catsId){
-    _catsSpotList = spotList.where((_list) => _list.categoryId == _catsId).toList();
+  void updateSelectedSpotList(categoryId) {
+    _selectedSpotList = _spotList.where((element) => element.categoryId == categoryId).toList();
+    String _tempId = _selectedSpotList.first.categoryId.toString();
+    selectedCategoryName = categoryList.singleWhere((element) => element.id == _tempId).name.toString();
     notifyListeners();
   }
 
-  //カテゴリで絞り込み後のSpotリスト取得
-  List getCatsSpotList(){
-    return _catsSpotList;
+  Spot getSpotInfo(spotId) {
+    return _spotList.singleWhere((element) => element.id == spotId);
   }
 
-  //カテゴリで絞り込み後のSpotリストをアップデート
-  void upadateCatsSpotList(){
-    if(_catsSpotList.isNotEmpty){
-      String _catsId = _catsSpotList.first.categoryId.toString();
-      narrowDownSpotListByCatsId(_catsId);//Provider通知済み
-    }
-  }
-
-  //現在絞り込んでいるカテゴリ名を取得
-  String getCatsName(){
-    String _catsId;
-    String _catsName;
-    if(_catsSpotList.isNotEmpty){
-      _catsId = _catsSpotList.first.categoryId.toString();
-      _catsName = categoryList.singleWhere((_list) => _list.id == _catsId).name.toString();
-    }else{
-      _catsName='error';
-    }
-    return _catsName;
-  }
-
-  //指定のSpotIDと一致するSpot情報を取得
-  Spot getSpotInfo(_spotId){
-    return spotList.singleWhere((_list) => _list.id == _spotId);
-  }
-
-  //Spot追加（Providerへ通知）
-  void addSpot(Spot _addedSpot){
-    spotList.add(_addedSpot);
-    notifyListeners();
-  }
-
-  //カテゴリで絞り込み後リスト（Providerで監視）
-  List<Spot> _catsSpotList = <Spot>[];
-
-  //Spotリスト（Providerで監視）
-  List<Spot> spotList = [
+  final List<Spot> _spotList = <Spot>[
     Spot(
       id: "spot0001",
       name: "McDonald's",

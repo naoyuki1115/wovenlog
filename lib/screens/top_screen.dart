@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 
-import '../dummy_data/selected_category_list.dart';
 import '../constants.dart';
-import '../screens/top_edit_screen.dart';
+import '../dummy_data/selected_category_list.dart';
 
 class TopScreen extends StatelessWidget {
   final userId;
@@ -11,9 +11,6 @@ class TopScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // This provider of _selectedCategoryList is not needed in case of using SharedPreferences.
-    // final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -24,12 +21,7 @@ class TopScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.menu, color: kPrimaryColor),
           onPressed: () {
-            // This function below is not needed in case of using SharedPreferences.
-            // _selectedCategoryList.updateIsCheckedList();
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const TopEditScreen()),
-            );
+            context.push('/top_edit_screen');
           },
         ),
       ),
@@ -77,6 +69,7 @@ class GridViewSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
+    const categoryId = 'category0001';
 
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -87,36 +80,37 @@ class GridViewSection extends StatelessWidget {
         return Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxHeight: 75.0,
-                maxWidth: 75.0,
-              ),
-              child: Container(
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: kAppBarColor,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      spreadRadius: 1,
-                      blurRadius: 3,
-                      offset: const Offset(2, 2), // changes position of shadow
-                    ),
-                  ],
+            GestureDetector(
+              onTap: () => context.push('/spot_list_screen/$categoryId'),
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(
+                  maxHeight: 75.0,
+                  maxWidth: 75.0,
                 ),
-                child: Image.asset(
-                  _selectedCategoryList.searchSelectedCategoryNameOrIcon(
-                      index, false),
-                  // categoryList[index].icon,
+                child: Container(
+                  padding: const EdgeInsets.all(15),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: kAppBarColor,
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        spreadRadius: 1,
+                        blurRadius: 3,
+                        offset: const Offset(2, 2), // changes position of shadow
+                      ),
+                    ],
+                  ),
+                  child: Image.asset(
+                    _selectedCategoryList.searchSelectedCategoryNameOrIcon(index, false),
+                    // categoryList[index].icon,
+                  ),
                 ),
               ),
             ),
             const SizedBox(height: 10),
             Text(
-              _selectedCategoryList.searchSelectedCategoryNameOrIcon(
-                  index, true),
+              _selectedCategoryList.searchSelectedCategoryNameOrIcon(index, true),
               style: const TextStyle(color: kFontColor),
             ),
           ],
