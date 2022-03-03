@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../constants.dart';
 import '../dummy_data/category_list.dart';
-import 'spot_list_screen.dart';
-
-void main() {
-  runApp(SpotPostScreen());
-}
 
 class SpotPostScreen extends StatefulWidget {
   const SpotPostScreen({Key? key}) : super(key: key);
@@ -31,82 +27,85 @@ void submit() {
 class _SpotPostScreenState extends State<SpotPostScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'post SC', //spotList[spotIndex].name,
-          style: TextStyle(color: kFontColor),
+    return MaterialApp(
+      title: 'spot_post_screen',
+      home: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: const Text(
+            'Post',
+            style: TextStyle(
+                fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
+          ),
+          backgroundColor: kAppBarColor,
+          // 戻るボタン
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios_new, color: kPrimaryColor),
+            onPressed: () {
+              context.pop();
+            },
+          ),
         ),
-        backgroundColor: kAppBarColor,
-        // 戻るボタン
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: kPrimaryColor),
-          onPressed: () {
-            Navigator.pop(
-              context,
-              MaterialPageRoute(builder: (context) => SpotListScreen()),
-            );
-          },
-        ),
-      ),
-      body: Container(
-        height: 750,
-        alignment: Alignment.center,
-        child: Column(
-          children: [
-            Expanded(
-              flex: 1,
-              child: Container(),
-            ),
-            // Submitエラー表示
-            ConstrainedBox(
-              constraints: BoxConstraints(minHeight: 30.0),
-              child: Text(
-                _errMsg, //loginボタン押下後に表示内容更新
-                style: TextStyle(color: kPrimaryColor),
+        body: Container(
+          height: 750,
+          alignment: Alignment.center,
+          child: Column(
+            children: [
+              Expanded(
+                flex: 1,
+                child: Container(),
               ),
-            ),
-            // 入力フォーム
-            AddProfile(),
-            // 空白
-            Expanded(
-              flex: 1,
-              child: Container(),
-            ),
-            // 画像投稿フォーム
-            AddImage(),
-            Expanded(
-              flex: 1,
-              child: Container(),
-            ),
-            // Submitボタン
-            SizedBox(
-              width: 300,
-              height: 60,
-              child: TextButton(
-                child: const Text(
-                  "Submit",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              // Submitエラー表示
+              ConstrainedBox(
+                constraints: BoxConstraints(minHeight: 30.0),
+                child: Text(
+                  _errMsg, //loginボタン押下後に表示内容更新
+                  style: TextStyle(color: kPrimaryColor),
                 ),
-                style: TextButton.styleFrom(
-                  primary: const Color(0xffD80C28),
-                  backgroundColor: kSecondaryColor,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(100))),
-                ),
-                onPressed: () {
-                  setState(() {
-                    // Submit成功可否の表示＆Listへの登録
-                    submit();
-                  });
-                },
               ),
-            ),
-            Expanded(
-              flex: 4,
-              child: Container(),
-            ),
-          ],
+              // 入力フォーム
+              AddProfile(),
+              // 空白
+              Expanded(
+                flex: 1,
+                child: Container(),
+              ),
+              // 画像投稿フォーム
+              AddImage(),
+              Expanded(
+                flex: 1,
+                child: Container(),
+              ),
+
+              // Submitボタン
+              SizedBox(
+                width: 300,
+                height: 60,
+                child: TextButton(
+                  child: const Text(
+                    "Submit",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                  style: TextButton.styleFrom(
+                    primary: const Color(0xffD80C28),
+                    backgroundColor: kSecondaryColor,
+                    shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(100))),
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      // Submit成功可否の表示＆Listへの登録
+                      submit();
+                    });
+                  },
+                ),
+              ),
+              Expanded(
+                flex: 4,
+                child: Container(),
+              ),
+            ],
+          ),
         ),
       ),
     );

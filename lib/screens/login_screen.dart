@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:wovenlog/constants.dart';
+import 'package:go_router/go_router.dart';
+
+import '../constants.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -157,6 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () {
                 setState(() {
                   authentication();
+                  context.go('/top_screen');
                 });
               }),
           Expanded(child: Container()), //余白
