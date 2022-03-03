@@ -77,7 +77,6 @@ class SelectedCategoryList extends ChangeNotifier {
   // This method searches name and icon of the selected category
   // and used for visualize category icon button on the top screen.
   */
-  // String searchSelectedCategoryNameOrIcon(int index, bool isName, SearchTarget target) {
   String searchSelectedCategoryInfo(int index, SearchTarget target) {
     updateIsCheckedList();
     final List<int> newList = [];
@@ -87,21 +86,6 @@ class SelectedCategoryList extends ChangeNotifier {
         newList.add(i);
       }
     }
-
-    // if (newList.isNotEmpty) {
-    //   int _targetIndex = newList[index];
-    //   String _categoryName = categoryList[_targetIndex].name;
-    //   // String _categoryId = categoryList[_targetIndex].icon;
-    //   String _categoryId = categoryList[_targetIndex].id;
-
-    //   if (isName) {
-    //     return _categoryName;
-    //   } else {
-    //     return _categoryId;
-    //   }
-    // } else {
-    //   return "Undefined";
-    // }
 
     if (newList.isNotEmpty) {
       int _targetIndex = newList[index];

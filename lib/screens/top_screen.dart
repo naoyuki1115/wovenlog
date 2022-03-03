@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
-import 'package:wovenlog/dummy_data/category_list.dart';
 
 import '../constants.dart';
 import '../dummy_data/selected_category_list.dart';
@@ -86,20 +85,12 @@ class GridViewSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-              // onTap: () => context.push(
-              //   '/spot_list_screen/${categoryList[index].id}',
-              // ),
               onTap: () {
-                print('==================');
-                print('index: $index');
-                print('${_selectedCategoryList.searchSelectedCategoryInfo(index, SearchTarget.id)}');
-                print('==================');
-
-                // print(index);
-                // print(categoryList[index].id);
-                // print(_selectedCategoryList.selectedCategoryList[index].categoryId);
                 context.push(
-                  '/spot_list_screen/${_selectedCategoryList.searchSelectedCategoryInfo(index, SearchTarget.id)}',
+                  '/spot_list_screen/${_selectedCategoryList.searchSelectedCategoryInfo(
+                    index,
+                    SearchTarget.id,
+                  )}',
                 );
               },
               child: ConstrainedBox(
