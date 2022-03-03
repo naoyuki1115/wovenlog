@@ -7,6 +7,7 @@ import '../dummy_data/like_list.dart';
 import '../dummy_data/spot_list.dart';
 import '../dummy_data/category_list.dart';
 import '../dummy_data/selected_category_list.dart';
+import '../dummy_data/user_list.dart';
 
 class SpotListScreen extends StatefulWidget {
   final String? categoryId;
@@ -135,6 +136,7 @@ class SpotListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _spotListNotifier = Provider.of<SpotList>(context);
+    final _userList = Provider.of<UserList>(context);
 
     return Expanded(
       child: ListView.builder(
@@ -156,7 +158,7 @@ class SpotListView extends StatelessWidget {
               trailing: SizedBox(
                 width: 90,
                 child: LikeWidget(
-                  userId: 'user0001',
+                  userId: _userList.selectedUserId,
                   spotId: spotId,
                 ),
               ),

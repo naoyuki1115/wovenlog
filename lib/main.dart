@@ -11,6 +11,7 @@ import './screens/spot_post_screen.dart';
 import './dummy_data/selected_category_list.dart';
 import './dummy_data/spot_list.dart';
 import './dummy_data/like_list.dart';
+import './dummy_data/user_list.dart';
 
 void main() {
   runApp(MyApp());
@@ -67,6 +68,9 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider(
           create: (context) => LikeList(),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => UserList(),
         ),
       ],
     );
