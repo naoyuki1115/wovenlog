@@ -1,9 +1,5 @@
-// import 'dart:async';
-// import 'dart:io';
-// import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-// import 'package:image_picker/image_picker.dart';
 
 import '../constants.dart';
 import '../dummy_data/category_list.dart';
@@ -279,21 +275,6 @@ class AddImage extends StatefulWidget {
 }
 
 class _AddImageState extends State<AddImage> {
-  // XFile? _image;
-  // ImagePicker picker = ImagePicker();
-
-  // Future _getImage() async {
-  //   XFile? image = await picker.pickImage(source: ImageSource.gallery);
-
-  //   setState(() {
-  //     if (image != null) {
-  //       _image = XFile(image.path);
-  //     } else {
-  //       const Text('No image selected.');
-  //     }
-  //   });
-  // }
-
   @override
   Widget build(BuildContext context) {
     final _spotListNotifier = Provider.of<SpotListNotifier>(context);

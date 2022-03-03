@@ -2,9 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
 import '../dummy_data/category_list.dart';
+import '../dummy_data/spot_list_provider.dart';
 import 'spot_list_screen.dart';
 
 class SpotPostScreen extends StatefulWidget {
@@ -26,6 +28,7 @@ void submit() {
   }
 }
 
+// メイン画面
 class _SpotPostScreenState extends State<SpotPostScreen> {
   @override
   Widget build(BuildContext context) {
@@ -51,168 +54,142 @@ class _SpotPostScreenState extends State<SpotPostScreen> {
             },
           ),
         ),
-        body: Container(
-          height: 750,
-          alignment: Alignment.center,
-          child: Column(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-              // Submitエラー表示
-              ConstrainedBox(
-                constraints: const BoxConstraints(minHeight: 30.0),
-                child: Text(
-                  _errMsg, //loginボタン押下後に表示内容更新
-                  style: const TextStyle(color: kPrimaryColor),
-                ),
-              ),
-              // 入力フォーム
-              const AddProfile(),
-              // 空白
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-              // 画像投稿フォーム
-              const AddImage(),
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-              // Submitボタン
-              SizedBox(
-                width: 300,
-                height: 60,
-                child: TextButton(
-                  child: const Text(
-                    "Submit",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  style: TextButton.styleFrom(
-                    primary: const Color(0xffD80C28),
-                    backgroundColor: kSecondaryColor,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(100))),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      // Submit成功可否の表示＆Listへの登録
-                      submit();
-                    });
-                  },
-                ),
-              ),
-              Expanded(
-                flex: 2,
-                child: Container(),
-              ),
-            ],
-          ),
-        ),
+        body: const InputScreen(),
       ),
     );
   }
 }
 
-//個人情報入力フォーム
-class AddProfile extends StatefulWidget {
-  const AddProfile({Key? key}) : super(key: key);
+// home画面
+class InputScreen extends StatefulWidget {
+  const InputScreen({Key? key}) : super(key: key);
 
   @override
-  _AddProfileState createState() => _AddProfileState();
+  _InputScreenState createState() => _InputScreenState();
 }
 
-class _AddProfileState extends State<AddProfile> {
+class _InputScreenState extends State<InputScreen> {
   final _formKey = GlobalKey<FormState>();
-  final myController = TextEditingController();
-  late FocusNode myFocusNode;
 
-  @override
-  // オートフォーカス用にstateを初期化
-  void initState() {
-    super.initState();
-    myFocusNode = FocusNode();
-  }
-
-  //フォーカス終了
-  @override
-  void dispose() {
-    myFocusNode.dispose();
-    super.dispose();
-  }
+  String _spotName = '';
+  String _spotURL = '';
+  String _spotDescription = '';
 
   @override
   Widget build(BuildContext context) {
+    final _spotListNotifier = Provider.of<SpotListNotifier>(context);
+
+    void _saveFormContentsToSpotList() {
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
+        _spotListNotifier.addNewSpot(_spotName, _spotURL, _spotDescription,
+            _spotListNotifier.categoryName);
+      }
+    }
+
     return Form(
       key: _formKey,
-      child: Row(
-        children: [
-          Expanded(
-            flex: 1,
-            child: Container(),
-          ),
-          Expanded(
-            flex: 8,
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    labelText: "Spot name",
-                    hintText: "Spot name",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(23),
-                    ),
+      child: Container(
+        height: 750,
+        alignment: Alignment.center,
+        child: Column(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Container(),
+            ),
+            // Submitエラー表示
+            ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 30.0),
+              child: Text(
+                _errMsg, //loginボタン押下後に表示内容更新
+                style: const TextStyle(color: kPrimaryColor),
+              ),
+            ),
+            // 入力フォーム
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: Container(),
+                ),
+                Expanded(
+                  flex: 8,
+                  child: Column(
+                    children: <Widget>[
+                      InputForm(
+                          onSaved: (newValue) => _spotName = newValue!,
+                          labelText: "Shop name"),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      // プルダウンボタン表示
+                      Container(
+                          height: 60,
+                          alignment: const Alignment(0, 0),
+                          padding: const EdgeInsets.only(left: 10),
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(23)),
+                          child: const PullDownButton()),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      InputForm(
+                          onSaved: (newValue) => _spotURL = newValue!,
+                          labelText: "URL"),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      InputForm(
+                          onSaved: (newValue) => _spotDescription = newValue!,
+                          labelText: "Description"),
+                    ],
                   ),
                 ),
-                const SizedBox(
-                  height: 10,
-                ),
-                // プルダウンボタン表示
-                Container(
-                    height: 60,
-                    alignment: const Alignment(0, 0),
-                    padding: const EdgeInsets.only(left: 10),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(23)),
-                    child: const PullDownButton()),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    labelText: "URL",
-                    hintText: "URL",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(23),
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                TextFormField(
-                  autofocus: true,
-                  decoration: InputDecoration(
-                    labelText: "Decription",
-                    hintText: "Description",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(23),
-                    ),
-                  ),
+                Expanded(
+                  flex: 1,
+                  child: Container(),
                 ),
               ],
             ),
-          ),
-          Expanded(
-            flex: 1,
-            child: Container(),
-          ),
-        ],
+
+            // 空白
+            Expanded(
+              flex: 1,
+              child: Container(),
+            ),
+            // 画像投稿フォーム
+            const AddImage(),
+            // 空白
+            Expanded(
+              flex: 1,
+              child: Container(),
+            ),
+            // Submitボタン
+            SizedBox(
+              width: 300,
+              height: 60,
+              child: TextButton(
+                child: const Text(
+                  "Submit",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                style: TextButton.styleFrom(
+                  primary: const Color(0xffD80C28),
+                  backgroundColor: kSecondaryColor,
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(100))),
+                ),
+                onPressed: () => _saveFormContentsToSpotList(),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Container(),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -226,20 +203,17 @@ class PullDownButton extends StatefulWidget {
 }
 
 class _PullDownButtonState extends State<PullDownButton> {
-  // _selectedCategoryはプルダウンから選択されたテキストの受け皿
-  String? selectedCategory;
-  // listにcategoryListを代入
-  List? list = categoryList;
-
   @override
   Widget build(BuildContext context) {
+    final _spotListNotifier = Provider.of<SpotListNotifier>(context);
+
     return DropdownButton(
       hint: const Text(
         "Category",
         style: TextStyle(fontSize: 17, color: Color.fromARGB(255, 97, 97, 97)),
       ),
       isExpanded: true,
-      value: selectedCategory,
+      value: _spotListNotifier.categoryName,
       icon: const Icon(Icons.arrow_drop_down),
       iconSize: 40,
       style: const TextStyle(color: kFontColor, fontSize: 17),
@@ -248,11 +222,11 @@ class _PullDownButtonState extends State<PullDownButton> {
       onChanged: (newvalue) {
         // _selectedCategoryの値の状態をstatとして持ち、setstateで変更し管理する
         setState(() {
-          selectedCategory = newvalue as String?;
+          _spotListNotifier.categoryName = newvalue.toString();
         });
       },
 
-      items: list?.map((categoryItem) {
+      items: categoryList.map((categoryItem) {
         return DropdownMenuItem(
           value: categoryItem.name,
           child: Text(categoryItem.name),
@@ -274,22 +248,8 @@ class _AddImageState extends State<AddImage> {
   XFile? _image;
   File? _file;
   bool _imageExist = false;
+
   ImagePicker picker = ImagePicker();
-
-  Future _getImage() async {
-    // ImagePickerを使用し画像Pathを取得
-    XFile? image = await picker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (image != null) {
-        _image = XFile(image.path);
-        // File型に変換（Image .file()はXfile非対応のため）
-        _file = File(image.path);
-        // 画像取得有無の確認用に_imageExistを使用
-        _imageExist = true;
-      }
-    });
-  }
 
   Future<String> _checkImage() async {
     // FutureBuilderで監視されるstate
@@ -302,6 +262,23 @@ class _AddImageState extends State<AddImage> {
 
   @override
   Widget build(BuildContext context) {
+    final _spotListNotifier = Provider.of<SpotListNotifier>(context);
+
+    Future _getImage() async {
+      final image = await picker.pickImage(source: ImageSource.gallery);
+      _spotListNotifier.getImage(image);
+
+      setState(() {
+        if (image != null) {
+          _image = XFile(image.path);
+          // File型に変換（Image .file()はXfile非対応のため）
+          _file = File(image.path);
+          // 画像取得有無の確認用に_imageExistを使用
+          _imageExist = true;
+        }
+      });
+    }
+
     return FutureBuilder<String>(
       future: _checkImage(), // a previously-obtained Future<String> or null
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -379,49 +356,27 @@ class _AddImageState extends State<AddImage> {
   }
 }
 
-// Submitボタン
-class Submit extends StatefulWidget {
-  const Submit({Key? key}) : super(key: key);
+// 情報投稿フォーム
+class InputForm extends StatelessWidget {
+  final FormFieldSetter<String> onSaved;
+  final String labelText;
 
-  @override
-  _SubmitState createState() => _SubmitState();
-}
+  InputForm({
+    required this.onSaved,
+    required this.labelText,
+  });
 
-String errMsg = '';
-bool postState = false;
-
-void submitData() {
-  if (postState) {
-    //画面遷移
-    // 登録処理
-  } else {
-    errMsg = 'Please fill some required info';
-  }
-}
-
-class _SubmitState extends State<Submit> {
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 300,
-      height: 60,
-      child: TextButton(
-        child: const Text(
-          "Submit",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+    return TextFormField(
+      autofocus: true,
+      onSaved: onSaved,
+      decoration: InputDecoration(
+        labelText: labelText,
+        hintText: labelText,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(23),
         ),
-        style: TextButton.styleFrom(
-          primary: const Color(0xffD80C28),
-          backgroundColor: kSecondaryColor,
-          shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(100))),
-        ),
-        onPressed: () {
-          setState(() {
-            // Submit成功可否の表示＆Listへの登録
-            submitData();
-          });
-        },
       ),
     );
   }
