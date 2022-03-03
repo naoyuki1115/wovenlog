@@ -65,13 +65,13 @@ class SpotList extends ChangeNotifier {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    await prefs.setStringList('savedSpotList_2203011556', savedSpotList);
+    await prefs.setStringList('savedSpotList_22030400', savedSpotList);
   }
 
   Future loadDataViaSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var result = prefs.getStringList('savedSpotList_2203011556');
+    var result = prefs.getStringList('savedSpotList_22030400');
 
     if (result != null) {
       _spotList = result

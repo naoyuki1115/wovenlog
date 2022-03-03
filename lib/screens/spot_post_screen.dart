@@ -15,18 +15,6 @@ class SpotPostScreen extends StatefulWidget {
   State<SpotPostScreen> createState() => _SpotPostScreenState();
 }
 
-String _errMsg = '';
-bool _postState = false;
-
-void submit() {
-  if (_postState) {
-    //画面遷移
-    // 登録処理
-  } else {
-    _errMsg = 'Please fill some required info';
-  }
-}
-
 class _SpotPostScreenState extends State<SpotPostScreen> {
   @override
   Widget build(BuildContext context) {
@@ -64,6 +52,7 @@ class _InputScreenState extends State<InputScreen> {
   String _spotName = '';
   String _spotURL = '';
   String _spotDescription = '';
+  String _errorMsg = '';
 
   @override
   Widget build(BuildContext context) {
@@ -73,6 +62,8 @@ class _InputScreenState extends State<InputScreen> {
       if (_formKey.currentState!.validate()) {
         _formKey.currentState!.save();
         _spotListNotifier.addNewSpot(_spotName, _spotURL, _spotDescription, _spotListNotifier.categoryName);
+      } else {
+        _errorMsg = 'Please fill some required info';
       }
     }
 
@@ -91,7 +82,7 @@ class _InputScreenState extends State<InputScreen> {
             ConstrainedBox(
               constraints: const BoxConstraints(minHeight: 30.0),
               child: Text(
-                _errMsg, //loginボタン押下後に表示内容更新
+                _errorMsg, //loginボタン押下後に表示内容更新
                 style: const TextStyle(color: kPrimaryColor),
               ),
             ),
@@ -142,7 +133,7 @@ class _InputScreenState extends State<InputScreen> {
               child: Container(),
             ),
             // 画像投稿フォーム
-            AddImage(),
+            const AddImage(),
             // 空白
             Expanded(
               flex: 1,
@@ -175,156 +166,6 @@ class _InputScreenState extends State<InputScreen> {
     );
   }
 }
-
-//個人情報入力フォーム
-// class AddProfile extends StatefulWidget {
-//   const AddProfile({Key? key}) : super(key: key);
-
-//   @override
-//   _AddProfileState createState() => _AddProfileState();
-// }
-
-// class _AddProfileState extends State<AddProfile> {
-//   final _formKey = GlobalKey<FormState>();
-//   late FocusNode myFocusNode;
-
-//   String _spotName = '';
-//   String _spotURL = '';
-//   String _spotDescription = '';
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     myFocusNode = FocusNode();
-//   }
-
-//   @override
-//   void dispose() {
-//     // Clean up the focus node when the Form is disposed.
-//     myFocusNode.dispose();
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     final _spotListNotifier = Provider.of<SpotList>(context);
-
-//     void _saveFormContentsToSpotList() {
-//       if (_formKey.currentState!.validate()) {
-//         _formKey.currentState!.save();
-//         _spotListNotifier.addNewSpot(_spotName, _spotURL, _spotDescription, _spotListNotifier.categoryName);
-//       }
-//     }
-
-//     return Form(
-//       key: _formKey,
-//       child: Row(
-//         children: [
-//           Expanded(
-//             flex: 1,
-//             child: Container(),
-//           ),
-//           Expanded(
-//             flex: 8,
-//             child: Column(
-//               children: <Widget>[
-//                 TextFormField(
-//                   autofocus: true,
-//                   decoration: InputDecoration(
-//                     labelText: "Spot name",
-//                     hintText: "Spot name",
-//                     hintStyle: const TextStyle(color: kFontColor, fontSize: 16),
-//                     border: OutlineInputBorder(
-//                       borderRadius: BorderRadius.circular(23),
-//                     ),
-//                   ),
-//                   validator: (value) {
-//                     if (value == null || value.isEmpty) {
-//                       return 'Please enter the required infomation';
-//                     }
-//                     return null;
-//                   },
-//                   onSaved: (newValue) {
-//                     setState(() {
-//                       _spotName = newValue!;
-//                     });
-//                   },
-//                 ),
-//                 const SizedBox(
-//                   height: 10,
-//                 ),
-//                 // プルダウンボタン表示
-//                 Container(
-//                     height: 60,
-//                     alignment: const Alignment(0, 0),
-//                     padding: const EdgeInsets.only(left: 10),
-//                     decoration: BoxDecoration(
-//                       border: Border.all(color: Colors.grey),
-//                       borderRadius: BorderRadius.circular(23),
-//                     ),
-//                     child: const PullDownButton()),
-//                 const SizedBox(
-//                   height: 10,
-//                 ),
-//                 TextFormField(
-//                   autofocus: true,
-//                   decoration: InputDecoration(
-//                     labelText: "URL",
-//                     hintText: "URL",
-//                     hintStyle: const TextStyle(color: kFontColor, fontSize: 16),
-//                     border: OutlineInputBorder(
-//                       borderRadius: BorderRadius.circular(23),
-//                     ),
-//                   ),
-//                   validator: (value) {
-//                     if (value == null || value.isEmpty) {
-//                       return 'Please enter the required infomation';
-//                     }
-//                     return null;
-//                   },
-//                   onSaved: (newValue) {
-//                     setState(() {
-//                       _spotURL = newValue!;
-//                     });
-//                   },
-//                 ),
-//                 const SizedBox(
-//                   height: 10,
-//                 ),
-//                 TextFormField(
-//                   autofocus: true,
-//                   decoration: InputDecoration(
-//                     labelText: "Decription",
-//                     hintText: "Description",
-//                     hintStyle: const TextStyle(color: kFontColor, fontSize: 16),
-//                     border: OutlineInputBorder(
-//                       borderRadius: BorderRadius.circular(23),
-//                     ),
-//                   ),
-//                   validator: (value) {
-//                     if (value == null || value.isEmpty) {
-//                       return 'Please enter the required infomation';
-//                     }
-//                     return null;
-//                   },
-//                   onSaved: (newValue) {
-//                     setState(() {
-//                       _spotDescription = newValue!;
-//                     });
-//                   },
-//                 ),
-//               ],
-//             ),
-//           ),
-//           Expanded(
-//             flex: 1,
-//             child: Container(),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
 
 // プルダウンボタン
 class PullDownButton extends StatefulWidget {
