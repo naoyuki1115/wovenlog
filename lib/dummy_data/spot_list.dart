@@ -3,6 +3,8 @@ import 'package:wovenlog/dummy_data/like_list.dart';
 
 import './spot_class.dart';
 import './category_list.dart';
+import '../dummy_data/like_list.dart';
+import 'like_class.dart';
 
 class SpotList extends ChangeNotifier {
   List<Spot> _selectedSpotList = <Spot>[];
@@ -14,6 +16,10 @@ class SpotList extends ChangeNotifier {
 
   int selectedIndex = 0;
 
+  List spotLikeNumList = [];
+
+  late LikeList likeListInstance;
+
   void setSelectedIndex(index) {
     selectedIndex = index;
     notifyListeners();
@@ -21,35 +27,46 @@ class SpotList extends ChangeNotifier {
 
   void updateSelectedSpotList(categoryId) {
     _selectedSpotList = _spotList.where((element) => element.categoryId == categoryId).toList();
+    //いいね順に並び替え
+    sortLikeNumOrder();
+    //表示Spot数を制限
+    filterByNum(10);
     selectedCategoryId = _selectedSpotList.first.categoryId.toString();
     selectedCategoryName = categoryList.singleWhere((element) => element.id == selectedCategoryId).name.toString();
     notifyListeners();
   }
 
+  //選択中のカテゴリIDを返す
+  String getSelectedCategoryId(){
+    return selectedCategoryId;
+  }
+
+  //LikeListのインスタンスを保持（いいね並び替えで使用するため）
+  void setLikeListInstance(LikeList _likeListInstance){
+    likeListInstance = _likeListInstance;
+  }
+
   //いいね順で並び替え機能
-  void sortLikeNumOrder(LikeList _likeListInstance){
-    
+  void sortLikeNumOrder(){
     List<Spot> _tempList = [];
     //SpotインスタンスとLike数を組み合わせたリストを作成
-    List spotLikeNumList = _selectedSpotList.map((e) => [_likeListInstance.getLikeNums(e.id),e]).toList();
+    List _spotLikeNumList = _selectedSpotList.map((e) => [likeListInstance.getLikeNums(e.id), e]).toList();
     //Like数で並び替え
-    spotLikeNumList.sort((a, b) => -a[0].compareTo(b[0]),);
+    _spotLikeNumList.sort((a, b) => -a[0].compareTo(b[0]),);
     //Like数の列を取り除く
-    spotLikeNumList.forEach((element) {_tempList.add(element[1]);});
+    _spotLikeNumList.forEach((element) {_tempList.add(element[1]);});
     //並び替えしたもので書き換え
     _selectedSpotList = _tempList;
-    notifyListeners();
   }
 
   //個数で絞り込み
-  void filterBy(int num){
+  void filterByNum(int num){
     List<Spot> _tempList = [];
     //指定個数分取り出し
     for (int i=0; i<=num-1; i++){
       _tempList.add(_selectedSpotList[i]);
     }
     _selectedSpotList = _tempList;
-    notifyListeners();
   }
 
   //Spot追加処理

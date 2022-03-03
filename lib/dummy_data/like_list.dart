@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:wovenlog/dummy_data/spot_class.dart';
 import 'like_class.dart';
 
 
 class LikeList extends ChangeNotifier{
 
-  //SpotごとのLike数を取得
+   //SpotごとのLike数を取得
   int getLikeNums(_spotId){
     return likeList.where((element) => element.spotId == _spotId).length;
   }
@@ -21,12 +22,12 @@ class LikeList extends ChangeNotifier{
   }
 
   //Like追加/削除
-  void addOrRemoveLike(String? _userId, String? _spotId, DateTime _createdDate){
+  void addOrRemoveLike(String? _userId, String? _spotId){
     
     Like _like = Like(
       userId: _userId,
       spotId: _spotId,
-      createdDate: _createdDate,
+      createdDate: DateTime.now(),
     );
 
     //Likeリスト上を有無確認し、Add or Remove
