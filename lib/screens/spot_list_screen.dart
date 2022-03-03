@@ -139,14 +139,10 @@ class SpotListView extends StatelessWidget {
     final _likeListInstance = Provider.of<LikeList>(context);
 
     /*表示させるカテゴリのSpotリストを取得*/
-    //追加/削除した分を反映
-    //_spotListNotifier.upadateCatsSpotList();
     //いいね順で並び替え
     _spotListNotifier.sortLikeNumOrder(_likeListInstance);
     //上位10個を取得
-    _spotListNotifier.filterBy(10);
-    //カテゴリで絞り込んだSpotリストを取得
-    //List oneCatsSpotList = _spotListNotifier.getCatsSpotList();
+    //_spotListNotifier.filterBy(10);
 
 
     return Expanded(

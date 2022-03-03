@@ -10,6 +10,7 @@ class SpotList extends ChangeNotifier {
   List<Spot> get selectedSpotList => _selectedSpotList;
 
   String selectedCategoryName = '';
+  String selectedCategoryId = '';
 
   int selectedIndex = 0;
 
@@ -20,8 +21,8 @@ class SpotList extends ChangeNotifier {
 
   void updateSelectedSpotList(categoryId) {
     _selectedSpotList = _spotList.where((element) => element.categoryId == categoryId).toList();
-    String _tempId = _selectedSpotList.first.categoryId.toString();
-    selectedCategoryName = categoryList.singleWhere((element) => element.id == _tempId).name.toString();
+    selectedCategoryId = _selectedSpotList.first.categoryId.toString();
+    selectedCategoryName = categoryList.singleWhere((element) => element.id == selectedCategoryId).name.toString();
     notifyListeners();
   }
 
@@ -51,9 +52,24 @@ class SpotList extends ChangeNotifier {
     notifyListeners();
   }
 
-  //カテゴリで絞り込み後リスト（Providerで監視）
-  //List<Spot> _catsSpotList = <Spot>[];
-  
+  //Spot追加処理
+  void addNewSpot(String? _name, String? _categoryId, String? _address, String? _url, String? _description, String? _imagePath){
+    Spot _newSpot = Spot(
+      id: "spot0001",//id求める処理必要
+      name: _name,
+      address: _address,
+      latitude: null,
+      longitude: null,
+      url: _url,
+      image: _imagePath,
+      createdDate: DateTime.now(),
+      categoryId: _categoryId,
+      description: _description,
+    );
+    _spotList.add(_newSpot);
+    updateSelectedSpotList(selectedCategoryId);
+  }
+
   Spot getSpotInfo(spotId) {
     return _spotList.singleWhere((element) => element.id == spotId);
   }
