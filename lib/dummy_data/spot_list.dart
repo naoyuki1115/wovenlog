@@ -47,9 +47,13 @@ class SpotList extends ChangeNotifier {
   XFile? imageFile;
   String message = "";
 
-  Future getImage() async {
-    ImagePicker picker = ImagePicker();
-    imageFile = await picker.pickImage(source: ImageSource.gallery);
+  // Future getImage() async {
+  //   ImagePicker picker = ImagePicker();
+  //   imageFile = await picker.pickImage(source: ImageSource.gallery);
+  // }
+
+  Future getImage(_image) async {
+    imageFile = XFile(_image.path);
   }
 
   Future saveToSharedPreferences() async {
