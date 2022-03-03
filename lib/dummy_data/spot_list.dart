@@ -1,61 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:wovenlog/dummy_data/like_list.dart';
 
-import 'spot_class.dart';
-import 'package:wovenlog/dummy_data/category_list.dart';
+import './spot_class.dart';
+import './category_list.dart';
 
 class SpotList extends ChangeNotifier {
+  List<Spot> _selectedSpotList = <Spot>[];
 
-  //最初の読み込みかどうかStateを保持
-  bool _isFirst = true;
-  bool getIsFirst(){
-    return _isFirst;
-  }
-  void switchIsFirst(){
-    _isFirst = !_isFirst;
+  List<Spot> get selectedSpotList => _selectedSpotList;
+
+  String selectedCategoryName = '';
+
+  int selectedIndex = 0;
+
+  void setSelectedIndex(index) {
+    selectedIndex = index;
     notifyListeners();
   }
 
-  //指定のカテゴリIDでSpotリストを絞り込み（Providerへ通知）
-  void filterSpotListByCatsId(_catsId){
-    _catsSpotList = spotList.where((_list) => _list.categoryId == _catsId).toList();
-    notifyListeners();
-  }
-
-  //カテゴリで絞り込み後のSpotリスト取得
-  List getCatsSpotList(){
-    return _catsSpotList;
-  }
-
-  //カテゴリで絞り込み後のSpotリストをアップデート（追加/削除した分を反映）
-  void upadateCatsSpotList(){
-    if(_catsSpotList.isNotEmpty){
-      String _catsId = _catsSpotList.first.categoryId.toString();
-      filterSpotListByCatsId(_catsId);//Provider通知済み
-    }
-  }
-
-  //現在絞り込んでいるカテゴリ名を取得
-  String getCatsName(){
-    String _catsId;
-    String _catsName;
-    if(_catsSpotList.isNotEmpty){
-      _catsId = _catsSpotList.first.categoryId.toString();
-      _catsName = categoryList.singleWhere((_list) => _list.id == _catsId).name.toString();
-    }else{
-      _catsName='error';
-    }
-    return _catsName;
-  }
-
-  //指定のSpotIDと一致するSpot情報を取得
-  Spot getSpotInfo(_spotId){
-    return spotList.singleWhere((_list) => _list.id == _spotId);
-  }
-
-  //Spot追加（Providerへ通知）
-  void addSpot(Spot _addedSpot){
-    spotList.add(_addedSpot);
+  void updateSelectedSpotList(categoryId) {
+    _selectedSpotList = _spotList.where((element) => element.categoryId == categoryId).toList();
+    String _tempId = _selectedSpotList.first.categoryId.toString();
+    selectedCategoryName = categoryList.singleWhere((element) => element.id == _tempId).name.toString();
     notifyListeners();
   }
 
@@ -64,13 +30,13 @@ class SpotList extends ChangeNotifier {
     
     List<Spot> _tempList = [];
     //SpotインスタンスとLike数を組み合わせたリストを作成
-    List spotLikeNumList = _catsSpotList.map((e) => [_likeListInstance.getLikeNums(e.id),e]).toList();
+    List spotLikeNumList = _selectedSpotList.map((e) => [_likeListInstance.getLikeNums(e.id),e]).toList();
     //Like数で並び替え
     spotLikeNumList.sort((a, b) => -a[0].compareTo(b[0]),);
     //Like数の列を取り除く
     spotLikeNumList.forEach((element) {_tempList.add(element[1]);});
     //並び替えしたもので書き換え
-    _catsSpotList = _tempList;
+    _selectedSpotList = _tempList;
     notifyListeners();
   }
 
@@ -79,17 +45,20 @@ class SpotList extends ChangeNotifier {
     List<Spot> _tempList = [];
     //指定個数分取り出し
     for (int i=0; i<=num-1; i++){
-      _tempList.add(_catsSpotList[i]);
+      _tempList.add(_selectedSpotList[i]);
     }
-    _catsSpotList = _tempList;
+    _selectedSpotList = _tempList;
     notifyListeners();
   }
 
   //カテゴリで絞り込み後リスト（Providerで監視）
-  List<Spot> _catsSpotList = <Spot>[];
+  //List<Spot> _catsSpotList = <Spot>[];
+  
+  Spot getSpotInfo(spotId) {
+    return _spotList.singleWhere((element) => element.id == spotId);
+  }
 
-  //Spotリスト（Providerで監視）
-  List<Spot> spotList = [
+  final List<Spot> _spotList = <Spot>[
     Spot(
       id: "spot0001",
       name: "McDonald's",

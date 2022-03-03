@@ -1,69 +1,74 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:wovenlog/constants.dart';
-import 'package:wovenlog/dummy_data/like_list.dart';
-import 'package:wovenlog/dummy_data/spot_list.dart';
-import 'package:wovenlog/dummy_data/category_list.dart';
-import '../dummy_data/selected_category_list.dart';
-import 'package:wovenlog/screens/spot_detail_screen.dart';
-import 'package:wovenlog/screens/spot_post_screen.dart';
+import 'package:go_router/go_router.dart';
 
-class SpotListScreen extends StatelessWidget {
-  final catsId = "category0001";
+import '../constants.dart';
+import '../dummy_data/like_list.dart';
+import '../dummy_data/spot_list.dart';
+import '../dummy_data/category_list.dart';
+import '../dummy_data/selected_category_list.dart';
+
+class SpotListScreen extends StatefulWidget {
+  final String? categoryId;
 
   const SpotListScreen({
     Key? key,
-    /*this.catsId*/
+    this.categoryId,
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    final _spotListInstance = Provider.of<SpotList>(context);
+  State<SpotListScreen> createState() => _SpotListScreenState();
+}
 
-    //カテゴリIDで絞り込み
-    if (_spotListInstance.getIsFirst()) {
-      _spotListInstance.filterSpotListByCatsId(catsId);
-      _spotListInstance.switchIsFirst();
-    }
-    //カテゴリIDからカテゴリ名を取得
-    String catsName = _spotListInstance.getCatsName();
+class _SpotListScreenState extends State<SpotListScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      final _spotListNoifier = Provider.of<SpotList>(context, listen: false);
+      _spotListNoifier.updateSelectedSpotList(widget.categoryId);
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final _spotListNotifier = Provider.of<SpotList>(context);
 
     return Scaffold(
-        appBar: AppBar(
-            title: Text(
-              catsName, //"[Cats name]",
-              style: TextStyle(color: kFontColor),
+      appBar: AppBar(
+        title: Text(
+          _spotListNotifier.selectedCategoryName,
+          style: const TextStyle(color: kFontColor),
+        ),
+        backgroundColor: kAppBarColor,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.arrow_back,
+            color: kPrimaryColor,
+          ),
+          //一つ前に戻る
+          onPressed: () => context.pop(),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.add,
+              color: kPrimaryColor,
             ),
-            backgroundColor: kAppBarColor,
-            leading: IconButton(
-              icon: const Icon(
-                Icons.arrow_back,
-                color: kPrimaryColor,
-              ),
-              //一つ前に戻る
-              onPressed: () => {Navigator.pop(context)},
-            ),
-            actions: [
-              IconButton(
-                  icon: const Icon(
-                    Icons.add,
-                    color: kPrimaryColor,
-                  ),
-                  onPressed: () => {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SpotPostScreen()),
-                        )
-                  }),
-            ]),
-        bottomNavigationBar: CustomButtomBar(),
-        body: Column(children: [
+            onPressed: () => context.push('/spot_post_screen'),
+          ),
+        ],
+      ),
+      bottomNavigationBar: const CustomButtomBar(),
+      body: Column(
+        children: const [
           SizedBox(
             height: 10,
           ),
           SpotListView(),
-        ])
+        ],
+      ),
     );
   }
 }
@@ -76,16 +81,13 @@ class CustomButtomBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _spotListInstance = Provider.of<SpotList>(context);
+    final _spotListNotifier = Provider.of<SpotList>(context);
     final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
 
     //表示するカテゴリID（上位3つ）
-    String? _firstCatsId =
-        _selectedCategoryList.selectedCategoryList[0].categoryId;
-    String? _secondCatsId =
-        _selectedCategoryList.selectedCategoryList[1].categoryId;
-    String? _thirdCatsId =
-        _selectedCategoryList.selectedCategoryList[2].categoryId;
+    String? _firstCatsId = _selectedCategoryList.selectedCategoryList[0].categoryId;
+    String? _secondCatsId = _selectedCategoryList.selectedCategoryList[1].categoryId;
+    String? _thirdCatsId = _selectedCategoryList.selectedCategoryList[2].categoryId;
 
     //表示するカテゴリIDリスト化（上位3つ）
     List favoriteCats = [
@@ -98,21 +100,22 @@ class CustomButtomBar extends StatelessWidget {
       backgroundColor: kAppBarColor,
       unselectedItemColor: kBackgroundColor,
       selectedItemColor: kPrimaryColor,
+      currentIndex: _spotListNotifier.selectedIndex,
       items: [
-        _buildBottomIcon(favoriteCats[0]), //(_firstCatsId),
+        _buildBottomIcon(favoriteCats[0]),
         _buildBottomIcon(favoriteCats[1]),
         _buildBottomIcon(favoriteCats[2]),
       ],
       onTap: (index) {
-        _spotListInstance.filterSpotListByCatsId(favoriteCats[index]);
+        _spotListNotifier.updateSelectedSpotList(favoriteCats[index]);
+        _spotListNotifier.setSelectedIndex(index);
       },
     );
   }
 
   //ボトムバーに表示するアイコンを定義
   BottomNavigationBarItem _buildBottomIcon(_catsId) {
-    int _catsIndex =
-        categoryList.indexWhere((element) => element.id == _catsId);
+    int _catsIndex = categoryList.indexWhere((element) => element.id == _catsId);
     return BottomNavigationBarItem(
       icon: SizedBox(
         child: Image.asset(categoryList[_catsIndex].icon),
@@ -132,47 +135,49 @@ class SpotListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _spotListInstance = Provider.of<SpotList>(context); 
+    final _spotListNotifier = Provider.of<SpotList>(context); 
     final _likeListInstance = Provider.of<LikeList>(context);
 
     /*表示させるカテゴリのSpotリストを取得*/
     //追加/削除した分を反映
-    _spotListInstance.upadateCatsSpotList();
+    //_spotListNotifier.upadateCatsSpotList();
     //いいね順で並び替え
-    _spotListInstance.sortLikeNumOrder(_likeListInstance);
+    _spotListNotifier.sortLikeNumOrder(_likeListInstance);
     //上位10個を取得
-    _spotListInstance.filterBy(10);
+    _spotListNotifier.filterBy(10);
     //カテゴリで絞り込んだSpotリストを取得
-    List oneCatsSpotList = _spotListInstance.getCatsSpotList();
+    //List oneCatsSpotList = _spotListNotifier.getCatsSpotList();
+
 
     return Expanded(
       child: ListView.builder(
-        itemCount: oneCatsSpotList.length,//リストからSpot数取得
+        itemCount: _spotListNotifier.selectedSpotList.length, //リストからSpot数取得
         itemBuilder: (context, index) {
-          String spotId = oneCatsSpotList[index].id.toString();
+          String spotId = _spotListNotifier.selectedSpotList[index].id.toString();
           return Card(
             child: ListTile(
               //tileColor: Colors.blue,
-              leading: Container(
-                  width: 100,
-                  height: 75,
-                  child: Image.asset(oneCatsSpotList[index].image.toString())),
-              title: Text(oneCatsSpotList[index].name.toString()),//spotList[index].name),
-              subtitle: Text(oneCatsSpotList[index].address.toString()),
+              leading: SizedBox(
+                width: 100,
+                height: 75,
+                child: Image.asset(
+                  _spotListNotifier.selectedSpotList[index].image.toString(),
+                ),
+              ),
+              title: Text(_spotListNotifier.selectedSpotList[index].name.toString()),
+              subtitle: Text(_spotListNotifier.selectedSpotList[index].address.toString()),
               trailing: SizedBox(
-                width:90, 
-                child: LikeWidget(userId: 'user0001', spotId: spotId,),
+                width: 90,
+                child: LikeWidget(
+                  userId: 'user0001',
+                  spotId: spotId,
+                ),
               ),
               enabled: true,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SpotDetailScreen(spotId:spotId)),
-                );
-              }
+              onTap: () => context.push('/spot_detail_screen/$spotId'),
             ),
           );
-        }
+        },
       ),
     );
   }
@@ -180,31 +185,29 @@ class SpotListView extends StatelessWidget {
 
 //いいねSection
 class LikeWidget extends StatelessWidget {
-  final userId;
-  final spotId;
-  const LikeWidget({ Key? key, this.userId, this.spotId}) : super(key: key);
+  final String? userId;
+  final String? spotId;
+  const LikeWidget({Key? key, this.userId, this.spotId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final _likeListInstance = Provider.of<LikeList>(context);
     int _likeNums = _likeListInstance.getLikeNums(spotId);
-    
-    return Container(
-      //padding: EdgeInsets.only(right: 12, left: 12),
-      child:Column(
-        mainAxisAlignment: MainAxisAlignment.end, 
-        children: [
-          Expanded(child: _buildLikeButton(_likeListInstance)),
-          Expanded(child: Text(_likeNums.toString()),),
-        ]
-      )
+
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Expanded(child: _buildLikeButton(_likeListInstance)),
+        Expanded(
+          child: Text(_likeNums.toString()),
+        ),
+      ],
     );
   }
 
-
   //Likeボタン作成
-  Widget _buildLikeButton(LikeList _likeListInstance){
-    bool _isLikeExsited = _likeListInstance.getIsLikeExisted(userId,spotId);
+  Widget _buildLikeButton(LikeList _likeListInstance) {
+    bool _isLikeExsited = _likeListInstance.getIsLikeExisted(userId, spotId);
 
     return IconButton(
       iconSize: 15,
@@ -213,13 +216,10 @@ class LikeWidget extends StatelessWidget {
               ? const Icon(Icons.favorite)
               : const Icon(Icons.favorite_border)),
       color: kPrimaryColor,
-      onPressed: (){
-          DateTime _createdDate = DateTime.now();
-          _likeListInstance.addOrRemoveLike(userId, spotId, _createdDate);
-      }
+      onPressed: () {
+        DateTime _createdDate = DateTime.now();
+        _likeListInstance.addOrRemoveLike(userId, spotId, _createdDate);
+      },
     );
   }
-  
 }
-
-
