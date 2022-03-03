@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './spot_class.dart';
+import './category_class.dart';
 import './category_list.dart';
 
 class SpotList extends ChangeNotifier {
@@ -19,8 +20,17 @@ class SpotList extends ChangeNotifier {
 
   void updateSelectedSpotList(categoryId) {
     _selectedSpotList = _spotList.where((element) => element.categoryId == categoryId).toList();
-    String _tempId = _selectedSpotList.first.categoryId.toString();
-    selectedCategoryName = categoryList.singleWhere((element) => element.id == _tempId).name.toString();
+    // String _tempId = _selectedSpotList.first.categoryId.toString();
+    // selectedCategoryName = categoryList.singleWhere((element) => element.id == _tempId).name.toString();
+
+    // String categoryName = '';
+    // print('thissss');
+    // print(categoryId);
+    // print(categoryList.singleWhere((element) => element.id == categoryId).name);
+
+    // Category categoryName = categoryList.where((element) => element.id == categoryId) as Category;
+    // print(categoryName);
+
     notifyListeners();
   }
 

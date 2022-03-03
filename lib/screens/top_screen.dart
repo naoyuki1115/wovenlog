@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:wovenlog/dummy_data/category_list.dart';
 
 import '../constants.dart';
 import '../dummy_data/selected_category_list.dart';
@@ -62,13 +63,18 @@ class TopScreen extends StatelessWidget {
   }
 }
 
+enum SearchTarget {
+  name,
+  icon,
+  id,
+}
+
 class GridViewSection extends StatelessWidget {
   const GridViewSection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
-    const categoryId = 'category0001';
 
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -80,7 +86,22 @@ class GridViewSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-              onTap: () => context.push('/spot_list_screen/$categoryId'),
+              // onTap: () => context.push(
+              //   '/spot_list_screen/${categoryList[index].id}',
+              // ),
+              onTap: () {
+                print('==================');
+                print('index: $index');
+                print('${_selectedCategoryList.searchSelectedCategoryInfo(index, SearchTarget.id)}');
+                print('==================');
+
+                // print(index);
+                // print(categoryList[index].id);
+                // print(_selectedCategoryList.selectedCategoryList[index].categoryId);
+                context.push(
+                  '/spot_list_screen/${_selectedCategoryList.searchSelectedCategoryInfo(index, SearchTarget.id)}',
+                );
+              },
               child: ConstrainedBox(
                 constraints: const BoxConstraints(
                   maxHeight: 75.0,
@@ -101,15 +122,14 @@ class GridViewSection extends StatelessWidget {
                     ],
                   ),
                   child: Image.asset(
-                    _selectedCategoryList.searchSelectedCategoryNameOrIcon(index, false),
-                    // categoryList[index].icon,
+                    _selectedCategoryList.searchSelectedCategoryInfo(index, SearchTarget.icon),
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 10),
             Text(
-              _selectedCategoryList.searchSelectedCategoryNameOrIcon(index, true),
+              _selectedCategoryList.searchSelectedCategoryInfo(index, SearchTarget.name),
               style: const TextStyle(color: kFontColor),
             ),
           ],

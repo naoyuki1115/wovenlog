@@ -24,7 +24,6 @@ class _SpotListScreenState extends State<SpotListScreen> {
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       final _spotListNoifier = Provider.of<SpotList>(context, listen: false);
       _spotListNoifier.updateSelectedSpotList(widget.categoryId);
@@ -34,7 +33,6 @@ class _SpotListScreenState extends State<SpotListScreen> {
   @override
   Widget build(BuildContext context) {
     final _spotListNotifier = Provider.of<SpotList>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(

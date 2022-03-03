@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wovenlog/screens/top_screen.dart';
 
 import './selected_category_class.dart';
 import './category_list.dart';
@@ -76,7 +77,8 @@ class SelectedCategoryList extends ChangeNotifier {
   // This method searches name and icon of the selected category
   // and used for visualize category icon button on the top screen.
   */
-  String searchSelectedCategoryNameOrIcon(int index, bool isName) {
+  // String searchSelectedCategoryNameOrIcon(int index, bool isName, SearchTarget target) {
+  String searchSelectedCategoryInfo(int index, SearchTarget target) {
     updateIsCheckedList();
     final List<int> newList = [];
 
@@ -86,14 +88,30 @@ class SelectedCategoryList extends ChangeNotifier {
       }
     }
 
+    // if (newList.isNotEmpty) {
+    //   int _targetIndex = newList[index];
+    //   String _categoryName = categoryList[_targetIndex].name;
+    //   // String _categoryId = categoryList[_targetIndex].icon;
+    //   String _categoryId = categoryList[_targetIndex].id;
+
+    //   if (isName) {
+    //     return _categoryName;
+    //   } else {
+    //     return _categoryId;
+    //   }
+    // } else {
+    //   return "Undefined";
+    // }
+
     if (newList.isNotEmpty) {
       int _targetIndex = newList[index];
-      String _categoryName = categoryList[_targetIndex].name;
-      String _categoryId = categoryList[_targetIndex].icon;
-      if (isName) {
-        return _categoryName;
-      } else {
-        return _categoryId;
+      switch (target) {
+        case SearchTarget.name:
+          return categoryList[_targetIndex].name;
+        case SearchTarget.id:
+          return categoryList[_targetIndex].id;
+        case SearchTarget.icon:
+          return categoryList[_targetIndex].icon;
       }
     } else {
       return "Undefined";
