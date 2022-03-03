@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import './spot_class.dart';
-import './category_class.dart';
 import './category_list.dart';
 
 class SpotList extends ChangeNotifier {
@@ -11,9 +13,13 @@ class SpotList extends ChangeNotifier {
 
   String selectedCategoryName = '';
   String selectedCategoryId = '';
-
   int selectedIndex = 0;
 
+  SpotList() {
+    loadDataViaSharedPreferences();
+  }
+
+  /* ---------------------------------------- */
   void setSelectedIndex(index) {
     selectedIndex = index;
     notifyListeners();
@@ -34,7 +40,76 @@ class SpotList extends ChangeNotifier {
     return _spotList.singleWhere((element) => element.id == spotId);
   }
 
-  final List<Spot> _spotList = <Spot>[
+  /* ---------------------------------------- */
+  // Spot post function
+  /* ---------------------------------------- */
+  String? categoryName;
+  XFile? imageFile;
+  String message = "";
+
+  Future getImage() async {
+    ImagePicker picker = ImagePicker();
+    imageFile = await picker.pickImage(source: ImageSource.gallery);
+  }
+
+  Future saveToSharedPreferences() async {
+    List<String> savedSpotList = _spotList
+        .map(
+          (e) => json.encode(e.toJson()),
+        )
+        .toList();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.setStringList('savedSpotList_2203011556', savedSpotList);
+  }
+
+  Future loadDataViaSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    var result = prefs.getStringList('savedSpotList_2203011556');
+
+    if (result != null) {
+      _spotList = result
+          .map(
+            (e) => Spot.fromJson(json.decode(e)),
+          )
+          .toList();
+    }
+
+    notifyListeners();
+  }
+
+  void addNewSpot(String name, String url, String description, String? categoryName) {
+    String categoryLength = _spotList.length.toString();
+
+    int index = categoryList.indexWhere((element) => element.name == categoryName);
+
+    if (imageFile != null) {
+      Spot _newSpot = Spot(
+        id: "spot00$categoryLength",
+        name: name,
+        address: "undefined",
+        latitude: null,
+        longitude: null,
+        url: url,
+        image: imageFile!.path,
+        createdDate: DateTime(2022, 1, 1),
+        categoryId: categoryList[index].id,
+        description: description,
+      );
+      _spotList.add(_newSpot);
+      print(_newSpot.image);
+      print(_spotList.length);
+      saveToSharedPreferences();
+    } else {
+      message = "No image selected";
+      print(message);
+    }
+  }
+  /* ---------------------------------------- */
+
+  List<Spot> _spotList = <Spot>[
     Spot(
       id: "spot0001",
       name: "McDonald's",

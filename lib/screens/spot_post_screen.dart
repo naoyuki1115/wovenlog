@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
+import 'package:wovenlog/dummy_data/spot_list_provider.dart';
 
 import '../constants.dart';
 import '../dummy_data/category_list.dart';
+import '../dummy_data/spot_list.dart';
 
 class SpotPostScreen extends StatefulWidget {
   const SpotPostScreen({Key? key}) : super(key: key);
@@ -27,82 +29,79 @@ void submit() {
 class _SpotPostScreenState extends State<SpotPostScreen> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'spot_post_screen',
-      home: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          title: const Text(
-            'Post',
-            style: TextStyle(fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
-          ),
-          backgroundColor: kAppBarColor,
-          // 戻るボタン
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios_new, color: kPrimaryColor),
-            onPressed: () {
-              context.pop();
-            },
-          ),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: const Text(
+          'Post',
+          style: TextStyle(fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
         ),
-        body: Container(
-          height: 750,
-          alignment: Alignment.center,
-          child: Column(
-            children: [
-              Expanded(
-                flex: 1,
-                child: Container(),
+        backgroundColor: kAppBarColor,
+        // 戻るボタン
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: kPrimaryColor),
+          onPressed: () {
+            context.pop();
+          },
+        ),
+      ),
+      body: Container(
+        height: 750,
+        alignment: Alignment.center,
+        child: Column(
+          children: [
+            Expanded(
+              flex: 1,
+              child: Container(),
+            ),
+            // Submitエラー表示
+            ConstrainedBox(
+              constraints: const BoxConstraints(minHeight: 30.0),
+              child: Text(
+                _errMsg, //loginボタン押下後に表示内容更新
+                style: const TextStyle(color: kPrimaryColor),
               ),
-              // Submitエラー表示
-              ConstrainedBox(
-                constraints: BoxConstraints(minHeight: 30.0),
-                child: Text(
-                  _errMsg, //loginボタン押下後に表示内容更新
-                  style: TextStyle(color: kPrimaryColor),
+            ),
+            // 入力フォーム
+            AddProfile(),
+            // 空白
+            Expanded(
+              flex: 1,
+              child: Container(),
+            ),
+            // 画像投稿フォーム
+            AddImage(),
+            Expanded(
+              flex: 1,
+              child: Container(),
+            ),
+            // Submitボタン
+            SizedBox(
+              width: 300,
+              height: 60,
+              child: TextButton(
+                child: const Text(
+                  "Submit",
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-              ),
-              // 入力フォーム
-              AddProfile(),
-              // 空白
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-              // 画像投稿フォーム
-              AddImage(),
-              Expanded(
-                flex: 1,
-                child: Container(),
-              ),
-              // Submitボタン
-              SizedBox(
-                width: 300,
-                height: 60,
-                child: TextButton(
-                  child: const Text(
-                    "Submit",
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  style: TextButton.styleFrom(
-                    primary: const Color(0xffD80C28),
-                    backgroundColor: kSecondaryColor,
-                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100))),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      // Submit成功可否の表示＆Listへの登録
-                      submit();
-                    });
-                  },
+                style: TextButton.styleFrom(
+                  primary: const Color(0xffD80C28),
+                  backgroundColor: kSecondaryColor,
+                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100))),
                 ),
+                onPressed: () {
+                  setState(() {
+                    // Submit成功可否の表示＆Listへの登録
+                    submit();
+                  });
+                },
               ),
-              Expanded(
-                flex: 4,
-                child: Container(),
-              ),
-            ],
-          ),
+            ),
+            Expanded(
+              flex: 4,
+              child: Container(),
+            ),
+          ],
         ),
       ),
     );
@@ -119,25 +118,36 @@ class AddProfile extends StatefulWidget {
 
 class _AddProfileState extends State<AddProfile> {
   final _formKey = GlobalKey<FormState>();
-  final myController = TextEditingController();
   late FocusNode myFocusNode;
 
+  String _spotName = '';
+  String _spotURL = '';
+  String _spotDescription = '';
+
   @override
-  // オートフォーカス用にstateを初期化
   void initState() {
     super.initState();
     myFocusNode = FocusNode();
   }
 
-  //フォーカス終了
   @override
   void dispose() {
+    // Clean up the focus node when the Form is disposed.
     myFocusNode.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final _spotListNotifier = Provider.of<SpotList>(context);
+
+    void _saveFormContentsToSpotList() {
+      if (_formKey.currentState!.validate()) {
+        _formKey.currentState!.save();
+        _spotListNotifier.addNewSpot(_spotName, _spotURL, _spotDescription, _spotListNotifier.categoryName);
+      }
+    }
+
     return Form(
       key: _formKey,
       child: Row(
@@ -155,10 +165,22 @@ class _AddProfileState extends State<AddProfile> {
                   decoration: InputDecoration(
                     labelText: "Spot name",
                     hintText: "Spot name",
+                    hintStyle: const TextStyle(color: kFontColor, fontSize: 16),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(23),
                     ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the required infomation';
+                    }
+                    return null;
+                  },
+                  onSaved: (newValue) {
+                    setState(() {
+                      _spotName = newValue!;
+                    });
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -168,9 +190,11 @@ class _AddProfileState extends State<AddProfile> {
                     height: 60,
                     alignment: const Alignment(0, 0),
                     padding: const EdgeInsets.only(left: 10),
-                    decoration:
-                        BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(23)),
-                    child: PullDownButton()),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(23),
+                    ),
+                    child: const PullDownButton()),
                 const SizedBox(
                   height: 10,
                 ),
@@ -179,10 +203,22 @@ class _AddProfileState extends State<AddProfile> {
                   decoration: InputDecoration(
                     labelText: "URL",
                     hintText: "URL",
+                    hintStyle: const TextStyle(color: kFontColor, fontSize: 16),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(23),
                     ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the required infomation';
+                    }
+                    return null;
+                  },
+                  onSaved: (newValue) {
+                    setState(() {
+                      _spotURL = newValue!;
+                    });
+                  },
                 ),
                 const SizedBox(
                   height: 10,
@@ -192,10 +228,22 @@ class _AddProfileState extends State<AddProfile> {
                   decoration: InputDecoration(
                     labelText: "Decription",
                     hintText: "Description",
+                    hintStyle: const TextStyle(color: kFontColor, fontSize: 16),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(23),
                     ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter the required infomation';
+                    }
+                    return null;
+                  },
+                  onSaved: (newValue) {
+                    setState(() {
+                      _spotDescription = newValue!;
+                    });
+                  },
                 ),
               ],
             ),
@@ -218,37 +266,33 @@ class PullDownButton extends StatefulWidget {
 }
 
 class _PullDownButtonState extends State<PullDownButton> {
-  // _selectedCategoryはプルダウンから選択されたテキストの受け皿
-  String? selectedCategory;
-  // listにcategoryListを代入
-  List? list = categoryList;
-
   @override
   Widget build(BuildContext context) {
+    final _spotListNotifier = Provider.of<SpotList>(context);
+
     return DropdownButton(
       hint: const Text(
         "Category",
-        style: TextStyle(fontSize: 17, color: Color.fromARGB(255, 97, 97, 97)),
+        style: TextStyle(color: kFontColor, fontSize: 16),
       ),
       isExpanded: true,
-      // vColor.fromARGB(255, 114, 114, 114)る値、_selectedCategoryをそれと定義
-      value: selectedCategory,
+      value: _spotListNotifier.categoryName,
       icon: const Icon(Icons.arrow_drop_down),
       iconSize: 40,
-      style: const TextStyle(color: kFontColor, fontSize: 17),
+      style: const TextStyle(color: kFontColor, fontSize: 20),
       underline: Container(),
-      // newValue=onChangedにて使用する引数
       onChanged: (newvalue) {
-        // _selectedCategoryの値の状態をstatとして持ち、setstateで変更し管理する
         setState(() {
-          selectedCategory = newvalue as String?;
+          _spotListNotifier.categoryName = newvalue.toString();
         });
       },
-
-      items: list?.map((categoryItem) {
+      items: categoryList.map((categoryItem) {
         return DropdownMenuItem(
           value: categoryItem.name,
-          child: Text(categoryItem.name),
+          child: Text(
+            categoryItem.name,
+            style: const TextStyle(color: Colors.black, fontSize: 16),
+          ),
         );
       }).toList(),
     );
@@ -264,23 +308,10 @@ class AddImage extends StatefulWidget {
 }
 
 class _AddImageState extends State<AddImage> {
-  XFile? _image;
-  ImagePicker picker = ImagePicker();
-
-  Future _getImage() async {
-    XFile? image = await picker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      if (image != null) {
-        _image = XFile(image.path);
-      } else {
-        const Text('No image selected.');
-      }
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final _spotListNotifier = Provider.of<SpotList>(context);
+
     return Column(
       children: [
         Container(
@@ -300,7 +331,7 @@ class _AddImageState extends State<AddImage> {
             ],
           ),
           child: IconButton(
-            onPressed: _getImage,
+            onPressed: _spotListNotifier.getImage,
             icon: const Icon(Icons.add),
           ),
         ),
