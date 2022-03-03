@@ -103,8 +103,9 @@ class SelectedCategoryList extends ChangeNotifier {
   }
 
   String beforeId = '';
-
   List<String> favoriteCats = [];
+
+  // To visualize categories on bottom bar of the top_list_screen.
   int getCategoryInfoForBottomBar(categoryId, bottomBarIndex) {
     final List<int> _sortedList = [];
 
