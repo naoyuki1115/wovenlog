@@ -137,10 +137,13 @@ class SpotListView extends StatelessWidget {
             child: ListTile(
               //tileColor: Colors.blue,
               leading: SizedBox(
-                width: 100,
-                height: 75,
-                child: Image.asset(
-                  _spotListNotifier.selectedSpotList[index].image.toString(),
+                width: 80,
+                height: 75, //74
+                child: FittedBox(
+                  fit: BoxFit.fill,
+                  child: Image.asset(
+                    _spotListNotifier.selectedSpotList[index].image.toString(),
+                  ),
                 ),
               ),
               title: Text(_spotListNotifier.selectedSpotList[index].name.toString()),
