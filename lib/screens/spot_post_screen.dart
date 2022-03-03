@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../constants.dart';
 import '../dummy_data/category_list.dart';
-import 'spot_list_screen.dart';
-
-void main() {
-  runApp(SpotPostScreen());
-}
 
 class SpotPostScreen extends StatefulWidget {
   const SpotPostScreen({Key? key}) : super(key: key);
@@ -38,18 +34,14 @@ class _SpotPostScreenState extends State<SpotPostScreen> {
         appBar: AppBar(
           title: const Text(
             'Post',
-            style: TextStyle(
-                fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
           ),
           backgroundColor: kAppBarColor,
           // 戻るボタン
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_ios_new, color: kPrimaryColor),
             onPressed: () {
-              Navigator.pop(
-                context,
-                MaterialPageRoute(builder: (context) => SpotListScreen()),
-              );
+              context.pop();
             },
           ),
         ),
@@ -95,8 +87,7 @@ class _SpotPostScreenState extends State<SpotPostScreen> {
                   style: TextButton.styleFrom(
                     primary: const Color(0xffD80C28),
                     backgroundColor: kSecondaryColor,
-                    shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(100))),
+                    shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100))),
                   ),
                   onPressed: () {
                     setState(() {
@@ -177,9 +168,8 @@ class _AddProfileState extends State<AddProfile> {
                     height: 60,
                     alignment: const Alignment(0, 0),
                     padding: const EdgeInsets.only(left: 10),
-                    decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey),
-                        borderRadius: BorderRadius.circular(23)),
+                    decoration:
+                        BoxDecoration(border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(23)),
                     child: PullDownButton()),
                 const SizedBox(
                   height: 10,
