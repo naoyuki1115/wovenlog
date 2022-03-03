@@ -27,6 +27,7 @@ class _SpotListScreenState extends State<SpotListScreen> {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       final _spotListNoifier = Provider.of<SpotList>(context, listen: false);
       _spotListNoifier.updateSelectedSpotList(widget.categoryId);
+      _spotListNoifier.resetSelectedIndex();
     });
   }
 

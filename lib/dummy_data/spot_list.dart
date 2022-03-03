@@ -19,6 +19,10 @@ class SpotList extends ChangeNotifier {
     notifyListeners();
   }
 
+  void resetSelectedIndex() {
+    selectedIndex = 0;
+  }
+
   void updateSelectedSpotList(categoryId) {
     selectedCategoryId = categoryId;
     _selectedSpotList = _spotList.where((element) => element.categoryId == categoryId).toList();

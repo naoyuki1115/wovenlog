@@ -102,6 +102,8 @@ class SelectedCategoryList extends ChangeNotifier {
     }
   }
 
+  String beforeId = '';
+
   List<String> favoriteCats = [];
   int getCategoryInfoForBottomBar(categoryId, bottomBarIndex) {
     final List<int> _sortedList = [];
@@ -120,12 +122,14 @@ class SelectedCategoryList extends ChangeNotifier {
     String _secondCategoryId = categoryList[_sortedList[1]].id;
     String _thirdCategoryId = categoryList[_sortedList[2]].id;
 
+/*
+
     if (categoryId == '') {
       // print('case1');
       // _firstCategoryId = categoryList[_sortedList[0]].id;
       // _secondCategoryId = categoryList[_sortedList[1]].id;
       // _thirdCategoryId = categoryList[_sortedList[2]].id;
-    } else if (categoryList[_sortedList[0]].id == categoryId && bottomBarIndex == 0) {
+    } else if (bottomBarIndex == 0 && categoryList[_sortedList[0]].id == categoryId) {
       print('case2');
       // if (bottomBarIndex == 0) {
       //   bottomBarIndex = 0;
@@ -135,7 +139,7 @@ class SelectedCategoryList extends ChangeNotifier {
       // _secondCategoryId = categoryList[_sortedList[1]].id;
       // _thirdCategoryId = categoryList[_sortedList[2]].id;
       bottomBarIndex = 0;
-    } else if (categoryList[_sortedList[1]].id == categoryId && bottomBarIndex == 1) {
+    } else if (bottomBarIndex == 1 && categoryList[_sortedList[1]].id == categoryId) {
       print('case3');
       // _firstCategoryId = categoryList[_sortedList[0]].id;
       // _secondCategoryId = categoryList[_sortedList[1]].id;
@@ -147,11 +151,11 @@ class SelectedCategoryList extends ChangeNotifier {
       // _secondCategoryId = categoryList[_sortedList[1]].id;
       // _thirdCategoryId = categoryList[_sortedList[2]].id;
       bottomBarIndex = 2;
-    } else if (bottomBarIndex == 1) {
+    } else if (bottomBarIndex == 1 && categoryList[_sortedList[0]].id == categoryId) {
       _firstCategoryId = categoryId;
       _secondCategoryId = categoryList[_sortedList[0]].id;
       _thirdCategoryId = categoryList[_sortedList[1]].id;
-    } else if (bottomBarIndex == 2) {
+    } else if (bottomBarIndex == 2 && categoryList[_sortedList[0]].id == categoryId) {
       _firstCategoryId = categoryId;
       _secondCategoryId = categoryList[_sortedList[0]].id;
       _thirdCategoryId = categoryList[_sortedList[1]].id;
@@ -178,12 +182,65 @@ class SelectedCategoryList extends ChangeNotifier {
     //   String? _thirdCategoryId = categoryList[2].categoryId;
     // } else if ()
 
+    */
+
+    // if (categoryId == '') {
+    //   print('case1');
+    //   _firstCategoryId = categoryList[_sortedList[0]].id;
+    //   print(categoryList[_sortedList[0]].id);
+    //   print(_firstCategoryId);
+    //   _secondCategoryId = categoryList[_sortedList[1]].id;
+    //   _thirdCategoryId = categoryList[_sortedList[2]].id;
+    // }
+
+    if (bottomBarIndex == 0) {
+      if (categoryId == categoryList[_sortedList[0]].id) {
+        bottomBarIndex = 0;
+      } else if (categoryId != '') {
+        print('here?');
+        bottomBarIndex = 0;
+        _firstCategoryId = categoryId;
+        _secondCategoryId = categoryList[_sortedList[0]].id;
+        _thirdCategoryId = categoryList[_sortedList[1]].id;
+      }
+    } else if (bottomBarIndex == 1) {
+      if (categoryId == categoryList[_sortedList[1]].id) {
+        bottomBarIndex = 1;
+      } else if (categoryId == categoryList[_sortedList[0]].id) {
+        bottomBarIndex = 1;
+        _firstCategoryId = beforeId;
+        _secondCategoryId = categoryList[_sortedList[0]].id;
+        _thirdCategoryId = categoryList[_sortedList[1]].id;
+      }
+      // } else {
+      //   bottomBarIndex = 1;
+      //   _firstCategoryId = categoryId;
+      //   _secondCategoryId = categoryList[_sortedList[0]].id;
+      //   _thirdCategoryId = categoryList[_sortedList[1]].id;
+      // }
+    } else if (bottomBarIndex == 2) {
+      if (categoryId == categoryList[_sortedList[2]].id) {
+        bottomBarIndex = 2;
+      } else if (categoryId == categoryList[_sortedList[1]].id) {
+        bottomBarIndex = 2;
+        _firstCategoryId = beforeId;
+        _secondCategoryId = categoryList[_sortedList[0]].id;
+        _thirdCategoryId = categoryList[_sortedList[1]].id;
+      }
+    }
+    // } else if (categoryId == '') {
+    //   _firstCategoryId = categoryList[_sortedList[0]].id;
+    //   _secondCategoryId = categoryList[_sortedList[1]].id;
+    //   _thirdCategoryId = categoryList[_sortedList[2]].id;
+    // }
+
     favoriteCats = [
       _firstCategoryId,
       _secondCategoryId,
       _thirdCategoryId,
     ];
 
+    beforeId = _firstCategoryId;
     print(_firstCategoryId);
     print(_secondCategoryId);
     print(_thirdCategoryId);
