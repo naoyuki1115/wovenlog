@@ -47,11 +47,6 @@ class SpotList extends ChangeNotifier {
   XFile? imageFile;
   String message = "";
 
-  // Future getImage() async {
-  //   ImagePicker picker = ImagePicker();
-  //   imageFile = await picker.pickImage(source: ImageSource.gallery);
-  // }
-
   Future getImage(_image) async {
     imageFile = XFile(_image.path);
   }
@@ -103,8 +98,8 @@ class SpotList extends ChangeNotifier {
         description: description,
       );
       _spotList.add(_newSpot);
-      print(_newSpot.image);
-      print(_spotList.length);
+      print('image path: ${_newSpot.image}');
+      print('spot list length: ${_spotList.length}');
       saveToSharedPreferences();
     } else {
       message = "No image selected";
