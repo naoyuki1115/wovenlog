@@ -102,6 +102,95 @@ class SelectedCategoryList extends ChangeNotifier {
     }
   }
 
+  List<String> favoriteCats = [];
+  int getCategoryInfoForBottomBar(categoryId, bottomBarIndex) {
+    final List<int> _sortedList = [];
+
+    for (int i = 0; i < isCheckedList.length; i++) {
+      if (isCheckedList[i] == true) {
+        _sortedList.add(i);
+      }
+    }
+    print('selectred index = $bottomBarIndex');
+    print(_sortedList);
+    // print(_sortedList[0]);
+    print(categoryList[0]);
+    print(categoryId);
+    String _firstCategoryId = categoryList[_sortedList[0]].id;
+    String _secondCategoryId = categoryList[_sortedList[1]].id;
+    String _thirdCategoryId = categoryList[_sortedList[2]].id;
+
+    if (categoryId == '') {
+      // print('case1');
+      // _firstCategoryId = categoryList[_sortedList[0]].id;
+      // _secondCategoryId = categoryList[_sortedList[1]].id;
+      // _thirdCategoryId = categoryList[_sortedList[2]].id;
+    } else if (categoryList[_sortedList[0]].id == categoryId && bottomBarIndex == 0) {
+      print('case2');
+      // if (bottomBarIndex == 0) {
+      //   bottomBarIndex = 0;
+      // }
+
+      // _firstCategoryId = categoryList[_sortedList[0]].id;
+      // _secondCategoryId = categoryList[_sortedList[1]].id;
+      // _thirdCategoryId = categoryList[_sortedList[2]].id;
+      bottomBarIndex = 0;
+    } else if (categoryList[_sortedList[1]].id == categoryId && bottomBarIndex == 1) {
+      print('case3');
+      // _firstCategoryId = categoryList[_sortedList[0]].id;
+      // _secondCategoryId = categoryList[_sortedList[1]].id;
+      // _thirdCategoryId = categoryList[_sortedList[2]].id;
+      bottomBarIndex = 1;
+    } else if (categoryList[_sortedList[2]].id == categoryId) {
+      print('case4');
+      // _firstCategoryId = categoryList[_sortedList[0]].id;
+      // _secondCategoryId = categoryList[_sortedList[1]].id;
+      // _thirdCategoryId = categoryList[_sortedList[2]].id;
+      bottomBarIndex = 2;
+    } else if (bottomBarIndex == 1) {
+      _firstCategoryId = categoryId;
+      _secondCategoryId = categoryList[_sortedList[0]].id;
+      _thirdCategoryId = categoryList[_sortedList[1]].id;
+    } else if (bottomBarIndex == 2) {
+      _firstCategoryId = categoryId;
+      _secondCategoryId = categoryList[_sortedList[0]].id;
+      _thirdCategoryId = categoryList[_sortedList[1]].id;
+    } else {
+      // _firstCategoryId = categoryList[_sortedList[0]].id;
+      _firstCategoryId = categoryId;
+      _secondCategoryId = categoryList[_sortedList[0]].id;
+      _thirdCategoryId = categoryList[_sortedList[1]].id;
+      bottomBarIndex = 0;
+      print('here?');
+      print(categoryId);
+    }
+
+    // if (categoryList[_sortedList[3]] == categoryId) {
+    //   _firstCategoryId = categoryId;
+    //   _secondCategoryId = categoryList[_sortedList[0]].id;
+    //   _thirdCategoryId = categoryList[_sortedList[1]].id;
+    // }
+
+    // String _firstCategoryId = categoryId;
+
+    // if (selectedCategoryList[1].categoryId == categoryId) {
+    //   String? _secondCategoryId = categoryList[1].categoryId;
+    //   String? _thirdCategoryId = categoryList[2].categoryId;
+    // } else if ()
+
+    favoriteCats = [
+      _firstCategoryId,
+      _secondCategoryId,
+      _thirdCategoryId,
+    ];
+
+    print(_firstCategoryId);
+    print(_secondCategoryId);
+    print(_thirdCategoryId);
+    print(bottomBarIndex);
+    return bottomBarIndex;
+  }
+
   /*
   // Save JSON data to the local device.
   // This medhod will be called when the user tapped checkbox on the edit category screen.

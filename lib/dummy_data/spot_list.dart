@@ -10,6 +10,7 @@ class SpotList extends ChangeNotifier {
   List<Spot> get selectedSpotList => _selectedSpotList;
 
   String selectedCategoryName = '';
+  String selectedCategoryId = '';
 
   int selectedIndex = 0;
 
@@ -19,6 +20,7 @@ class SpotList extends ChangeNotifier {
   }
 
   void updateSelectedSpotList(categoryId) {
+    selectedCategoryId = categoryId;
     _selectedSpotList = _spotList.where((element) => element.categoryId == categoryId).toList();
     selectedCategoryName = categoryList.singleWhere(((element) => element.id == categoryId)).name;
     notifyListeners();
