@@ -29,10 +29,8 @@ class _SpotListScreenState extends State<SpotListScreen> {
       final _spotListNotifier = Provider.of<SpotList>(context, listen: false);
       final _likeListNotifier = Provider.of<LikeList>(context, listen: false);
 
-      // _spotListNoifier.updateSelectedSpotList(widget.categoryId);
       //LikeListのインスタンスをSpotListクラスに渡してstate管理
       _spotListNotifier.setLikeListInstance(_likeListNotifier);
-      print('update selected spot');
       _spotListNotifier.updateSelectedSpotList(widget.categoryId);
       _spotListNotifier.resetSelectedIndex();
     });

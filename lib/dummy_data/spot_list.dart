@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import './spot_class.dart';
 import './category_list.dart';
-import '../dummy_data/like_list.dart';
+import './like_list.dart';
 
 class SpotList extends ChangeNotifier {
   List<Spot> _selectedSpotList = <Spot>[];
@@ -18,13 +18,11 @@ class SpotList extends ChangeNotifier {
 
   SpotList() {
     loadDataViaSharedPreferences();
-    print('load shared pref');
   }
 
   /* ---------------------------------------- */
   List spotLikeNumList = [];
   late LikeList likeListInstance;
-  // LikeList likeListInstance = ;
 
   void setSelectedIndex(index) {
     selectedIndex = index;
@@ -36,7 +34,6 @@ class SpotList extends ChangeNotifier {
   }
 
   void updateSelectedSpotList(categoryId) {
-    print('update');
     selectedCategoryId = categoryId;
     _selectedSpotList = _spotList.where((element) => element.categoryId == categoryId).toList();
     selectedCategoryName = categoryList.singleWhere(((element) => element.id == categoryId)).name;
@@ -66,7 +63,6 @@ class SpotList extends ChangeNotifier {
       _tempList.add(element[1]);
     });
     //並び替えしたもので書き換え
-    print('');
     _selectedSpotList = _tempList;
   }
 
@@ -102,12 +98,12 @@ class SpotList extends ChangeNotifier {
         )
         .toList();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setStringList('savedSpotList_2203040904', savedSpotList);
+    await prefs.setStringList('savedSpotList_2203040905', savedSpotList);
   }
 
   Future loadDataViaSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    var result = prefs.getStringList('savedSpotList_2203040904');
+    var result = prefs.getStringList('savedSpotList_2203040905');
     if (result != null) {
       _spotList = result
           .map(
@@ -115,11 +111,12 @@ class SpotList extends ChangeNotifier {
           )
           .toList();
     }
-    notifyListeners();
+    // notifyListeners();
+    updateSelectedSpotList(selectedCategoryId);
   }
 
   void addNewSpot(String name, String url, String description, String? categoryName) {
-    String categoryLength = _spotList.length.toString();
+    String categoryLength = (_spotList.length + 1).toString();
 
     int index = categoryList.indexWhere((element) => element.name == categoryName);
 
@@ -137,12 +134,10 @@ class SpotList extends ChangeNotifier {
         description: description,
       );
       _spotList.add(_newSpot);
-      print('image path: ${_newSpot.image}');
-      print('spot list length: ${_spotList.length}');
+      // print('image path: ${_newSpot.image}');
+      // print('spot list length: ${_spotList.length}');
       saveToSharedPreferences();
-    } else {
-      message = "No image selected";
-      print(message);
+      updateSelectedSpotList(selectedCategoryId);
     }
   }
   /* ---------------------------------------- */
