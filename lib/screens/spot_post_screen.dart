@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../constants.dart';
 import '../dummy_data/category_list.dart';
+import '../dummy_data/spot_list.dart';
 
 class SpotPostScreen extends StatefulWidget {
   const SpotPostScreen({Key? key}) : super(key: key);
@@ -13,12 +15,20 @@ class SpotPostScreen extends StatefulWidget {
 }
 
 String _errMsg = '';
-bool _postState = false;
+bool _postState = true;
 
-void submit() {
+void submit(SpotList _spotListNotifier) {
   if (_postState) {
     //画面遷移
     // 登録処理
+    _spotListNotifier.addNewSpot(
+      'dummy_name', 
+      'category0001', 
+      'dummy_address', 
+      'dummy_url', 
+      'dummy_description', 
+      'dummy_imagePath'
+    );
   } else {
     _errMsg = 'Please fill some required info';
   }
@@ -27,6 +37,7 @@ void submit() {
 class _SpotPostScreenState extends State<SpotPostScreen> {
   @override
   Widget build(BuildContext context) {
+    final _spotListNotifier = Provider.of<SpotList>(context); 
     return MaterialApp(
       title: 'spot_post_screen',
       home: Scaffold(
@@ -71,7 +82,7 @@ class _SpotPostScreenState extends State<SpotPostScreen> {
                 child: Container(),
               ),
               // 画像投稿フォーム
-              AddImage(),
+              //AddImage(),
               Expanded(
                 flex: 1,
                 child: Container(),
@@ -95,7 +106,7 @@ class _SpotPostScreenState extends State<SpotPostScreen> {
                   onPressed: () {
                     setState(() {
                       // Submit成功可否の表示＆Listへの登録
-                      submit();
+                      submit(_spotListNotifier);
                     });
                   },
                 ),

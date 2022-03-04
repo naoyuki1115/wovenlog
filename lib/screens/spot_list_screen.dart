@@ -26,8 +26,12 @@ class _SpotListScreenState extends State<SpotListScreen> {
     super.initState();
 
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      final _spotListNoifier = Provider.of<SpotList>(context, listen: false);
-      _spotListNoifier.updateSelectedSpotList(widget.categoryId);
+      final _spotListNotifier = Provider.of<SpotList>(context, listen: false);
+      final _likeListNotifier = Provider.of<LikeList>(context, listen: false);
+
+      //LikeListのインスタンスをSpotListクラスに渡してstate管理
+      _spotListNotifier.setLikeListInstance(_likeListNotifier);
+      _spotListNotifier.updateSelectedSpotList(widget.categoryId);
     });
   }
 
@@ -73,6 +77,7 @@ class _SpotListScreenState extends State<SpotListScreen> {
   }
 }
 
+//ボトムバー
 class CustomButtomBar extends StatelessWidget {
   const CustomButtomBar({
     Key? key,
@@ -142,6 +147,7 @@ class SpotListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _spotListNotifier = Provider.of<SpotList>(context);
+    final _likeListInstance = Provider.of<LikeList>(context);
 
     return Expanded(
       child: ListView.builder(
@@ -180,6 +186,7 @@ class SpotListView extends StatelessWidget {
   }
 }
 
+//いいねSection
 class LikeWidget extends StatelessWidget {
   final String? userId;
   final String? spotId;
@@ -188,12 +195,13 @@ class LikeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _likeListInstance = Provider.of<LikeList>(context);
+    final _spotListInstance = Provider.of<SpotList>(context);
     int _likeNums = _likeListInstance.getLikeNums(spotId);
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        Expanded(child: _buildLikeButton(_likeListInstance)),
+        Expanded(child: _buildLikeButton(_likeListInstance, _spotListInstance)),
         Expanded(
           child: Text(_likeNums.toString()),
         ),
@@ -202,7 +210,8 @@ class LikeWidget extends StatelessWidget {
   }
 
   //Likeボタン作成
-  Widget _buildLikeButton(LikeList _likeListInstance) {
+  Widget _buildLikeButton(
+      LikeList _likeListInstance, SpotList _spotListInstance) {
     bool _isLikeExsited = _likeListInstance.getIsLikeExisted(userId, spotId);
 
     return IconButton(
@@ -213,8 +222,12 @@ class LikeWidget extends StatelessWidget {
           : const Icon(Icons.favorite_border)),
       color: kPrimaryColor,
       onPressed: () {
-        DateTime _createdDate = DateTime.now();
-        _likeListInstance.addOrRemoveLike(userId, spotId, _createdDate);
+        //いいね追加/削除処理
+        _likeListInstance.addOrRemoveLike(userId, spotId);
+        //SpotListViewの表示を更新
+        _spotListInstance.setLikeListInstance(_likeListInstance);
+        _spotListInstance
+            .updateSelectedSpotList(_spotListInstance.getSelectedCategoryId());
       },
     );
   }
