@@ -6,7 +6,7 @@ import '../constants.dart';
 import '../dummy_data/selected_category_list.dart';
 
 class TopScreen extends StatelessWidget {
-  final userId;
+  final String? userId;
   const TopScreen({Key? key, this.userId}) : super(key: key);
 
   @override
