@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wovenlog/screens/top_screen.dart';
 
 import './selected_category_class.dart';
 import './category_list.dart';
@@ -76,7 +77,7 @@ class SelectedCategoryList extends ChangeNotifier {
   // This method searches name and icon of the selected category
   // and used for visualize category icon button on the top screen.
   */
-  String searchSelectedCategoryNameOrIcon(int index, bool isName) {
+  String searchSelectedCategoryInfo(int index, SearchTarget target) {
     updateIsCheckedList();
     final List<int> newList = [];
 
@@ -88,16 +89,65 @@ class SelectedCategoryList extends ChangeNotifier {
 
     if (newList.isNotEmpty) {
       int _targetIndex = newList[index];
-      String _categoryName = categoryList[_targetIndex].name;
-      String _categoryId = categoryList[_targetIndex].icon;
-      if (isName) {
-        return _categoryName;
-      } else {
-        return _categoryId;
+      switch (target) {
+        case SearchTarget.name:
+          return categoryList[_targetIndex].name;
+        case SearchTarget.id:
+          return categoryList[_targetIndex].id;
+        case SearchTarget.icon:
+          return categoryList[_targetIndex].icon;
       }
     } else {
       return "Undefined";
     }
+  }
+
+  String beforeId = '';
+  List<String> favoriteCats = [];
+
+  // To visualize categories on bottom bar of the top_list_screen.
+  int getCategoryInfoForBottomBar(categoryId, bottomBarIndex) {
+    final List<int> _sortedList = [];
+
+    for (int i = 0; i < isCheckedList.length; i++) {
+      if (isCheckedList[i] == true) {
+        _sortedList.add(i);
+      }
+    }
+    String _firstCategoryId = categoryList[_sortedList[0]].id;
+    String _secondCategoryId = categoryList[_sortedList[1]].id;
+    String _thirdCategoryId = categoryList[_sortedList[2]].id;
+
+    if (bottomBarIndex == 0) {
+      if (categoryId == categoryList[_sortedList[0]].id) {
+      } else if (categoryId != '') {
+        _firstCategoryId = categoryId;
+        _secondCategoryId = categoryList[_sortedList[0]].id;
+        _thirdCategoryId = categoryList[_sortedList[1]].id;
+      }
+    } else if (bottomBarIndex == 1) {
+      if (categoryId == categoryList[_sortedList[1]].id) {
+      } else if (categoryId == categoryList[_sortedList[0]].id) {
+        _firstCategoryId = beforeId;
+        _secondCategoryId = categoryList[_sortedList[0]].id;
+        _thirdCategoryId = categoryList[_sortedList[1]].id;
+      }
+    } else if (bottomBarIndex == 2) {
+      if (categoryId == categoryList[_sortedList[2]].id) {
+      } else if (categoryId == categoryList[_sortedList[1]].id) {
+        _firstCategoryId = beforeId;
+        _secondCategoryId = categoryList[_sortedList[0]].id;
+        _thirdCategoryId = categoryList[_sortedList[1]].id;
+      }
+    }
+    favoriteCats = [
+      _firstCategoryId,
+      _secondCategoryId,
+      _thirdCategoryId,
+    ];
+
+    beforeId = _firstCategoryId;
+    return bottomBarIndex;
   }
 
   /*
