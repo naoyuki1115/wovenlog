@@ -19,9 +19,14 @@ class SpotList extends ChangeNotifier {
 
   SpotList() {
     loadDataViaSharedPreferences();
+    print('load shared pref');
   }
 
   /* ---------------------------------------- */
+  List spotLikeNumList = [];
+  late LikeList likeListInstance;
+  // LikeList likeListInstance = ;
+
   void setSelectedIndex(index) {
     selectedIndex = index;
     notifyListeners();
@@ -32,11 +37,18 @@ class SpotList extends ChangeNotifier {
   }
 
   void updateSelectedSpotList(categoryId) {
+    print('update');
     selectedCategoryId = categoryId;
     _selectedSpotList =
         _spotList.where((element) => element.categoryId == categoryId).toList();
     selectedCategoryName =
         categoryList.singleWhere(((element) => element.id == categoryId)).name;
+    //いいね順に並び替え
+    sortLikeNumOrder();
+    //表示Spot数を制限
+    // filterByNum(10);
+    // selectedCategoryId = _selectedSpotList.first.categoryId.toString();
+    // selectedCategoryName = categoryList.singleWhere((element) => element.id == selectedCategoryId).name.toString();
     notifyListeners();
   }
 
@@ -66,6 +78,7 @@ class SpotList extends ChangeNotifier {
       _tempList.add(element[1]);
     });
     //並び替えしたもので書き換え
+    print('');
     _selectedSpotList = _tempList;
   }
 
@@ -78,6 +91,24 @@ class SpotList extends ChangeNotifier {
     }
     _selectedSpotList = _tempList;
   }
+
+  // //Spot追加処理
+  // void addNewSpot(String? _name, String? _categoryId, String? _address, String? _url, String? _description, String? _imagePath){
+  //   Spot _newSpot = Spot(
+  //     id: "spot0001",//id求める処理必要
+  //     name: _name,
+  //     address: _address,
+  //     latitude: null,
+  //     longitude: null,
+  //     url: _url,
+  //     image: _imagePath,
+  //     createdDate: DateTime.now(),
+  //     categoryId: _categoryId,
+  //     description: _description,
+  //   );
+  //   _spotList.add(_newSpot);
+  //   updateSelectedSpotList(selectedCategoryId);
+  // }
 
   Spot getSpotInfo(spotId) {
     return _spotList.singleWhere((element) => element.id == spotId);
@@ -103,13 +134,13 @@ class SpotList extends ChangeNotifier {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    await prefs.setStringList('savedSpotList_22030400', savedSpotList);
+    await prefs.setStringList('savedSpotList_2203040905', savedSpotList);
   }
 
   Future loadDataViaSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var result = prefs.getStringList('savedSpotList_22030400');
+    var result = prefs.getStringList('savedSpotList_2203040905');
 
     if (result != null) {
       _spotList = result
@@ -146,6 +177,7 @@ class SpotList extends ChangeNotifier {
       print('image path: ${_newSpot.image}');
       print('spot list length: ${_spotList.length}');
       saveToSharedPreferences();
+      updateSelectedSpotList(selectedCategoryId);
     } else {
       message = "No image selected";
       print(message);
@@ -544,18 +576,18 @@ class SpotList extends ChangeNotifier {
       categoryId: 'category0003',
       description: '皇居前広場',
     ),
-    Spot(
-      id: "spot0031",
-      name: "あああああああ",
-      address: "いいいいいい",
-      latitude: 35.6811152,
-      longitude: 139.7560612,
-      url:
-          "https://www.google.com/maps/place/Imperial+Palace+Front+Gardens/@35.6811152,139.7560612,16.25z/data=!4m9!1m3!2m2!1z6Kaz5YWJ5ZCN5omA!6e1!3m4!1s0x60188bf5d740e7a7:0xf04856902f747!8m2!3d35.6806711!4d139.7572871",
-      image: "assets/images/spot_images/spot0022.jpg",
-      createdDate: DateTime(2020, 1, 1),
-      categoryId: 'category0001',
-      description: 'うううう',
-    ),
+    // Spot(
+    //   id: "spot0031",
+    //   name: "あああああああ",
+    //   address: "いいいいいい",
+    //   latitude: 35.6811152,
+    //   longitude: 139.7560612,
+    //   url:
+    //       "https://www.google.com/maps/place/Imperial+Palace+Front+Gardens/@35.6811152,139.7560612,16.25z/data=!4m9!1m3!2m2!1z6Kaz5YWJ5ZCN5omA!6e1!3m4!1s0x60188bf5d740e7a7:0xf04856902f747!8m2!3d35.6806711!4d139.7572871",
+    //   image: "assets/images/spot_images/spot0022.jpg",
+    //   createdDate: DateTime(2020, 1, 1),
+    //   categoryId: 'category0001',
+    //   description: 'うううう',
+    // ),
   ];
 }

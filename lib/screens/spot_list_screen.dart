@@ -26,6 +26,12 @@ class _SpotListScreenState extends State<SpotListScreen> {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       final _spotListNoifier = Provider.of<SpotList>(context, listen: false);
+      final _likeListNotifier = Provider.of<LikeList>(context, listen: false);
+
+      // _spotListNoifier.updateSelectedSpotList(widget.categoryId);
+      //LikeListのインスタンスをSpotListクラスに渡してstate管理
+      _spotListNoifier.setLikeListInstance(_likeListNotifier);
+      print('update selected spot');
       _spotListNoifier.updateSelectedSpotList(widget.categoryId);
       _spotListNoifier.resetSelectedIndex();
     });
@@ -61,7 +67,7 @@ class _SpotListScreenState extends State<SpotListScreen> {
       ),
       bottomNavigationBar: const CustomButtomBar(),
       body: Column(
-        children: [
+        children: const [
           SizedBox(
             height: 10,
           ),
@@ -123,12 +129,9 @@ class CustomButtomBar extends StatelessWidget {
 
 //Spot一覧をカード表示
 class SpotListView extends StatelessWidget {
-  SpotListView({
+  const SpotListView({
     Key? key,
   }) : super(key: key);
-
-  bool _isLiked = false;
-  int likeNum = 0;
 
   @override
   Widget build(BuildContext context) {

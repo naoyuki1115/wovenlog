@@ -39,7 +39,7 @@ class Spot {
   Spot.fromJson(Map json)
       : id = json['id'],
         name = json['name'],
-        address = json['addaress'],
+        address = json['address'],
         latitude = json['latitude'],
         longitude = json['longitude'],
         url = json['url'],
