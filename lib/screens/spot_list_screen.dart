@@ -26,15 +26,15 @@ class _SpotListScreenState extends State<SpotListScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      final _spotListNoifier = Provider.of<SpotList>(context, listen: false);
+      final _spotListNotifier = Provider.of<SpotList>(context, listen: false);
       final _likeListNotifier = Provider.of<LikeList>(context, listen: false);
 
       // _spotListNoifier.updateSelectedSpotList(widget.categoryId);
       //LikeListのインスタンスをSpotListクラスに渡してstate管理
-      _spotListNoifier.setLikeListInstance(_likeListNotifier);
+      _spotListNotifier.setLikeListInstance(_likeListNotifier);
       print('update selected spot');
-      _spotListNoifier.updateSelectedSpotList(widget.categoryId);
-      _spotListNoifier.resetSelectedIndex();
+      _spotListNotifier.updateSelectedSpotList(widget.categoryId);
+      _spotListNotifier.resetSelectedIndex();
     });
   }
 

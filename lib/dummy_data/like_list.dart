@@ -1,8 +1,15 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'like_class.dart';
 
 
 class LikeList extends ChangeNotifier{
+
+  LikeList() {
+    loadDataViaSharedPreferences();
+    print('load shared pref');
+  }
 
    //SpotごとのLike数を取得
   int getLikeNums(_spotId){
@@ -22,7 +29,6 @@ class LikeList extends ChangeNotifier{
 
   //Like追加/削除
   void addOrRemoveLike(String? _userId, String? _spotId){
-    
     Like _like = Like(
       userId: _userId,
       spotId: _spotId,
@@ -37,10 +43,29 @@ class LikeList extends ChangeNotifier{
     } else {
       likeList.add(_like);
     }
+    saveToSharedPreferences();
     notifyListeners();
   }
 
-  List<Like> likeList = [
+  //sharedPrefarebce
+  Future saveToSharedPreferences() async {
+    List<String> savedLikeList = likeList.map((e) => json.encode(e.toJson())).toList();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('savedSpotList_2203041321', savedLikeList);
+  }
+
+  Future loadDataViaSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var result = prefs.getStringList('savedSpotList_2203041321');
+    if (result != null) {
+      likeList = result.map((e) => Like.fromJson(json.decode(e))).toList();
+    }
+    notifyListeners();
+  }
+
+
+
+  List<Like> likeList = <Like>[
     Like(userId: "user0001", spotId: "spot0001", createdDate: DateTime(2022, 1, 1),),
     Like(userId: "user0001", spotId: "spot0002", createdDate: DateTime(2022, 1, 2),),
     Like(userId: "user0001", spotId: "spot0003", createdDate: DateTime(2022, 1, 1),),

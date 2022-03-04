@@ -82,24 +82,6 @@ class SpotList extends ChangeNotifier {
     _selectedSpotList = _tempList;
   }
 
-  // //Spot追加処理
-  // void addNewSpot(String? _name, String? _categoryId, String? _address, String? _url, String? _description, String? _imagePath){
-  //   Spot _newSpot = Spot(
-  //     id: "spot0001",//id求める処理必要
-  //     name: _name,
-  //     address: _address,
-  //     latitude: null,
-  //     longitude: null,
-  //     url: _url,
-  //     image: _imagePath,
-  //     createdDate: DateTime.now(),
-  //     categoryId: _categoryId,
-  //     description: _description,
-  //   );
-  //   _spotList.add(_newSpot);
-  //   updateSelectedSpotList(selectedCategoryId);
-  // }
-
   Spot getSpotInfo(spotId) {
     return _spotList.singleWhere((element) => element.id == spotId);
   }
@@ -121,17 +103,13 @@ class SpotList extends ChangeNotifier {
           (e) => json.encode(e.toJson()),
         )
         .toList();
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
     await prefs.setStringList('savedSpotList_2203040904', savedSpotList);
   }
 
   Future loadDataViaSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
     var result = prefs.getStringList('savedSpotList_2203040904');
-
     if (result != null) {
       _spotList = result
           .map(
@@ -139,7 +117,6 @@ class SpotList extends ChangeNotifier {
           )
           .toList();
     }
-
     notifyListeners();
   }
 
