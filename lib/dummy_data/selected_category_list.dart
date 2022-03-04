@@ -120,6 +120,10 @@ class SelectedCategoryList extends ChangeNotifier {
 
     if (bottomBarIndex == 0) {
       if (categoryId == categoryList[_sortedList[0]].id) {
+      } else if (categoryId == categoryList[_sortedList[1]].id) {
+        _firstCategoryId = categoryId;
+        _secondCategoryId = categoryList[_sortedList[0]].id;
+        _thirdCategoryId = categoryList[_sortedList[2]].id;
       } else if (categoryId != '') {
         _firstCategoryId = categoryId;
         _secondCategoryId = categoryList[_sortedList[0]].id;
@@ -127,6 +131,10 @@ class SelectedCategoryList extends ChangeNotifier {
       }
     } else if (bottomBarIndex == 1) {
       if (categoryId == categoryList[_sortedList[1]].id) {
+      } else if (beforeId == categoryList[_sortedList[1]].id) {
+        _firstCategoryId = beforeId;
+        _secondCategoryId = categoryList[_sortedList[0]].id;
+        _thirdCategoryId = categoryList[_sortedList[2]].id;
       } else if (categoryId == categoryList[_sortedList[0]].id) {
         _firstCategoryId = beforeId;
         _secondCategoryId = categoryList[_sortedList[0]].id;

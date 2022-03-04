@@ -250,13 +250,6 @@ class _AddImageState extends State<AddImage> {
           _imageExist = false;
         }
       });
-      // アプリケーション専用のファイル配置ディレクトリへのパスを取得（）
-      // final appDir = await syspaths.getApplicationDocumentsDirectory();
-      // //画像名を取得(〜.jpg)
-      // final fileName = path.basename(_image!.path);
-
-      // final savedImage = await _file!.copy('${appDir.path}/$fileName');
-      // widget.onSelectImage(savedImage);
     }
 
     return FutureBuilder<String>(
