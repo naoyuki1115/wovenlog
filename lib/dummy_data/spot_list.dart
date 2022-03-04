@@ -1,5 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:wovenlog/dummy_data/like_list.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import './spot_class.dart';
 import './category_list.dart';
@@ -13,85 +15,145 @@ class SpotList extends ChangeNotifier {
 
   String selectedCategoryName = '';
   String selectedCategoryId = '';
-
   int selectedIndex = 0;
 
-  List spotLikeNumList = [];
+  SpotList() {
+    loadDataViaSharedPreferences();
+  }
 
-  late LikeList likeListInstance;
-
+  /* ---------------------------------------- */
   void setSelectedIndex(index) {
     selectedIndex = index;
     notifyListeners();
   }
 
+  void resetSelectedIndex() {
+    selectedIndex = 0;
+  }
+
   void updateSelectedSpotList(categoryId) {
-    _selectedSpotList = _spotList.where((element) => element.categoryId == categoryId).toList();
-    //いいね順に並び替え
-    sortLikeNumOrder();
-    //表示Spot数を制限
-    filterByNum(10);
-    selectedCategoryId = _selectedSpotList.first.categoryId.toString();
-    selectedCategoryName = categoryList.singleWhere((element) => element.id == selectedCategoryId).name.toString();
+    selectedCategoryId = categoryId;
+    _selectedSpotList =
+        _spotList.where((element) => element.categoryId == categoryId).toList();
+    selectedCategoryName =
+        categoryList.singleWhere(((element) => element.id == categoryId)).name;
     notifyListeners();
   }
 
   //選択中のカテゴリIDを返す
-  String getSelectedCategoryId(){
+  String getSelectedCategoryId() {
     return selectedCategoryId;
   }
 
   //LikeListのインスタンスを保持（いいね並び替えで使用するため）
-  void setLikeListInstance(LikeList _likeListInstance){
+  void setLikeListInstance(LikeList _likeListInstance) {
     likeListInstance = _likeListInstance;
   }
 
   //いいね順で並び替え機能
-  void sortLikeNumOrder(){
+  void sortLikeNumOrder() {
     List<Spot> _tempList = [];
     //SpotインスタンスとLike数を組み合わせたリストを作成
-    List _spotLikeNumList = _selectedSpotList.map((e) => [likeListInstance.getLikeNums(e.id), e]).toList();
+    List _spotLikeNumList = _selectedSpotList
+        .map((e) => [likeListInstance.getLikeNums(e.id), e])
+        .toList();
     //Like数で並び替え
-    _spotLikeNumList.sort((a, b) => -a[0].compareTo(b[0]),);
+    _spotLikeNumList.sort(
+      (a, b) => -a[0].compareTo(b[0]),
+    );
     //Like数の列を取り除く
-    _spotLikeNumList.forEach((element) {_tempList.add(element[1]);});
+    _spotLikeNumList.forEach((element) {
+      _tempList.add(element[1]);
+    });
     //並び替えしたもので書き換え
     _selectedSpotList = _tempList;
   }
 
   //個数で絞り込み
-  void filterByNum(int num){
+  void filterByNum(int num) {
     List<Spot> _tempList = [];
     //指定個数分取り出し
-    for (int i=0; i<=num-1; i++){
+    for (int i = 0; i <= num - 1; i++) {
       _tempList.add(_selectedSpotList[i]);
     }
     _selectedSpotList = _tempList;
-  }
-
-  //Spot追加処理
-  void addNewSpot(String? _name, String? _categoryId, String? _address, String? _url, String? _description, String? _imagePath){
-    Spot _newSpot = Spot(
-      id: "spot0001",//id求める処理必要
-      name: _name,
-      address: _address,
-      latitude: null,
-      longitude: null,
-      url: _url,
-      image: _imagePath,
-      createdDate: DateTime.now(),
-      categoryId: _categoryId,
-      description: _description,
-    );
-    _spotList.add(_newSpot);
-    updateSelectedSpotList(selectedCategoryId);
   }
 
   Spot getSpotInfo(spotId) {
     return _spotList.singleWhere((element) => element.id == spotId);
   }
 
-  final List<Spot> _spotList = <Spot>[
+  /* ---------------------------------------- */
+  // Spot post function
+  /* ---------------------------------------- */
+  String? categoryName;
+  XFile? imageFile;
+  String message = "";
+
+  Future getImage(_image) async {
+    imageFile = XFile(_image.path);
+  }
+
+  Future saveToSharedPreferences() async {
+    List<String> savedSpotList = _spotList
+        .map(
+          (e) => json.encode(e.toJson()),
+        )
+        .toList();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    await prefs.setStringList('savedSpotList_22030400', savedSpotList);
+  }
+
+  Future loadDataViaSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    var result = prefs.getStringList('savedSpotList_22030400');
+
+    if (result != null) {
+      _spotList = result
+          .map(
+            (e) => Spot.fromJson(json.decode(e)),
+          )
+          .toList();
+    }
+
+    notifyListeners();
+  }
+
+  void addNewSpot(
+      String name, String url, String description, String? categoryName) {
+    String categoryLength = _spotList.length.toString();
+
+    int index =
+        categoryList.indexWhere((element) => element.name == categoryName);
+
+    if (imageFile != null) {
+      Spot _newSpot = Spot(
+        id: "spot00$categoryLength",
+        name: name,
+        address: "undefined",
+        latitude: null,
+        longitude: null,
+        url: url,
+        image: imageFile!.path,
+        createdDate: DateTime(2022, 1, 1),
+        categoryId: categoryList[index].id,
+        description: description,
+      );
+      _spotList.add(_newSpot);
+      print('image path: ${_newSpot.image}');
+      print('spot list length: ${_spotList.length}');
+      saveToSharedPreferences();
+    } else {
+      message = "No image selected";
+      print(message);
+    }
+  }
+  /* ---------------------------------------- */
+
+  List<Spot> _spotList = <Spot>[
     Spot(
       id: "spot0001",
       name: "McDonald's",

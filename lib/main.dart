@@ -35,8 +35,6 @@ class MyApp extends StatelessWidget {
         builder: (context, state) => const TopEditScreen(),
       ),
       GoRoute(
-        // path: '/spot_list_screen',
-        // builder: (context, state) => const SpotListScreen(),
         path: '/spot_list_screen/:categoryId',
         builder: (context, state) =>
             SpotListScreen(categoryId: state.params['categoryId']!),

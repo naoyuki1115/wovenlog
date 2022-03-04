@@ -63,13 +63,18 @@ class TopScreen extends StatelessWidget {
   }
 }
 
+enum SearchTarget {
+  name,
+  icon,
+  id,
+}
+
 class GridViewSection extends StatelessWidget {
   const GridViewSection({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
-    const categoryId = 'category0001';
 
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -81,7 +86,14 @@ class GridViewSection extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             GestureDetector(
-              onTap: () => context.push('/spot_list_screen/$categoryId'),
+              onTap: () {
+                context.push(
+                  '/spot_list_screen/${_selectedCategoryList.searchSelectedCategoryInfo(
+                    index,
+                    SearchTarget.id,
+                  )}',
+                );
+              },
               child: ConstrainedBox(
                 constraints: const BoxConstraints(
                   maxHeight: 75.0,
@@ -102,15 +114,14 @@ class GridViewSection extends StatelessWidget {
                     ],
                   ),
                   child: Image.asset(
-                    _selectedCategoryList.searchSelectedCategoryNameOrIcon(index, false),
-                    // categoryList[index].icon,
+                    _selectedCategoryList.searchSelectedCategoryInfo(index, SearchTarget.icon),
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 10),
             Text(
-              _selectedCategoryList.searchSelectedCategoryNameOrIcon(index, true),
+              _selectedCategoryList.searchSelectedCategoryInfo(index, SearchTarget.name),
               style: const TextStyle(color: kFontColor),
             ),
           ],
