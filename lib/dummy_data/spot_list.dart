@@ -44,8 +44,6 @@ class SpotList extends ChangeNotifier {
     sortLikeNumOrder();
     //表示Spot数を制限
     // filterByNum(10);
-    // selectedCategoryId = _selectedSpotList.first.categoryId.toString();
-    // selectedCategoryName = categoryList.singleWhere((element) => element.id == selectedCategoryId).name.toString();
     notifyListeners();
   }
 

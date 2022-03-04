@@ -18,8 +18,8 @@ class LikeList extends ChangeNotifier{
 
   //UserID x SpotIDのLikeリスト上の有無確認
   bool getIsLikeExisted(_userId, _spotId){
-    List<Like> narrowDownList = likeList.where((element) => element.userId == _userId).where((element) => element.spotId == _spotId).toList();
-    return narrowDownList.isNotEmpty;
+    List<Like> _tempList = likeList.where((element) => element.userId == _userId).where((element) => element.spotId == _spotId).toList();
+    return _tempList.isNotEmpty;
   }
 
   //UserID x SpotIDごとのLikeを取得
