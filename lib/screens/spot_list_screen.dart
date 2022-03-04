@@ -25,21 +25,22 @@ class _SpotListScreenState extends State<SpotListScreen> {
   @override
   void initState() {
     super.initState();
-
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      final _spotListNotifier = Provider.of<SpotList>(context, listen: false);
+      final _spotListNoifier = Provider.of<SpotList>(context, listen: false);
       final _likeListNotifier = Provider.of<LikeList>(context, listen: false);
-      
+
+      // _spotListNoifier.updateSelectedSpotList(widget.categoryId);
       //LikeListのインスタンスをSpotListクラスに渡してstate管理
-      _spotListNotifier.setLikeListInstance(_likeListNotifier);
-      _spotListNotifier.updateSelectedSpotList(widget.categoryId);
+      _spotListNoifier.setLikeListInstance(_likeListNotifier);
+      print('update selected spot');
+      _spotListNoifier.updateSelectedSpotList(widget.categoryId);
+      _spotListNoifier.resetSelectedIndex();
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final _spotListNotifier = Provider.of<SpotList>(context);
-
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -49,7 +50,7 @@ class _SpotListScreenState extends State<SpotListScreen> {
         backgroundColor: kAppBarColor,
         leading: IconButton(
           icon: const Icon(
-            Icons.arrow_back,
+            Icons.arrow_back_ios_new,
             color: kPrimaryColor,
           ),
           //一つ前に戻る
@@ -89,30 +90,23 @@ class CustomButtomBar extends StatelessWidget {
     final _spotListNotifier = Provider.of<SpotList>(context);
     final _selectedCategoryList = Provider.of<SelectedCategoryList>(context);
 
-    //表示するカテゴリID（上位3つ）
-    String? _firstCatsId = _selectedCategoryList.selectedCategoryList[0].categoryId;
-    String? _secondCatsId = _selectedCategoryList.selectedCategoryList[1].categoryId;
-    String? _thirdCatsId = _selectedCategoryList.selectedCategoryList[2].categoryId;
-
-    //表示するカテゴリIDリスト化（上位3つ）
-    List favoriteCats = [
-      _firstCatsId,
-      _secondCatsId,
-      _thirdCatsId,
-    ];
+    int selectedIndex = _selectedCategoryList.getCategoryInfoForBottomBar(
+      _spotListNotifier.selectedCategoryId,
+      _spotListNotifier.selectedIndex,
+    );
 
     return BottomNavigationBar(
       backgroundColor: kAppBarColor,
       unselectedItemColor: kBackgroundColor,
       selectedItemColor: kPrimaryColor,
-      currentIndex: _spotListNotifier.selectedIndex,
+      currentIndex: selectedIndex,
       items: [
-        _buildBottomIcon(favoriteCats[0]),
-        _buildBottomIcon(favoriteCats[1]),
-        _buildBottomIcon(favoriteCats[2]),
+        _buildBottomIcon(_selectedCategoryList.favoriteCats[0]),
+        _buildBottomIcon(_selectedCategoryList.favoriteCats[1]),
+        _buildBottomIcon(_selectedCategoryList.favoriteCats[2]),
       ],
       onTap: (index) {
-        _spotListNotifier.updateSelectedSpotList(favoriteCats[index]);
+        _spotListNotifier.updateSelectedSpotList(_selectedCategoryList.favoriteCats[index]);
         _spotListNotifier.setSelectedIndex(index);
       },
     );
@@ -152,10 +146,13 @@ class SpotListView extends StatelessWidget {
             child: ListTile(
               //tileColor: Colors.blue,
               leading: SizedBox(
-                width: 100,
-                height: 75,
-                child: Image.asset(
-                  _spotListNotifier.selectedSpotList[index].image.toString(),
+                width: 80,
+                height: 75, //74
+                child: FittedBox(
+                  fit: BoxFit.fill,
+                  child: Image.asset(
+                    _spotListNotifier.selectedSpotList[index].image.toString(),
+                  ),
                 ),
               ),
               title: Text(_spotListNotifier.selectedSpotList[index].name.toString()),
@@ -207,9 +204,7 @@ class LikeWidget extends StatelessWidget {
     return IconButton(
       iconSize: 15,
       padding: const EdgeInsets.only(right: 8, left: 8),
-      icon: (_isLikeExsited
-              ? const Icon(Icons.favorite)
-              : const Icon(Icons.favorite_border)),
+      icon: (_isLikeExsited ? const Icon(Icons.favorite) : const Icon(Icons.favorite_border)),
       color: kPrimaryColor,
       onPressed: () {
         //いいね追加/削除処理
