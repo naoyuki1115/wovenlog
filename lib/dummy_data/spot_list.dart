@@ -130,13 +130,13 @@ class SpotList extends ChangeNotifier {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    await prefs.setStringList('savedSpotList_2203040904', savedSpotList);
+    await prefs.setStringList('savedSpotList_2203040905', savedSpotList);
   }
 
   Future loadDataViaSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    var result = prefs.getStringList('savedSpotList_2203040904');
+    var result = prefs.getStringList('savedSpotList_2203040905');
 
     if (result != null) {
       _spotList = result
@@ -171,6 +171,7 @@ class SpotList extends ChangeNotifier {
       print('image path: ${_newSpot.image}');
       print('spot list length: ${_spotList.length}');
       saveToSharedPreferences();
+      updateSelectedSpotList(selectedCategoryId);
     } else {
       message = "No image selected";
       print(message);
