@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:wovenlog/dummy_data/spot_class.dart';
-import 'package:wovenlog/dummy_data/user_class.dart';
-
 import 'like_class.dart';
-import 'package:wovenlog/dummy_data/user_list.dart';
-import 'package:wovenlog/dummy_data/spot_list.dart';
 
 
 class LikeList extends ChangeNotifier{
 
-  //SpotごとのLike数を取得
+   //SpotごとのLike数を取得
   int getLikeNums(_spotId){
     return likeList.where((element) => element.spotId == _spotId).length;
   }
@@ -27,12 +21,12 @@ class LikeList extends ChangeNotifier{
   }
 
   //Like追加/削除
-  void addOrRemoveLike(String? _userId, String? _spotId, DateTime _createdDate){
+  void addOrRemoveLike(String? _userId, String? _spotId){
     
     Like _like = Like(
       userId: _userId,
       spotId: _spotId,
-      createdDate: _createdDate,
+      createdDate: DateTime.now(),
     );
 
     //Likeリスト上を有無確認し、Add or Remove
@@ -52,11 +46,11 @@ class LikeList extends ChangeNotifier{
     Like(userId: "user0001", spotId: "spot0003", createdDate: DateTime(2022, 1, 1),),
     Like(userId: "user0001", spotId: "spot0004", createdDate: DateTime(2022, 1, 2),),
     Like(userId: "user0001", spotId: "spot0005", createdDate: DateTime(2022, 1, 1),),
-    Like(userId: "user0002", spotId: "spot0001", createdDate: DateTime(2022, 1, 1),),
-    Like(userId: "user0002", spotId: "spot0002", createdDate: DateTime(2022, 1, 2),),
+    Like(userId: "user0002", spotId: "spot0005", createdDate: DateTime(2022, 1, 1),),
+    Like(userId: "user0002", spotId: "spot0004", createdDate: DateTime(2022, 1, 2),),
     Like(userId: "user0002", spotId: "spot0003", createdDate: DateTime(2022, 1, 1),),
     Like(userId: "user0002", spotId: "spot0004", createdDate: DateTime(2022, 1, 2),),
-    Like(userId: "user0003", spotId: "spot0001", createdDate: DateTime(2022, 1, 1),),
+    Like(userId: "user0003", spotId: "spot0005", createdDate: DateTime(2022, 1, 1),),
     Like(userId: "user0003", spotId: "spot0002", createdDate: DateTime(2022, 1, 2),),
     Like(userId: "user0003", spotId: "spot0003", createdDate: DateTime(2022, 1, 1),),
   ];

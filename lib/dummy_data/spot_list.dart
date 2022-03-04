@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:wovenlog/dummy_data/like_list.dart';
 
 import './spot_class.dart';
 import './category_list.dart';
+import '../dummy_data/like_list.dart';
 
 class SpotList extends ChangeNotifier {
   List<Spot> _selectedSpotList = <Spot>[];
@@ -9,8 +11,13 @@ class SpotList extends ChangeNotifier {
   List<Spot> get selectedSpotList => _selectedSpotList;
 
   String selectedCategoryName = '';
+  String selectedCategoryId = '';
 
   int selectedIndex = 0;
+
+  List spotLikeNumList = [];
+
+  late LikeList likeListInstance;
 
   void setSelectedIndex(index) {
     selectedIndex = index;
@@ -19,9 +26,64 @@ class SpotList extends ChangeNotifier {
 
   void updateSelectedSpotList(categoryId) {
     _selectedSpotList = _spotList.where((element) => element.categoryId == categoryId).toList();
-    String _tempId = _selectedSpotList.first.categoryId.toString();
-    selectedCategoryName = categoryList.singleWhere((element) => element.id == _tempId).name.toString();
+    //いいね順に並び替え
+    sortLikeNumOrder();
+    //表示Spot数を制限
+    filterByNum(10);
+    selectedCategoryId = _selectedSpotList.first.categoryId.toString();
+    selectedCategoryName = categoryList.singleWhere((element) => element.id == selectedCategoryId).name.toString();
     notifyListeners();
+  }
+
+  //選択中のカテゴリIDを返す
+  String getSelectedCategoryId(){
+    return selectedCategoryId;
+  }
+
+  //LikeListのインスタンスを保持（いいね並び替えで使用するため）
+  void setLikeListInstance(LikeList _likeListInstance){
+    likeListInstance = _likeListInstance;
+  }
+
+  //いいね順で並び替え機能
+  void sortLikeNumOrder(){
+    List<Spot> _tempList = [];
+    //SpotインスタンスとLike数を組み合わせたリストを作成
+    List _spotLikeNumList = _selectedSpotList.map((e) => [likeListInstance.getLikeNums(e.id), e]).toList();
+    //Like数で並び替え
+    _spotLikeNumList.sort((a, b) => -a[0].compareTo(b[0]),);
+    //Like数の列を取り除く
+    _spotLikeNumList.forEach((element) {_tempList.add(element[1]);});
+    //並び替えしたもので書き換え
+    _selectedSpotList = _tempList;
+  }
+
+  //個数で絞り込み
+  void filterByNum(int num){
+    List<Spot> _tempList = [];
+    //指定個数分取り出し
+    for (int i=0; i<=num-1; i++){
+      _tempList.add(_selectedSpotList[i]);
+    }
+    _selectedSpotList = _tempList;
+  }
+
+  //Spot追加処理
+  void addNewSpot(String? _name, String? _categoryId, String? _address, String? _url, String? _description, String? _imagePath){
+    Spot _newSpot = Spot(
+      id: "spot0001",//id求める処理必要
+      name: _name,
+      address: _address,
+      latitude: null,
+      longitude: null,
+      url: _url,
+      image: _imagePath,
+      createdDate: DateTime.now(),
+      categoryId: _categoryId,
+      description: _description,
+    );
+    _spotList.add(_newSpot);
+    updateSelectedSpotList(selectedCategoryId);
   }
 
   Spot getSpotInfo(spotId) {
@@ -418,6 +480,19 @@ class SpotList extends ChangeNotifier {
       createdDate: DateTime(2020, 1, 1),
       categoryId: 'category0003',
       description: '皇居前広場',
+    ),
+    Spot(
+      id: "spot0031",
+      name: "あああああああ",
+      address: "いいいいいい",
+      latitude: 35.6811152,
+      longitude: 139.7560612,
+      url:
+          "https://www.google.com/maps/place/Imperial+Palace+Front+Gardens/@35.6811152,139.7560612,16.25z/data=!4m9!1m3!2m2!1z6Kaz5YWJ5ZCN5omA!6e1!3m4!1s0x60188bf5d740e7a7:0xf04856902f747!8m2!3d35.6806711!4d139.7572871",
+      image: "assets/images/spot_images/spot0022.jpg",
+      createdDate: DateTime(2020, 1, 1),
+      categoryId: 'category0001',
+      description: 'うううう',
     ),
   ];
 }
