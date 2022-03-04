@@ -211,7 +211,7 @@ class LikeWidget extends StatelessWidget {
         _likeListInstance.addOrRemoveLike(userId, spotId);
         //SpotListViewの表示を更新
         _spotListInstance.setLikeListInstance(_likeListInstance);
-        _spotListInstance.updateSelectedSpotList(_spotListInstance.getSelectedCategoryId());
+        _spotListInstance.updateSelectedSpotList(_spotListInstance.selectedCategoryId);
       },
     );
   }

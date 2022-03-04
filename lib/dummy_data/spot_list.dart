@@ -49,11 +49,6 @@ class SpotList extends ChangeNotifier {
     notifyListeners();
   }
 
-  //選択中のカテゴリIDを返す
-  String getSelectedCategoryId() {
-    return selectedCategoryId;
-  }
-
   //LikeListのインスタンスを保持（いいね並び替えで使用するため）
   void setLikeListInstance(LikeList _likeListInstance) {
     likeListInstance = _likeListInstance;
