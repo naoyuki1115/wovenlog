@@ -1,3 +1,4 @@
+import 'package:amplify_auth_cognito/amplify_auth_cognito.dart';
 import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -26,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _configureAmplify() async {
     try {
+      await _amplify.addPlugins([AmplifyAuthCognito()]); 
       await _amplify.configure(amplifyconfig);
       debugPrint('Successfully configured Amplify 🎉');
       print('Successfully configured Amplify 🎉');

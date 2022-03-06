@@ -10,6 +10,11 @@
       "StackName": "amplify-wovenlog-dev-105015",
       "StackId": "arn:aws:cloudformation:ap-northeast-1:268832845736:stack/amplify-wovenlog-dev-105015/cec0ee70-9cef-11ec-9656-0e161cc9f84d",
       "AmplifyAppId": "d2qa521cab37lb"
+    },
+    "categories": {
+      "auth": {
+        "wovenlogcdeeabe2": {}
+      }
     }
   }
 }
