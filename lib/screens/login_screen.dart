@@ -1,8 +1,11 @@
+import 'package:amplify_flutter/amplify.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
+import '../amplifyconfiguration.dart';
 import '../constants.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -18,6 +21,21 @@ class _LoginScreenState extends State<LoginScreen> {
   String _errMsg = '';
   final _formKey = GlobalKey<FormState>();
 
+  //Amplify test
+  final _amplify = Amplify;
+
+  Future<void> _configureAmplify() async {
+    try {
+      await _amplify.configure(amplifyconfig);
+      debugPrint('Successfully configured Amplify 🎉');
+      print('Successfully configured Amplify 🎉');
+    } catch (e) {
+      debugPrint(e.toString());
+      print('Could not configure Amplify ☠️');
+    }
+  }
+
+
   //認証機能（通常はスクリーン画面(View)で認証処理せず、ViewModelで実施？）
   bool _authentication(String _userName, String _password) {
     //入力有無判定
@@ -28,6 +46,14 @@ class _LoginScreenState extends State<LoginScreen> {
       //loginFunction(userName, password);
       return true;
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //Amplify 
+    _configureAmplify();
   }
 
   @override
