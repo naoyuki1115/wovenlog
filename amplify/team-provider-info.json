@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-wovenlog-dev-105015-authRole",
+      "UnauthRoleArn": "arn:aws:iam::268832845736:role/amplify-wovenlog-dev-105015-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::268832845736:role/amplify-wovenlog-dev-105015-authRole",
+      "Region": "ap-northeast-1",
+      "DeploymentBucketName": "amplify-wovenlog-dev-105015-deployment",
+      "UnauthRoleName": "amplify-wovenlog-dev-105015-unauthRole",
+      "StackName": "amplify-wovenlog-dev-105015",
+      "StackId": "arn:aws:cloudformation:ap-northeast-1:268832845736:stack/amplify-wovenlog-dev-105015/cec0ee70-9cef-11ec-9656-0e161cc9f84d",
+      "AmplifyAppId": "d2qa521cab37lb"
+    }
+  }
+}
