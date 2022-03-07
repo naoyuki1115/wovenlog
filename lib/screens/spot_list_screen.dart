@@ -7,6 +7,7 @@ import '../dummy_data/like_list.dart';
 import '../dummy_data/spot_list.dart';
 import '../dummy_data/category_list.dart';
 import '../dummy_data/selected_category_list.dart';
+import '../dummy_data/user_list.dart';
 
 class SpotListScreen extends StatefulWidget {
   final String? categoryId;
@@ -25,13 +26,13 @@ class _SpotListScreenState extends State<SpotListScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
-      final _spotListNoifier = Provider.of<SpotList>(context, listen: false);
+      final _spotListNotifier = Provider.of<SpotList>(context, listen: false);
       final _likeListNotifier = Provider.of<LikeList>(context, listen: false);
 
       //LikeListのインスタンスをSpotListクラスに渡してstate管理
-      _spotListNoifier.setLikeListInstance(_likeListNotifier);
-      _spotListNoifier.updateSelectedSpotList(widget.categoryId);
-      _spotListNoifier.resetSelectedIndex();
+      _spotListNotifier.setLikeListInstance(_likeListNotifier);
+      _spotListNotifier.updateSelectedSpotList(widget.categoryId);
+      _spotListNotifier.resetSelectedIndex();
     });
   }
 
@@ -47,7 +48,7 @@ class _SpotListScreenState extends State<SpotListScreen> {
         backgroundColor: kAppBarColor,
         leading: IconButton(
           icon: const Icon(
-            Icons.arrow_back,
+            Icons.arrow_back_ios_new,
             color: kPrimaryColor,
           ),
           //一つ前に戻る
@@ -132,6 +133,7 @@ class SpotListView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _spotListNotifier = Provider.of<SpotList>(context);
+    final _userList = Provider.of<UserList>(context);
 
     return Expanded(
       child: ListView.builder(
@@ -156,7 +158,7 @@ class SpotListView extends StatelessWidget {
               trailing: SizedBox(
                 width: 90,
                 child: LikeWidget(
-                  userId: 'user0001',
+                  userId: _userList.selectedUserId,
                   spotId: spotId,
                 ),
               ),
@@ -207,7 +209,7 @@ class LikeWidget extends StatelessWidget {
         _likeListInstance.addOrRemoveLike(userId, spotId);
         //SpotListViewの表示を更新
         _spotListInstance.setLikeListInstance(_likeListInstance);
-        _spotListInstance.updateSelectedSpotList(_spotListInstance.getSelectedCategoryId());
+        _spotListInstance.updateSelectedSpotList(_spotListInstance.selectedCategoryId);
       },
     );
   }

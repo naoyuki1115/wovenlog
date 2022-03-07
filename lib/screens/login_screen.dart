@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../constants.dart';
+import '../dummy_data/user_list.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -18,20 +21,21 @@ class _LoginScreenState extends State<LoginScreen> {
   String _errMsg = '';
   final _formKey = GlobalKey<FormState>();
 
-  //認証機能（通常はスクリーン画面(View)で認証処理せず、ViewModelで実施？）
-  bool _authentication(String _userName, String _password) {
-    //入力有無判定
-    if (_userName == '' || _password == '') {
-      return false;
-    } else {
-      //DBとユーザ認証
-      //loginFunction(userName, password);
-      return true;
-    }
-  }
+  // //認証機能（通常はスクリーン画面(View)で認証処理せず、ViewModelで実施？）
+  // bool _authentication(String _userName, String _password) {
+  //   //入力有無判定
+  //   if (_userName == '' || _password == '') {
+  //     return false;
+  //   } else {
+  //     //DBとユーザ認証
+  //     //loginFunction(userName, password);
+  //     return true;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
+    final _userList = Provider.of<UserList>(context);
     return Scaffold(
         resizeToAvoidBottomInset: false,
         //背景色設定
@@ -109,7 +113,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     setState(() {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        _authentication(userName, password)
+                        _userList.authentication(userName, password)
                           ? context.go('/top_screen') //ログイン承認成功時ページ遷移
                           : _errMsg = 'Authentication failed'; //ログイン承認失敗時エラーメッセージ
                       }

@@ -1,18 +1,26 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'like_class.dart';
 
+
+
 class LikeList extends ChangeNotifier {
+
+  LikeList(){
+    loadDataViaSharedPreferences();
+    print('load shared pref');
+  }
+
   //SpotごとのLike数を取得
   int getLikeNums(_spotId) {
     return likeList.where((element) => element.spotId == _spotId).length;
   }
 
   //UserID x SpotIDのLikeリスト上の有無確認
-  bool getIsLikeExisted(_userId, _spotId) {
-    List<Like> narrowDownList =
-        likeList.where((element) => element.userId == _userId).where((element) => element.spotId == _spotId).toList();
-    return narrowDownList.isNotEmpty;
+  bool getIsLikeExisted(_userId, _spotId){
+    List<Like> _tempList = likeList.where((element) => element.userId == _userId).where((element) => element.spotId == _spotId).toList();
+    return _tempList.isNotEmpty;
   }
 
   //UserID x SpotIDごとのLikeを取得
@@ -35,6 +43,23 @@ class LikeList extends ChangeNotifier {
       likeList.remove(_removedLike);
     } else {
       likeList.add(_like);
+    }
+    saveToSharedPreferences();
+    notifyListeners();
+  }
+
+  //sharedPrefarebce
+  Future saveToSharedPreferences() async {
+    List<String> savedLikeList = likeList.map((e) => json.encode(e.toJson())).toList();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setStringList('savedSpotList_2203041321', savedLikeList);
+  }
+
+  Future loadDataViaSharedPreferences() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var result = prefs.getStringList('savedSpotList_2203041321');
+    if (result != null) {
+      likeList = result.map((e) => Like.fromJson(json.decode(e))).toList();
     }
     notifyListeners();
   }

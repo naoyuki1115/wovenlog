@@ -44,11 +44,6 @@ class SpotList extends ChangeNotifier {
     notifyListeners();
   }
 
-  //選択中のカテゴリIDを返す
-  String getSelectedCategoryId() {
-    return selectedCategoryId;
-  }
-
   //LikeListのインスタンスを保持（いいね並び替えで使用するため）
   void setLikeListInstance(LikeList _likeListInstance) {
     likeListInstance = _likeListInstance;
@@ -102,17 +97,13 @@ class SpotList extends ChangeNotifier {
           (e) => json.encode(e.toJson()),
         )
         .toList();
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
     await prefs.setStringList('savedSpotList_2203040905', savedSpotList);
   }
 
   Future loadDataViaSharedPreferences() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-
     var result = prefs.getStringList('savedSpotList_2203040905');
-
     if (result != null) {
       _spotList = result
           .map(
