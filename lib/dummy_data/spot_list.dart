@@ -78,7 +78,6 @@ class SpotList extends ChangeNotifier {
       _tempList.add(element[1]);
     });
     //並び替えしたもので書き換え
-    print('');
     _selectedSpotList = _tempList;
   }
 

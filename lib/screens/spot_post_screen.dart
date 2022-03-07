@@ -55,19 +55,22 @@ class _InputScreenState extends State<InputScreen> {
   String _spotDescription = '';
   String _errorMsg = '';
 
+  bool _checkInputValue(String spotName, String? spotCategoryName,
+      String spotURL, String spotDescription, XFile? imageFile) {
+    if (spotName == '' ||
+        spotCategoryName == null ||
+        spotURL == '' ||
+        spotDescription == '' ||
+        imageFile == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final _spotListNotifier = Provider.of<SpotList>(context);
-
-    void _saveFormContentsToSpotList() {
-      if (_formKey.currentState!.validate()) {
-        _formKey.currentState!.save();
-        _spotListNotifier.addNewSpot(_spotName, _spotURL, _spotDescription,
-            _spotListNotifier.categoryName);
-      } else {
-        _errorMsg = 'Please fill some required info';
-      }
-    }
 
     return Form(
       key: _formKey,
@@ -101,8 +104,9 @@ class _InputScreenState extends State<InputScreen> {
                   child: Column(
                     children: <Widget>[
                       InputForm(
-                          onSaved: (newValue) => _spotName = newValue!,
-                          labelText: "Shop name"),
+                        onSaved: (newValue) => _spotName = newValue!,
+                        labelText: "Shop name",
+                      ),
                       const SizedBox(
                         height: 10,
                       ),
@@ -163,7 +167,29 @@ class _InputScreenState extends State<InputScreen> {
                   shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(Radius.circular(100))),
                 ),
-                onPressed: () => _saveFormContentsToSpotList(),
+                onPressed: () {
+                  // フォーム内の各値を本クラスの変数に格納
+                  _formKey.currentState!.save();
+                  setState(() {
+                    // フォーム内への入力と画像のアップロードの完了を確認
+                    if (_checkInputValue(
+                        _spotName,
+                        _spotListNotifier.categoryName,
+                        _spotURL,
+                        _spotDescription,
+                        _spotListNotifier.imageFile)) {
+                      // 格納した変数をSpotListに保存
+                      _spotListNotifier.addNewSpot(_spotName, _spotURL,
+                          _spotDescription, _spotListNotifier.categoryName);
+                      // _spotListNotifier.categoryName等の値を初期化（ページ遷移後も値が残るため）
+                      _spotListNotifier.categoryName = null;
+                      _spotListNotifier.imageFile = null;
+                      context.pop();
+                    } else {
+                      _errorMsg = "Please try to take some info";
+                    }
+                  });
+                },
               ),
             ),
             Expanded(
@@ -227,7 +253,6 @@ class AddImage extends StatefulWidget {
 }
 
 class _AddImageState extends State<AddImage> {
-  XFile? _image;
   File? _file;
   bool _imageExist = false;
   ImagePicker picker = ImagePicker();
@@ -251,7 +276,6 @@ class _AddImageState extends State<AddImage> {
 
       setState(() {
         if (image != null) {
-          _image = XFile(image.path);
           // File型に変換（Image .file()はXfile非対応のため）
           _file = File(image.path);
           // 画像取得有無の確認用に_imageExistを使用
@@ -260,17 +284,11 @@ class _AddImageState extends State<AddImage> {
           _imageExist = false;
         }
       });
-      // アプリケーション専用のファイル配置ディレクトリへのパスを取得（）
-      // final appDir = await syspaths.getApplicationDocumentsDirectory();
-      // //画像名を取得(〜.jpg)
-      // final fileName = path.basename(_image!.path);
-
-      // final savedImage = await _file!.copy('${appDir.path}/$fileName');
-      // widget.onSelectImage(savedImage);
     }
 
     return FutureBuilder<String>(
-      future: _checkImage(), // a previously-obtained Future<String> or null
+      future:
+          _checkImage(), // _formState previously-obtained Future<String> or null
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         List<Widget> children;
         if (snapshot.data == "finished") {
@@ -349,11 +367,8 @@ class _AddImageState extends State<AddImage> {
 class InputForm extends StatelessWidget {
   final FormFieldSetter<String> onSaved;
   final String labelText;
-  const InputForm({
-    Key? key,
-    required this.onSaved,
-    required this.labelText,
-  }) : super(key: key);
+  const InputForm({Key? key, required this.onSaved, required this.labelText})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
