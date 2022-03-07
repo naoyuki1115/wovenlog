@@ -20,7 +20,8 @@ class SpotDetailScreen extends StatelessWidget {
     // 前画面から渡されたSpotIdと一致するSpotを抽出
     final _selectedSpot = _spotListInstance.getSpotInfo(spotId);
     //抽出したSpotのCategoruIdと一致するカテゴリー名をcategoryListから抽出
-    final _selectedCats = categoryList.singleWhere((element) => element.id == _selectedSpot.categoryId);
+    final _selectedCats = categoryList
+        .singleWhere((element) => element.id == _selectedSpot.categoryId);
 
     // var _getSpotId = getSpotId(spotId);
     return MaterialApp(
@@ -126,7 +127,6 @@ class SpotDetailScreen extends StatelessWidget {
             ),
             // Description表示
             Container(
-              height: 150,
               width: double.infinity,
               margin: const EdgeInsets.only(right: 25, left: 25),
               child: Text(
