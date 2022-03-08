@@ -35,8 +35,10 @@ class SpotList extends ChangeNotifier {
 
   void updateSelectedSpotList(categoryId) {
     selectedCategoryId = categoryId;
-    _selectedSpotList = _spotList.where((element) => element.categoryId == categoryId).toList();
-    selectedCategoryName = categoryList.singleWhere(((element) => element.id == categoryId)).name;
+    _selectedSpotList =
+        _spotList.where((element) => element.categoryId == categoryId).toList();
+    selectedCategoryName =
+        categoryList.singleWhere(((element) => element.id == categoryId)).name;
     //いいね順に並び替え
     sortLikeNumOrder();
     //表示Spot数を制限
@@ -53,7 +55,9 @@ class SpotList extends ChangeNotifier {
   void sortLikeNumOrder() {
     List<Spot> _tempList = [];
     //SpotインスタンスとLike数を組み合わせたリストを作成
-    List _spotLikeNumList = _selectedSpotList.map((e) => [likeListInstance.getLikeNums(e.id), e]).toList();
+    List _spotLikeNumList = _selectedSpotList
+        .map((e) => [likeListInstance.getLikeNums(e.id), e])
+        .toList();
     //Like数で並び替え
     _spotLikeNumList.sort(
       (a, b) => -a[0].compareTo(b[0]),
@@ -115,10 +119,12 @@ class SpotList extends ChangeNotifier {
     updateSelectedSpotList(selectedCategoryId);
   }
 
-  void addNewSpot(String name, String url, String description, String? categoryName) {
+  void addNewSpot(
+      String name, String url, String description, String? categoryName) {
     String categoryLength = (_spotList.length + 1).toString();
 
-    int index = categoryList.indexWhere((element) => element.name == categoryName);
+    int index =
+        categoryList.indexWhere((element) => element.name == categoryName);
 
     if (imageFile != null) {
       Spot _newSpot = Spot(

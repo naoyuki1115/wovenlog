@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../constants.dart';
 import '../dummy_data/user_list.dart';
 
-
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -114,15 +113,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
                         _userList.authentication(userName, password)
-                          ? context.go('/top_screen') //ログイン承認成功時ページ遷移
-                          : _errMsg = 'Authentication failed'; //ログイン承認失敗時エラーメッセージ
+                            ? context.go('/top_screen') //ログイン承認成功時ページ遷移
+                            : _errMsg =
+                                'Authentication failed'; //ログイン承認失敗時エラーメッセージ
                       }
                     });
+                    print("${_formKey.currentState!.validate()}");
                   }),
               Expanded(child: Container()), //余白
-            ])
-        )
-    );
+            ])));
   }
 }
 

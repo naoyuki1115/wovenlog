@@ -23,7 +23,8 @@ class _SpotPostScreenState extends State<SpotPostScreen> {
       appBar: AppBar(
         title: const Text(
           'Post',
-          style: TextStyle(fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: 20, color: kFontColor, fontWeight: FontWeight.bold),
         ),
         backgroundColor: kAppBarColor,
         // 戻るボタン
@@ -54,18 +55,22 @@ class _InputScreenState extends State<InputScreen> {
   String _spotDescription = '';
   String _errorMsg = '';
 
+  bool _checkInputValue(String spotName, String? spotCategoryName,
+      String spotURL, String spotDescription, XFile? imageFile) {
+    if (spotName == '' ||
+        spotCategoryName == null ||
+        spotURL == '' ||
+        spotDescription == '' ||
+        imageFile == null) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final _spotListNotifier = Provider.of<SpotList>(context);
-
-    void _saveFormContentsToSpotList() {
-      if (_formKey.currentState!.validate()) {
-        _formKey.currentState!.save();
-        _spotListNotifier.addNewSpot(_spotName, _spotURL, _spotDescription, _spotListNotifier.categoryName);
-      } else {
-        _errorMsg = 'Please fill some required info';
-      }
-    }
 
     return Form(
       key: _formKey,
@@ -98,7 +103,10 @@ class _InputScreenState extends State<InputScreen> {
                   flex: 8,
                   child: Column(
                     children: <Widget>[
-                      InputForm(onSaved: (newValue) => _spotName = newValue!, labelText: "Shop name"),
+                      InputForm(
+                        onSaved: (newValue) => _spotName = newValue!,
+                        labelText: "Shop name",
+                      ),
                       const SizedBox(
                         height: 10,
                       ),
@@ -108,16 +116,21 @@ class _InputScreenState extends State<InputScreen> {
                           alignment: const Alignment(0, 0),
                           padding: const EdgeInsets.only(left: 10),
                           decoration: BoxDecoration(
-                              border: Border.all(color: Colors.grey), borderRadius: BorderRadius.circular(23)),
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(23)),
                           child: const PullDownButton()),
                       const SizedBox(
                         height: 10,
                       ),
-                      InputForm(onSaved: (newValue) => _spotURL = newValue!, labelText: "URL"),
+                      InputForm(
+                          onSaved: (newValue) => _spotURL = newValue!,
+                          labelText: "URL"),
                       const SizedBox(
                         height: 10,
                       ),
-                      InputForm(onSaved: (newValue) => _spotDescription = newValue!, labelText: "Description"),
+                      InputForm(
+                          onSaved: (newValue) => _spotDescription = newValue!,
+                          labelText: "Description"),
                     ],
                   ),
                 ),
@@ -151,9 +164,32 @@ class _InputScreenState extends State<InputScreen> {
                 style: TextButton.styleFrom(
                   primary: const Color(0xffD80C28),
                   backgroundColor: kSecondaryColor,
-                  shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(100))),
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(100))),
                 ),
-                onPressed: () => _saveFormContentsToSpotList(),
+                onPressed: () {
+                  // フォーム内の各値を本クラスの変数に格納
+                  _formKey.currentState!.save();
+                  setState(() {
+                    // フォーム内への入力と画像のアップロードの完了を確認
+                    if (_checkInputValue(
+                        _spotName,
+                        _spotListNotifier.categoryName,
+                        _spotURL,
+                        _spotDescription,
+                        _spotListNotifier.imageFile)) {
+                      // 格納した変数をSpotListに保存
+                      _spotListNotifier.addNewSpot(_spotName, _spotURL,
+                          _spotDescription, _spotListNotifier.categoryName);
+                      // _spotListNotifier.categoryName等の値を初期化（ページ遷移後も値が残るため）
+                      _spotListNotifier.categoryName = null;
+                      _spotListNotifier.imageFile = null;
+                      context.pop();
+                    } else {
+                      _errorMsg = "Please try to take some info";
+                    }
+                  });
+                },
               ),
             ),
             Expanded(
@@ -217,7 +253,6 @@ class AddImage extends StatefulWidget {
 }
 
 class _AddImageState extends State<AddImage> {
-  XFile? _image;
   File? _file;
   bool _imageExist = false;
   ImagePicker picker = ImagePicker();
@@ -241,7 +276,6 @@ class _AddImageState extends State<AddImage> {
 
       setState(() {
         if (image != null) {
-          _image = XFile(image.path);
           // File型に変換（Image .file()はXfile非対応のため）
           _file = File(image.path);
           // 画像取得有無の確認用に_imageExistを使用
@@ -253,7 +287,8 @@ class _AddImageState extends State<AddImage> {
     }
 
     return FutureBuilder<String>(
-      future: _checkImage(), // a previously-obtained Future<String> or null
+      future:
+          _checkImage(), // _formState previously-obtained Future<String> or null
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         List<Widget> children;
         if (snapshot.data == "finished") {
@@ -332,11 +367,8 @@ class _AddImageState extends State<AddImage> {
 class InputForm extends StatelessWidget {
   final FormFieldSetter<String> onSaved;
   final String labelText;
-  const InputForm({
-    Key? key,
-    required this.onSaved,
-    required this.labelText,
-  }) : super(key: key);
+  const InputForm({Key? key, required this.onSaved, required this.labelText})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

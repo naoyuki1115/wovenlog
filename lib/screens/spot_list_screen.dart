@@ -104,7 +104,8 @@ class CustomButtomBar extends StatelessWidget {
         _buildBottomIcon(_selectedCategoryList.favoriteCats[2]),
       ],
       onTap: (index) {
-        _spotListNotifier.updateSelectedSpotList(_selectedCategoryList.favoriteCats[index]);
+        _spotListNotifier
+            .updateSelectedSpotList(_selectedCategoryList.favoriteCats[index]);
         _spotListNotifier.setSelectedIndex(index);
       },
     );
@@ -112,7 +113,8 @@ class CustomButtomBar extends StatelessWidget {
 
   //ボトムバーに表示するアイコンを定義
   BottomNavigationBarItem _buildBottomIcon(_catsId) {
-    int _catsIndex = categoryList.indexWhere((element) => element.id == _catsId);
+    int _catsIndex =
+        categoryList.indexWhere((element) => element.id == _catsId);
     return BottomNavigationBarItem(
       icon: SizedBox(
         child: Image.asset(categoryList[_catsIndex].icon),
@@ -139,7 +141,8 @@ class SpotListView extends StatelessWidget {
       child: ListView.builder(
         itemCount: _spotListNotifier.selectedSpotList.length, //リストからSpot数取得
         itemBuilder: (context, index) {
-          String spotId = _spotListNotifier.selectedSpotList[index].id.toString();
+          String spotId =
+              _spotListNotifier.selectedSpotList[index].id.toString();
           return Card(
             child: ListTile(
               //tileColor: Colors.blue,
@@ -153,8 +156,10 @@ class SpotListView extends StatelessWidget {
                   ),
                 ),
               ),
-              title: Text(_spotListNotifier.selectedSpotList[index].name.toString()),
-              subtitle: Text(_spotListNotifier.selectedSpotList[index].address.toString()),
+              title: Text(
+                  _spotListNotifier.selectedSpotList[index].name.toString()),
+              subtitle: Text(
+                  _spotListNotifier.selectedSpotList[index].address.toString()),
               trailing: SizedBox(
                 width: 90,
                 child: LikeWidget(
@@ -196,20 +201,24 @@ class LikeWidget extends StatelessWidget {
   }
 
   //Likeボタン作成
-  Widget _buildLikeButton(LikeList _likeListInstance, SpotList _spotListInstance) {
+  Widget _buildLikeButton(
+      LikeList _likeListInstance, SpotList _spotListInstance) {
     bool _isLikeExsited = _likeListInstance.getIsLikeExisted(userId, spotId);
 
     return IconButton(
       iconSize: 15,
       padding: const EdgeInsets.only(right: 8, left: 8),
-      icon: (_isLikeExsited ? const Icon(Icons.favorite) : const Icon(Icons.favorite_border)),
+      icon: (_isLikeExsited
+          ? const Icon(Icons.favorite)
+          : const Icon(Icons.favorite_border)),
       color: kPrimaryColor,
       onPressed: () {
         //いいね追加/削除処理
         _likeListInstance.addOrRemoveLike(userId, spotId);
         //SpotListViewの表示を更新
         _spotListInstance.setLikeListInstance(_likeListInstance);
-        _spotListInstance.updateSelectedSpotList(_spotListInstance.selectedCategoryId);
+        _spotListInstance
+            .updateSelectedSpotList(_spotListInstance.selectedCategoryId);
       },
     );
   }

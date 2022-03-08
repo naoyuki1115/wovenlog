@@ -37,11 +37,13 @@ class MyApp extends StatelessWidget {
       ),
       GoRoute(
         path: '/spot_list_screen/:categoryId',
-        builder: (context, state) => SpotListScreen(categoryId: state.params['categoryId']!),
+        builder: (context, state) =>
+            SpotListScreen(categoryId: state.params['categoryId']!),
       ),
       GoRoute(
         path: '/spot_detail_screen/:spotId',
-        builder: (context, state) => SpotDetailScreen(spotId: state.params['spotId']!),
+        builder: (context, state) =>
+            SpotDetailScreen(spotId: state.params['spotId']!),
       ),
       GoRoute(
         path: '/spot_post_screen',
